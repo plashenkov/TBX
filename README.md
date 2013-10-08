@@ -1,7 +1,7 @@
 TBX
 ===
 
-TBX is an add-on package for [Toolbar2000 components](http://www.jrsoftware.org/tb2k.php).
+TBX is an add-on package for Toolbar2000(http://www.jrsoftware.org/tb2k.php) components.
 
 TBX expands Toolbar2000 with the following new features:
 
@@ -14,4 +14,5 @@ TBX expands Toolbar2000 with the following new features:
 * Tool palettes and color selectors
 * A status bar component
 * Additional controls
-* Compatible with Delphi/C++Builder 4—XE2.
+
+Compatible with Delphi/C++Builder 4—XE2.

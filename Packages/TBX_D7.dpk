@@ -1,0 +1,50 @@
+package TBX_D7;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Toolbar2000 - TBX Extensions'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  rtl,
+  tb2k_d7;
+
+contains
+  TBX in '..\Source\TBX.pas',
+  TBXConsts in '..\Source\TBXConsts.pas',
+  TBXColorConsts in '..\Source\TBXColorConsts.pas',
+  TBXDkPanels in '..\Source\TBXDkPanels.pas',
+  TBXExtItems in '..\Source\TBXExtItems.pas',
+  TBXLists in '..\Source\TBXLists.pas',
+  TBXMDI in '..\Source\TBXMDI.pas',
+  TBXStatusBars in '..\Source\TBXStatusBars.pas',
+  TBXSwitcher in '..\Source\TBXSwitcher.pas',
+  TBXThemes in '..\Source\TBXThemes.pas',
+  TBXToolPals in '..\Source\TBXToolPals.pas',
+  TBXUtils in '..\Source\TBXUtils.pas',
+  TBXUxThemes in '..\Source\TBXUxThemes.pas',
+  TBXDefaultTheme in '..\Source\Themes\TBXDefaultTheme.pas';
+
+end.

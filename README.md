@@ -19,7 +19,7 @@ TBX expands Toolbar2000 with the following new features:
 Compatibility
 -------------
 
-Compatible with Delphi/C++Builder 4—XE2.
+Compatible with Delphi/C++Builder 4–XE2.
 
 
 Installation

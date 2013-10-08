@@ -15,4 +15,23 @@ TBX expands Toolbar2000 with the following new features:
 * A status bar component
 * Additional controls
 
+
+Compatibility
+-------------
+
 Compatible with Delphi/C++Builder 4—XE2.
+
+
+Installation
+------------
+
+
+
+
+Credits
+-------
+
+Alex A. Denisov, initial developer.
+Robert Lee (http://www.silverpointdevelopment.com), contributor.
+Vladimir Bochkarev (boxa@mail.ru), contributor.
+Yury Plashenkov (http://www.plashenkov.com), contributor and current maintainer.

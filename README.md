@@ -1,7 +1,7 @@
 TBX
 ===
 
-TBX is an add-on package for Toolbar2000(http://www.jrsoftware.org/tb2k.php) components.
+TBX is an add-on package for [Toolbar2000](http://www.jrsoftware.org/tb2k.php) components.
 
 TBX expands Toolbar2000 with the following new features:
 

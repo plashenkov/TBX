@@ -31,7 +31,7 @@ Installation
 Credits
 -------
 
-Alex A. Denisov, initial developer.
-Robert Lee (http://www.silverpointdevelopment.com), contributor.
-Vladimir Bochkarev (boxa@mail.ru), contributor.
+Alex A. Denisov, initial developer.  
+Robert Lee (http://www.silverpointdevelopment.com), contributor.  
+Vladimir Bochkarev (boxa@mail.ru), contributor.  
 Yury Plashenkov (http://www.plashenkov.com), contributor and current maintainer.

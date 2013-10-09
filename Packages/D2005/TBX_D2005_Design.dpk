@@ -1,7 +1,7 @@
-package TBX_DXE2_Design;
+package TBX_D2005_Design;
 
 {$R *.res}
-{$R '..\Source\TBXReg.dcr'}
+{$R '..\..\Source\TBXReg.dcr'}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -25,16 +25,16 @@ package TBX_DXE2_Design;
 {$IMAGEBASE $400000}
 {$DESCRIPTION 'Toolbar2000 - TBX Extensions'}
 {$DESIGNONLY}
-{$IMPLICITBUILD OFF}
+{$IMPLICITBUILD ON}
 
 requires
   vcl,
-  tb2k_d16,
-  tb2kdsgn_d16,
-  TBX_DXE2;
+  tb2k_d9,
+  tb2kdsgn_d9,
+  TBX_D2005;
 
 contains
-  TBXReg in '..\Source\TBXReg.pas',
-  TBXStrEdit in '..\Source\TBXStrEdit.pas';
+  TBXReg in '..\..\Source\TBXReg.pas',
+  TBXStrEdit in '..\..\Source\TBXStrEdit.pas';
 
 end.

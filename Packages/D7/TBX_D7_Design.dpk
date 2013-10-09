@@ -1,8 +1,8 @@
-package TBX_D4_Design;
+package TBX_D7_Design;
 
-{$R *.RES}
-{$R '..\Source\TBXReg.dcr'}
-{$ALIGN ON}
+{$R *.res}
+{$R '..\..\Source\TBXReg.dcr'}
+{$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
 {$DEBUGINFO ON}
@@ -28,12 +28,13 @@ package TBX_D4_Design;
 {$IMPLICITBUILD ON}
 
 requires
-  tb2k_d4,
-  tb2kdsgn_d4,
-  TBX_D4;
+  vcl,
+  tb2k_d7,
+  tb2kdsgn_d7,
+  TBX_D7;
 
 contains
-  TBXReg in '..\Source\TBXReg.pas',
-  TBXStrEdit in '..\Source\TBXStrEdit.pas';
+  TBXReg in '..\..\Source\TBXReg.pas',
+  TBXStrEdit in '..\..\Source\TBXStrEdit.pas';
 
 end.

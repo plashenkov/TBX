@@ -32,7 +32,7 @@ Credits
 -------
 
 Alex A. Denisov, initial developer.  
-Roy Magne Klever (http://rmklever.com/), contributor.  
+Roy Magne Klever (http://rmklever.com), contributor.  
 Robert Lee (http://www.silverpointdevelopment.com), contributor.  
 Vladimir Bochkarev (boxa@mail.ru), contributor.  
 Yury Plashenkov (http://www.plashenkov.com), contributor and current maintainer.

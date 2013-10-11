@@ -5,7 +5,7 @@ unit TBXProfessionalTheme;
 // See TBX.chm for license and installation instructions
 //
 // "Professional" Theme for TBX version 2.1
-// Copyright (c) Yury Plashenkov (March 2008) <mailto:support@indasoftware.com>
+// Copyright (c) 2008 Yury Plashenkov
 
 interface
 
@@ -35,10 +35,10 @@ type
 
     EmbeddedColor: TColor;
     EmbeddedFrameColor: TColor;
-    
+
     PopupColor: TColor;
     PopupFrameColor: TColor;
-    
+
     DockPanelColor: TColor;
     DockPanelCaptionColor1: TColor;
     DockPanelCaptionColor2: TColor;
@@ -141,7 +141,7 @@ begin
 
     Dec(Size);
     if Size = 0 then Exit;
-    
+
     for I := 0 to Size do
     begin
       FillRectEx(DC, TempRect, RGB((r2 - r1) * I div Size + r1,
@@ -374,7 +374,7 @@ begin
           LeftWidth := 1; RightWidth := 1;
           TopHeight := 3; BottomHeight := 3;
         end;
-        
+
       MID_STATUSPANE:
         begin
           LeftWidth := 1; RightWidth := 3;
@@ -463,14 +463,14 @@ begin
   if not ItemInfo.IsVertical then
   begin
     Inc(R2.Top, 4);
-    R2.Bottom := R2.Top + 5;  
+    R2.Bottom := R2.Top + 5;
     W := 8;
     H := 5;
   end
   else
   begin
     R2.Left := R2.Right - 9;
-    R2.Right := R2.Left + 5;   
+    R2.Right := R2.Left + 5;
     W := 5;
     H := 8;
   end;
@@ -714,7 +714,7 @@ begin
 
       if not IsDockPanel then Brush.Color := WinFrameColors[wfpBorder]
       else Brush.Color := WinFrameColors[wfpBorder];
-      
+
       SaveIndex := SaveDC(Canvas.Handle);
       Sz := WindowInfo.FloatingBorderSize;
       with R, Sz do
@@ -1129,7 +1129,7 @@ begin
         Inc(R2.Left);
         Inc(R2.Top);
       end;
-      
+
       if Horz then
       begin
         I := R2.Top + Sz div 2;
@@ -1524,7 +1524,7 @@ procedure TTBXProfessionalTheme.PaintStatusBar(Canvas: TCanvas; R: TRect;
     Canvas.Brush.Color := SeparatorColor1;
     Canvas.FillRect(Rect(P.X - 3, P.Y - 3, P.X - 1, P.Y - 1));
   end;
-  
+
 begin
   case Part of
     SBP_BODY:
@@ -1537,11 +1537,11 @@ begin
     SBP_GRIPPER:
       begin
         Dec(R.Right);
-        Dec(R.Bottom);        
+        Dec(R.Bottom);
         DrawHandleElement(Point(R.Right, R.Bottom));
         DrawHandleElement(Point(R.Right, R.Bottom - 4));
         DrawHandleElement(Point(R.Right, R.Bottom - 8));
-        
+
         Dec(R.Right, 4);
         DrawHandleElement(Point(R.Right, R.Bottom));
         DrawHandleElement(Point(R.Right, R.Bottom - 4));

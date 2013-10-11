@@ -129,8 +129,7 @@ type
     procedure DoMeasureHeight(ACanvas: TCanvas; var AHeight: Integer); virtual;
     procedure DoMeasureWidth(ACanvas: TCanvas; AIndex: Integer; var AWidth: Integer); virtual;
     procedure DrawItem(ACanvas: TCanvas; AViewer: TTBXCustomListViewer; const ARect: TRect; AIndex, AHoverIndex: Integer); virtual;
-    {function  GetImageIndex(ItemIndex: Integer): Integer; virtual;} {vb-}
-    function  GetImageIndex(ItemIndex: Integer): Integer; reintroduce; {vb+}
+    function  GetImageIndex(ItemIndex: Integer): Integer; reintroduce;
     function  GetItemViewerClass(AView: TTBView): TTBItemViewerClass; override;
     function  GetItemText(Index: Integer): string; virtual; abstract;
     function  GetCount: Integer; virtual; abstract;
@@ -188,13 +187,12 @@ type
     procedure MouseDown(Shift: TShiftState; X, Y: Integer; var MouseDownOnMenu: Boolean); override;
     procedure MouseMove(X, Y: Integer); override;
     procedure MouseUp(X, Y: Integer; MouseWasDownOnMenu: Boolean); override;
-    {procedure MouseWheel(WheelDelta: Integer; X, Y: Integer); override;} {vb-}
-    procedure MouseWheel(WheelDelta: Integer; X, Y: Integer; var Handled: Boolean); override; {vb+}
+    procedure MouseWheel(WheelDelta: Integer; X, Y: Integer; var Handled: Boolean); override;
     procedure Paint(const Canvas: TCanvas; const ClientAreaRect: TRect; IsHoverItem, IsPushed, UseDisabledShadow: Boolean); override;
     procedure UpdateItems;
     property HoverIndex: Integer read FHoverIndex write FHoverIndex;
-    property Offset: Integer read FOffset; {vb+}
-    property VisibleItems: Integer read FVisibleItems; {vb+}
+    property Offset: Integer read FOffset;
+    property VisibleItems: Integer read FVisibleItems;
   public
     constructor Create(AView: TTBView; AItem: TTBCustomItem; AGroupLevel: Integer); override;
     destructor Destroy; override;
@@ -246,7 +244,7 @@ type
 
 implementation
 
-uses {$IFDEF JR_D9} Types, {$ENDIF} TB2Common; {vb+}
+uses {$IFDEF JR_D9} Types, {$ENDIF} TB2Common;
 
 type TTBViewAccess = class(TTBView);
 
@@ -421,11 +419,8 @@ begin
     StateFlags := DirectionXPFlags[Direction];
     if not Enabled then Inc(StateFlags, 3)
     else if Pushed then Inc(StateFlags, 2);
-    {DrawThemeBackground(SCROLLBAR_THEME, Canvas.Handle, SBP_ARROWBTN, StateFlags, Rect, nil);} {vb-}
-    {vb+}
     DrawThemeBackground(XPTheme(tcScrollBar), Canvas.Handle,
       SBP_ARROWBTN, StateFlags, Rect, nil);
-    {vb+end}
   end
   else
   begin
@@ -436,40 +431,28 @@ end;
 
 procedure TTBXScrollBar.PaintHandle(Canvas: TCanvas; Rect: TRect; Pushed, Enabled: Boolean);
 const
-  {PartXPFlags: array [TScrollBarKind] of Cardinal = (SBP_THUMBBTNHORZ, SBP_THUMBBTNVERT);} {vb-}
-  ThumbXPFlags: array [TScrollBarKind] of Cardinal = (SBP_THUMBBTNHORZ, SBP_THUMBBTNVERT); {vb+}
-  GripperXPFlags: array [TScrollBarKind] of Cardinal = (SBP_GRIPPERHORZ, SBP_GRIPPERVERT); {vb+}
+  ThumbXPFlags: array [TScrollBarKind] of Cardinal = (SBP_THUMBBTNHORZ, SBP_THUMBBTNVERT);
+  GripperXPFlags: array [TScrollBarKind] of Cardinal = (SBP_GRIPPERHORZ, SBP_GRIPPERVERT);
 var
   StateFlags: Cardinal;
-  {vb+}
   DC: HDC;
   ContentMarg: TMargins;
   GripperSize: TSize;
-  {vb+end}
 begin
   if USE_THEMES then
   begin
     StateFlags := SCRBS_NORMAL;
     if not Enabled then Inc(StateFlags, 3)
     else if Pushed then Inc(StateFlags, 2);
-    {DrawThemeBackground(SCROLLBAR_THEME, Canvas.Handle,
-      PartXPFlags[Kind], StateFlags, Rect, nil);} {vb-}
-    {vb+}
     DC := Canvas.Handle;
-    DrawThemeBackground(XPTheme(tcScrollBar), DC,
-      ThumbXPFlags[Kind], StateFlags, Rect, nil);
-    if (GetThemeMargins(XPTheme(tcScrollBar), DC, ThumbXPFlags[Kind],
-      StateFlags, TMT_CONTENTMARGINS, nil, ContentMarg) = S_OK) and
-        (GetThemePartSize(XPTheme(tcScrollBar), DC, GripperXPFlags[Kind],
-          StateFlags, nil, TS_DRAW, GripperSize) = S_OK) then
+    DrawThemeBackground(XPTheme(tcScrollBar), DC, ThumbXPFlags[Kind], StateFlags, Rect, nil);
+    if (GetThemeMargins(XPTheme(tcScrollBar), DC, ThumbXPFlags[Kind], StateFlags, TMT_CONTENTMARGINS, nil, ContentMarg) = S_OK) and
+       (GetThemePartSize(XPTheme(tcScrollBar), DC, GripperXPFlags[Kind], StateFlags, nil, TS_DRAW, GripperSize) = S_OK) then
     begin
       with Rect, ContentMarg, GripperSize do
-        if ((Right- Left)- (cxLeftWidth+ cxRightWidth) >= cx) and
-          ((Bottom- Top)- (cyTopHeight+ cyBottomHeight) >= cy) then
-            DrawThemeBackground(XPTheme(tcScrollBar), DC,
-              GripperXPFlags[Kind], StateFlags, Rect, nil);
+        if (Right - Left - cxLeftWidth - cxRightWidth >= cx) and (Bottom - Top - cyTopHeight - cyBottomHeight >= cy) then
+          DrawThemeBackground(XPTheme(tcScrollBar), DC, GripperXPFlags[Kind], StateFlags, Rect, nil);
     end;
-    {vb+end}
   end
   else
   begin
@@ -533,12 +516,8 @@ begin
     StateFlags := SCRBS_NORMAL;
     if not Enabled then Inc(StateFlags, 3)
     else if Pushed then Inc(StateFlags, 2);
-    {DrawThemeBackground(SCROLLBAR_THEME, Canvas.Handle, PartXPFlags[IsNextZone, Kind],
-      StateFlags, Rect, nil);} {vb-}
-    {vb+}
     DrawThemeBackground(XPTheme(tcScrollBar), Canvas.Handle,
       PartXPFlags[IsNextZone, Kind], StateFlags, Rect, nil);
-    {vb+end}
   end
   else
   begin
@@ -566,7 +545,8 @@ var
 begin
   case Message.Msg of
 
-    WM_TIMER: with TWMTimer(Message) do
+    WM_TIMER:
+      with TWMTimer(Message) do
       begin
         I := 0;
         TimerElapsed(TimerID, I);
@@ -877,27 +857,12 @@ begin
   if (Operation = opRemove) and (AComponent = Images) then Images := nil;
 end;
 
-(*procedure TTBXCustomList.SetItemIndex(Value: Integer);
-var
-  I: Integer;
-begin
-  if Value < 0 then Value := -1;
-  FItemIndex := Value;
-
-  { Update viewers }
-  if FViewers <> nil then
-    for I := 0 to FViewers.Count - 1 do
-      TTBXCustomListViewer(FViewers[I]).ListChangeHandler(Value);
-
-  if Assigned(FOnChange) then FOnChange(Self);
-end;*) {rm-}
-{rm+}
 procedure TTBXCustomList.SetItemIndex(Value: Integer);
 var
   I: Integer;
 begin
   if Value < 0 then Value := -1;
-  { RM 2005/04/14: Make sure there's a change and Value<GetCount(NOT Count!) }
+  { Make sure there's a change and Value<GetCount(NOT Count!) }
   if (FItemIndex <> Value) and (Value < GetCount) then
   begin
     FItemIndex := Value;
@@ -908,7 +873,6 @@ begin
     if Assigned(FOnChange) then FOnChange(Self);
   end;
 end;
-{rm+end}
 
 //----------------------------------------------------------------------------//
 
@@ -920,11 +884,12 @@ begin
 end;
 
 procedure TTBXCustomListViewer.CalcSize(const Canvas: TCanvas; var AWidth, AHeight: Integer);
-const ListViewType: array[Boolean] of Integer = (PVT_LISTBOX, PVT_TOOLBOX); {vb+}
+const
+  ListViewType: array[Boolean] of Integer = (PVT_LISTBOX, PVT_TOOLBOX);
 var
   Item: TTBXCustomList;
   I, W: Integer;
-  Border: TPoint; {vb+}
+  Border: TPoint;
 begin
   Item := TTBXCustomList(Self.Item);
   Canvas.Font := TTBViewAccess(View).GetFont;
@@ -950,10 +915,9 @@ begin
 
   if AWidth < Item.MinWidth then AWidth := Item.MinWidth;
   if (Item.MaxWidth > Item.MinWidth) and (AWidth > Item.MaxWidth) then AWidth := Item.MaxWidth;
-  {vb+}
+
   CurrentTheme.GetViewBorder(ListViewType[Item.ToolBoxPopup], Border);
   Dec(AWidth, Border.X * 2);
-  {vb+end}
 end;
 
 constructor TTBXCustomListViewer.Create(AView: TTBView; AItem: TTBCustomItem; AGroupLevel: Integer);
@@ -1122,8 +1086,7 @@ end;
 
 procedure TTBXCustomListViewer.MouseDown(Shift: TShiftState; X, Y: Integer; var MouseDownOnMenu: Boolean);
 begin
-  {if X > FWidth - FScrollBarWidth then} {vb-}
-  if (FScrollBar <> nil) and (X > FWidth - FScrollBarWidth) then {vb+}
+  if (FScrollBar <> nil) and (X > FWidth - FScrollBarWidth) then
   begin
     Dec(X, FWidth - FScrollBarWidth);
     MouseInScrollBar := True;
@@ -1250,9 +1213,8 @@ begin
   end;
 end;
 
-{procedure TTBXCustomListViewer.MouseWheel(WheelDelta, X, Y: Integer);} {vb-}
 procedure TTBXCustomListViewer.MouseWheel(WheelDelta, X, Y: Integer;
-  var Handled: Boolean); {vb+}
+  var Handled: Boolean);
 var
   IsNegative: Boolean;
 begin
@@ -1271,7 +1233,7 @@ begin
       else
         FScrollBar.UpdatePosition(FScrollBar.Position - 1)
     end;
-    Handled := True; {vb+}
+    Handled := True;
   end;
 end;
 
@@ -1286,10 +1248,9 @@ begin
     FHeight := Bottom - Top;
   end;
 
-  {DrawItems(Canvas, ClientAreaRect);} {vb-}
-  { vb Note: if we have slowly drawn items (for example font list), scrollbar
+  { Note: if we have slowly drawn items (for example font list), scrollbar
     appears only after all items are drawn. To avoid it, first draw scrollbar,
-    then items. (Moved down) }
+    then items. }
 
   if FScrollBarWidth > 0 then
   begin
@@ -1308,7 +1269,7 @@ begin
     FScrollBar.Position := FOffset;
     FScrollBar.PaintTo(Canvas);
   end;
-  DrawItems(Canvas, ClientAreaRect); {vb+}
+  DrawItems(Canvas, ClientAreaRect);
 end;
 
 procedure TTBXCustomListViewer.SBAutoScrollHandler(Sender: TObject;

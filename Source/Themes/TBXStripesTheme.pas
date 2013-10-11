@@ -59,8 +59,7 @@ type
 
 implementation
 
-{uses TBXUtils, TB2Item, TB2Common, Classes, Controls, Forms, Commctrl;} {vb-}
-uses TBXUtils, TB2Item, TB2Common, Classes, Controls, Forms, Commctrl {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+uses TBXUtils, TB2Item, TB2Common, Classes, Controls, Forms, Commctrl {$IFDEF JR_D9}, Types {$ENDIF};
 
 var
   StockImgList: TImageList;
@@ -316,12 +315,8 @@ begin
       I := ColorIntensity(AColor);
       if I < 200 then I := (200 - I) div 20
       else I := 0;
-      {HighlightColor := GetNearestColor(DC, Lighten(AColor, 16 + I));
-      ShadowColor := GetNearestColor(DC, Lighten(AColor, -16));} {vb- Range check error}
-      {vb+}
       HighlightColor := TColor(GetNearestColor(DC, Cardinal(Lighten(AColor, 16 + I))));
       ShadowColor := TColor(GetNearestColor(DC, Cardinal(Lighten(AColor, -16))));
-      {vb+end}
 
       if not Transparent then
       begin
@@ -666,7 +661,6 @@ begin
   with Canvas, ItemInfo do
   begin
     R := ARect;
-//    W := EditFrameWidth;
     Inc(R.Left);
     Embedded := ((ViewType and VT_TOOLBAR) = VT_TOOLBAR) and ((ViewType and TVT_EMBEDDED) = TVT_EMBEDDED);
     BtnDisabled := (ButtonInfo.ButtonState and EBDS_DISABLED) <> 0;
@@ -1429,7 +1423,6 @@ begin
 end;
 
 initialization
-
-RegisterTBXTheme('Stripes', TTBXStripesTheme);
+  RegisterTBXTheme('Stripes', TTBXStripesTheme);
 
 end.

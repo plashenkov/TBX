@@ -19,7 +19,7 @@ type
     procedure MemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   protected
     procedure ArrangeControls;
-    procedure DoShow; override; {vb+}
+    procedure DoShow; override;
     procedure Resize; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -33,11 +33,9 @@ var
   W, H: Integer;
 begin
   R := ClientRect;
-  {InflateRect(R, -16, -16);} {vb-}
-  InflateRect(R, -6, -6); {vb+}
+  InflateRect(R, -6, -6);
   B := R;
-  {W := 60; H := 23;} {vb-}
-  W := 70; H := 23; {vb+}
+  W := 70; H := 23;
   B.Left := B.Right - W;
   B.Top := B.Bottom - H;
   Cancel.BoundsRect := B;
@@ -52,10 +50,8 @@ constructor TStrEditDlg.Create(AOwner: TComponent);
 begin
   inherited CreateNew(AOwner);
   AutoScroll := False;
-  {vb+}
   Constraints.MinHeight := 200;
   Constraints.MinWidth := 300;
-  {vb+end}
   Scaled := False;
   Position := poScreenCenter;
   Memo := TMemo.Create(Self);
@@ -63,7 +59,7 @@ begin
   begin
     ScrollBars := ssBoth;
     OnKeyDown := MemoKeyDown;
-    Parent := Self; {vb+}
+    Parent := Self;
   end;
   OK := TButton.Create(Self);
   with OK do
@@ -71,7 +67,7 @@ begin
     Caption := 'OK';
     Default := True;
     ModalResult := mrOk;
-    Parent := Self; {vb+}
+    Parent := Self;
   end;
   Cancel := TButton.Create(Self);
   with Cancel do
@@ -79,13 +75,13 @@ begin
     Cancel := True;
     Caption := 'Cancel';
     ModalResult := mrCancel;
-    Parent := Self; {vb+}
+    Parent := Self;
   end;
 end;
 
-procedure TStrEditDlg.DoShow; {vb+}
+procedure TStrEditDlg.DoShow;
 begin
-  Memo.SelStart := Length(Memo.Text)- 1;
+  Memo.SelStart := Length(Memo.Text) - 1;
 end;
 
 procedure TStrEditDlg.MemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

@@ -40,14 +40,12 @@ type
 
     procedure SetupColorCache; override;
   protected
-    {vb+}
     BaseColor: TColor;
     BtnText: TColor;
     BtnShadow: TColor;
     BtnFace: TColor;
     BtnHighlight: TColor;
     procedure SetupBaseColors; virtual;
-    {vb+end}
     { Internal Methods }
     function GetPartColor(const ItemInfo: TTBXItemInfo; ItemPart: TItemPart): TColor;
     function GetBtnColor(const ItemInfo: TTBXItemInfo; ItemPart: TItemPart): TColor;
@@ -94,33 +92,20 @@ type
 
 implementation
 
-{uses TBXUtils, TB2Item, TB2Common, Classes, Controls, Forms, Commctrl;} {vb-}
-uses TBXUtils, TB2Item, TB2Common, Classes, Controls, Forms, Commctrl {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
-
-{const
-  BaseColor = $DFDFDF;
-  BtnText = $000000;
-  BtnShadow = $9F9F9F;
-  BtnFace = $C7C7C7;
-  BtnHighlight = $DFDFDF;} {vb-}
+uses TBXUtils, TB2Item, TB2Common, Classes, Controls, Forms, Commctrl {$IFDEF JR_D9}, Types {$ENDIF};
 
 var
   StockImgList: TImageList;
-  {StockPatternBitmap: TBitmap;} {vb-}
   CounterLock: Integer = 0;
 
 procedure InitializeStock;
 begin
-  {StockPatternBitmap := TBitmap.Create;
-  StockPatternBitmap.Width := 8;
-  StockPatternBitmap.Height := 8;} {vb-}
   StockImgList := TImageList.Create(nil);
   StockImgList.Handle := ImageList_LoadBitmap(HInstance, 'TBXGLYPHS', 16, 0, clWhite);
 end;
 
 procedure FinalizeStock;
 begin
-  {StockPatternBitmap.Free;} {vb-}
   StockImgList.Free;
 end;
 
@@ -150,17 +135,17 @@ begin
 
   for J := 0 to (R.Bottom - R.Top - 1) div STEP do
     for I := 0 to (R.Right - R.Left - 1) div STEP do
-      begin
-        X := R.Left + I * STEP + 1;
-        Y := R.Top + J * STEP + 1;
-        SetPixelV(DC, X, Y, C);
-        SetPixelV(DC, X - 1, Y - 1, CLo1);
-        SetPixelV(DC, X - 1, Y, CLo2);
-        SetPixelV(DC, X, Y - 1, CLo2);
-        SetPixelV(DC, X + 1, Y, CHi2);
-        SetPixelV(DC, X, Y + 1, CHi2);
-        SetPixelV(DC, X + 1, Y + 1, CHi1);
-      end;
+    begin
+      X := R.Left + I * STEP + 1;
+      Y := R.Top + J * STEP + 1;
+      SetPixelV(DC, X, Y, C);
+      SetPixelV(DC, X - 1, Y - 1, CLo1);
+      SetPixelV(DC, X - 1, Y, CLo2);
+      SetPixelV(DC, X, Y - 1, CLo2);
+      SetPixelV(DC, X + 1, Y, CHi2);
+      SetPixelV(DC, X, Y + 1, CHi2);
+      SetPixelV(DC, X + 1, Y + 1, CHi1);
+    end;
 end;
 
 procedure RoundFrame(DC: HDC; R: TRect; TL, TR, BL, BR: Integer; Color: TColor); overload;
@@ -400,17 +385,6 @@ begin
   DrawGlyph(DC, R, 7, 6, Pattern[0], C);
 end;
 
-{procedure DrawBtnFill(DC: HDC; const R: TRect);
-var
-  C: TColor;
-  T: Integer;
-begin
-  C := MixColors(BtnHighlight, BtnFace, 192);
-  T := (R.Top + R.Bottom) div 2;
-  GradFill(DC, Rect(R.Left, R.Top, R.Right, T), BtnHighlight, C, gkVert);
-  GradFill(DC, Rect(R.Left, T, R.Right, R.Bottom), C, Lighten(BtnFace, -16), gkVert);
-end;} {vb-}
-
 { TTBXAluminumTheme }
 
 function TTBXAluminumTheme.GetBooleanMetrics(Index: Integer): Boolean;
@@ -582,19 +556,6 @@ begin
   end;
 end;
 
-{procedure TTBXAluminumTheme.PaintCheckMark(Canvas: TCanvas; ARect: TRect; const ItemInfo: TTBXItemInfo);
-var
-  DC: HDC;
-  X, Y: Integer;
-begin
-  DC := Canvas.Handle;
-  X := (ARect.Left + ARect.Right) div 2 - 2;
-  Y := (ARect.Top + ARect.Bottom) div 2 + 1;
-  PolyLineEx(DC, [Point(X-2, Y-2), Point(X, Y), Point(X+4, Y-4),
-    Point(X+4, Y-3), Point(X, Y+1), Point(X-2, Y-1), Point(X-2, Y-2)], GetBtnColor(ItemInfo, ipText));
-end;} {vb-}
-
-{vb+}
 procedure TTBXAluminumTheme.PaintCheckMark(Canvas: TCanvas; ARect: TRect;
   const ItemInfo: TTBXItemInfo);
 const
@@ -620,7 +581,6 @@ begin
   end
   else DrawPattern(DC, X, Y, CheckMarkPattern, C1, False);
 end;
-{vb+end}
 
 procedure TTBXAluminumTheme.PaintDropDownArrow(Canvas: TCanvas;
   const ARect: TRect; const ItemInfo: TTBXItemInfo);
@@ -817,7 +777,7 @@ begin
       Dec(R.Bottom);
       RoundFill(DC, R, 2, 2, 2, 2, C);
       RoundFrame(DC, R, 2, 2, 2, 2, BorderColor);
-      C := ToolbarColor; {vb+}
+      C := ToolbarColor;
       DrawButtonBitmap(Canvas.Handle, R, C, IsPushed or IsHovered);
     end;
   end;
@@ -863,8 +823,6 @@ end;
 
 procedure TTBXAluminumTheme.PaintEditButton(Canvas: TCanvas; const ARect: TRect;
   var ItemInfo: TTBXItemInfo; ButtonInfo: TTBXEditBtnInfo);
-{const
-  ArrowColor: array [Boolean] of TColor = (BtnText, clMenuText);} {vb-}
 var
   DC: HDC;
   BtnDisabled, BtnHot, BtnPressed: Boolean;
@@ -966,15 +924,12 @@ var
   DC: HDC;
   R: TRect;
   W: Integer;
-//  Embedded: Boolean;
 begin
   DC := Canvas.Handle;
   R := ARect;
   PaintFrame(Canvas, R, ItemInfo);
   W := EditFrameWidth;
   InflateRect(R, -W, -W);
-{  Embedded := ((ItemInfo.ViewType and VT_TOOLBAR) = VT_TOOLBAR) and
-    ((ItemInfo.ViewType and TVT_EMBEDDED) = TVT_EMBEDDED); }
 
   with EditInfo do if RightBtnWidth > 0 then Dec(R.Right, RightBtnWidth - W);
 
@@ -1270,7 +1225,7 @@ begin
       BorderColor := BtnItemColors[BtnItemState, ipFrame];
       RoundFill(DC, R2, 1, 1, 1, 1, C);
       RoundFrame(DC, R2, 1, 1, 1, 1, BorderColor);
-      C := ToolbarColor; {vb+}
+      C := ToolbarColor;
       DrawButtonBitmap(DC, R2, C, CloseButtonDown or CloseButtonHover);
     end;
   end;
@@ -1313,7 +1268,7 @@ end;
 
 constructor TTBXAluminumTheme.Create(const AName: string);
 begin
-  SetupBaseColors; {vb+}
+  SetupBaseColors;
   inherited;
   if CounterLock = 0 then InitializeStock;
   Inc(CounterLock);
@@ -1322,14 +1277,11 @@ end;
 destructor TTBXAluminumTheme.Destroy;
 begin
   Dec(CounterLock);
-  {if CounterLock = 0 then FinalizeStock;} {vb-}
-  {vb+}
   if CounterLock = 0 then
   begin
     FinalizeBrushedFill;
     FinalizeStock;
   end;
-  {vb+end}
   inherited;
 end;
 
@@ -1423,7 +1375,7 @@ begin
         BorderColor := BtnItemColors[BtnItemState, ipFrame];
         RoundFill(DC, R2, 1, 1, 1, 1, C);
         RoundFrame(DC, R2, 1, 1, 1, 1, BorderColor);
-        C := ToolbarColor; {vb+}
+        C := ToolbarColor;
         DrawButtonBitmap(DC, R2, C, CloseButtonDown or CloseButtonHover);
       end;
 
@@ -1635,7 +1587,7 @@ begin
     end;
 end;
 
-procedure TTBXAluminumTheme.SetupBaseColors; {vb+}
+procedure TTBXAluminumTheme.SetupBaseColors;
 begin
   BaseColor := $DFDFDF;
   BtnText := $000000;

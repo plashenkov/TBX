@@ -103,7 +103,7 @@ const
   IO_COMBO                   = $08;
   IO_DESIGNING               = $10;
   IO_APPACTIVE               = $20;  // True when Application.Active = True
-  IO_RADIO                   = $40;  {vb+}
+  IO_RADIO                   = $40;
 
 { Drag handle styles }
 const
@@ -411,19 +411,6 @@ var
   TBXHiContrast: Boolean; // this can me removed in future
   TBXNoBlending: Boolean; // TBXNoColor or TBXHiContrast
 
-  { Handles for Windows XP visual styles }
-  {SCROLLBAR_THEME: THandle;
-  REBAR_THEME: THandle;
-  BUTTON_THEME: THandle;
-  TOOLBAR_THEME: THandle;
-  WINDOW_THEME: THandle;
-  COMBO_THEME: THandle;
-  EXPLORERBAR_THEME: THandle;
-  STATUSBAR_THEME: THandle;
-  SPIN_THEME: THandle;} {vb-}
-
-{vb+}
-{ Use XPTheme(tc...) instead of commented variables }
 type
   TThemedControl = (tcButton, tcClock, tcComboBox, tcEdit, tcExplorerBar,
     tcGlobals, tcHeader, tcListView, tcMenu, tcMenuBand, tcPage, tcProgress,
@@ -432,7 +419,6 @@ type
     tcWindow);
 
 function XPTheme(ThemedControl: TThemedControl): THandle;
-{vb+end}
 
 var
   USE_FLATMENUS: Boolean;
@@ -449,16 +435,14 @@ function GetTBXDragHandleSize(const ToolbarInfo: TTBXToolbarInfo): Integer;
 implementation
 
 uses
-  {SysUtils, TBXUtils, TBXUxThemes;} {vb-}
-  SysUtils, TypInfo, TB2Common, TBXConsts, TBXUtils, TBXUxThemes {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+  SysUtils, TypInfo, TB2Common, TBXConsts, TBXUtils, TBXUxThemes {$IFDEF JR_D9}, Types {$ENDIF};
 
 const
   SPI_GETFLATMENU = $1022;
 
 type
   TThemeInfo = record
-    {Name: ShortString;} {vb-}
-    Name: String; {vb+}
+    Name: String;
     ThemeClass: TTBXThemeClass;
     ThemeInstance: TTBXTheme;
     RefCount: Integer;
@@ -480,10 +464,9 @@ type
     procedure SetEnableVisualStyles(Value: Boolean);
     procedure SetFlatMenuStyle(Value: Integer);
   protected
-    {procedure VisualStylesClose;} {vb-}
-    procedure VisualStylesClose(CloseHandles: Boolean = True); {vb+}
+    procedure VisualStylesClose(CloseHandles: Boolean = True);
     procedure VisualStylesOpen;
-    procedure UpdateMenuRelated; {vb+}
+    procedure UpdateMenuRelated;
     procedure UpdateVariables;
     procedure WndProc(var Message: TMessage);
   public
@@ -543,11 +526,9 @@ var
   Index: Integer;
 begin
   if (Length(AName) = 0) or (AThemeClass = nil) then
-    {raise Exception.Create('Cannot register theme');} {vb-}
-    raise Exception.CreateRes(@STBXCannotRegisterTheme); {vb+}
+    raise Exception.CreateRes(@STBXCannotRegisterTheme);
   Index := FindTBXTheme(AName);
-  {if Index >= 0 then raise Exception.CreateFmt('Theme %s is already registered', [AName]);} {vb-}
-  if Index >= 0 then raise Exception.CreateResFmt(@STBXThemeAlreadyRegistered, [AName]); {vb+}
+  if Index >= 0 then raise Exception.CreateResFmt(@STBXThemeAlreadyRegistered, [AName]);
   Index := Length(Themes);
   SetLength(Themes, Index + 1);
   with Themes[Index] do
@@ -564,12 +545,7 @@ var
   Index, L: Integer;
 begin
   Index := FindTBXTheme(AName);
-  {if Index < 0 then raise Exception.CreateFmt('Cannot unregister unknown theme %s', [AName]);} {vb-}
-  if Index < 0 then raise Exception.CreateResFmt(@STBXCannotUnregisterUnknownTheme, [AName]); {vb+}
-  {L := Length(Themes);
-  if Index < L - 1 then
-    Move(Themes[Index + 1], Themes[Index], SizeOf(TThemeInfo) * (L - Index - 1));} {vb-}
-  {vb+}
+  if Index < 0 then raise Exception.CreateResFmt(@STBXCannotUnregisterUnknownTheme, [AName]);
   L := High(Themes);
   if Index < L then
   begin
@@ -577,7 +553,6 @@ begin
     Move(Themes[Index + 1], Themes[Index], SizeOf(TThemeInfo) * (L - Index));
     PLongint(Themes[L].Name) := nil;
   end;
-  {vb+end}
   SetLength(Themes, L);
 end;
 
@@ -603,8 +578,7 @@ var
   M: TMessage;
 begin
   Index := FindTBXTheme(AName);
-  {if Index < 0 then raise Exception.Create('Unknown theme ' + AName);} {vb-}
-  if Index < 0 then raise Exception.CreateResFmt(@STBXUnknownTheme, [AName]); {vb+}
+  if Index < 0 then raise Exception.CreateResFmt(@STBXUnknownTheme, [AName]);
   with Themes[Index] do
   begin
     if RefCount = 0 then
@@ -613,7 +587,7 @@ begin
       Assert(ThemeInstance = nil);
       ThemeInstance := ThemeClass.Create(Name);
       M.Msg := TBX_SYSCOMMAND;
-      M.WParam := Integer(Application.Active);
+      M.WParam := WPARAM(Application.Active);
       M.LParam := 0;
       M.Result := 0;
       ThemeInstance.Dispatch(M);
@@ -631,8 +605,7 @@ begin
     with Themes[Index] do
       if ThemeInstance = ATheme then
       begin
-        {if RefCount < 1 then raise Exception.Create('Cannot release theme ' + Themes[Index].Name);} {vb-}
-        if RefCount < 1 then raise Exception.CreateResFmt(@STBXCannotReleaseTheme, [Themes[Index].Name]); {vb+}
+        if RefCount < 1 then raise Exception.CreateResFmt(@STBXCannotReleaseTheme, [Themes[Index].Name]);
         Dec(RefCount);
         if RefCount = 0 then
         begin
@@ -642,8 +615,7 @@ begin
         end;
         Exit;
       end;
-  {raise Exception.Create('Cannot release theme');} {vb-}
-  raise Exception.CreateRes(@STBXCannotReleaseTheme); {vb+}
+  raise Exception.CreateRes(@STBXCannotReleaseTheme);
 end;
 
 { TTBXTheme }
@@ -722,8 +694,8 @@ begin
   if FNotifies.Count > 0 then
   begin
     M.Msg := Msg;
-    M.WParam := Param1;
-    M.LParam := Param2;
+    M.WParam := WPARAM(Param1);
+    M.LParam := LPARAM(Param2);
     M.Result := 0;
     for I := 0 to FNotifies.Count - 1 do TObject(FNotifies[I]).Dispatch(M);
     Result := M.Result;
@@ -742,11 +714,9 @@ end;
 
 destructor TTBXThemeManager.Destroy;
 begin
-  {VisualStylesClose;} {vb-}
   {$IFDEF JR_D6}Classes.{$ENDIF}DeallocateHWnd(FWindowHandle);
   FNotifies.Free;
-  {VisualStylesClose;} {vb-}
-  VisualStylesClose(not IsLibrary); {vb+}
+  VisualStylesClose(not IsLibrary);
   inherited;
 end;
 
@@ -780,145 +750,11 @@ begin
   if Value <> FFlatMenuStyle then
   begin
     FFlatMenuStyle := Value;
-    {UpdateVariables;} {vb-}
-    UpdateMenuRelated; {vb+}
+    UpdateMenuRelated;
     Notify;
   end;
 end;
 
-{procedure TTBXThemeManager.UpdateVariables;
-var
-  DC: HDC;
-  SysFlatMenus: Boolean;
-begin
-  TBXUtils.RecreateStock;
-
-  DC := GetDC(0);
-  try
-    TBXLoColor := GetDeviceCaps(DC, BITSPIXEL) * GetDeviceCaps(DC, PLANES) < 12;
-    TBXHiContrast := GetSysColor(COLOR_BTNFACE) = $00FFFFFF;
-    TBXNoBlending := TBXLoColor or TBXHiContrast;
-  finally
-    ReleaseDC(0, DC);
-  end;
-
-  VisualStylesClose;
-  VisualStylesOpen;
-
-  clToolbar := clBtnFace;
-  clToolbarText := clBtnText;
-  if USE_THEMES then
-  begin
-    GetThemeColor(TOOLBAR_THEME, 0, 0, TMT_FILLCOLOR, Cardinal(clToolbar));
-    GetThemeColor(TOOLBAR_THEME, 0, 0, TMT_TEXTCOLOR, Cardinal(clToolbarText));
-  end;
-
-  SysFlatMenus := False;
-  if (Win32Platform = VER_PLATFORM_WIN32_NT) and
-    ((Win32MajorVersion > 5) or
-     ((Win32MajorVersion = 5) and (Win32MinorVersion >= 1))) then
-  begin
-    SystemParametersInfo(SPI_GETFLATMENU, 0, @SysFlatMenus, 0);
-  end;
-
-
-  if SysFlatMenus then // System indicates support for flat menus
-  begin
-    if FlatMenuStyle in [FMS_AUTOMATIC, FMS_ENABLED] then
-    begin
-      USE_FLATMENUS := True;
-      clPopup := clMenu;
-      clPopupText := clMenuText;
-    end
-    else
-    begin
-      USE_FLATMENUS := False;
-      clPopup := clToolbar;
-      clPopupText := clToolbarText;
-    end;
-  end
-  else
-  begin
-    if FlatMenuStyle = FMS_ENABLED then
-    begin
-      USE_FLATMENUS := True;
-      clPopup := clWindow;
-      clPopupText := clWindowText;
-    end
-    else
-    begin
-      USE_FLATMENUS := False;
-      clPopup := clMenu;
-      clPopupText := clMenuText;
-    end;
-  end;
-end;
-
-procedure TTBXThemeManager.VisualStylesClose;
-
-  procedure Close(var ATheme: THandle);
-  begin
-    if ATheme <> 0 then begin CloseThemeData(ATheme); ATheme := 0; end;
-  end;
-
-begin
-  if USE_THEMES then
-  begin
-    Close(BUTTON_THEME);
-    Close(SCROLLBAR_THEME);
-    Close(REBAR_THEME);
-    Close(TOOLBAR_THEME);
-    Close(WINDOW_THEME);
-    Close(COMBO_THEME);
-    Close(EXPLORERBAR_THEME);
-    Close(STATUSBAR_THEME);
-    Close(SPIN_THEME);
-  end;
-  FreeXPThemes;
-end;
-
-procedure TTBXThemeManager.VisualStylesOpen;
-begin
-  USE_THEMES := False;
-  if (Win32Platform = VER_PLATFORM_WIN32_NT) and ((Win32MajorVersion > 5) or
-     ((Win32MajorVersion = 5) and (Win32MinorVersion >= 1))) and EnableVisualStyles then
-  begin
-    InitXPThemes;
-    USE_THEMES := CanUseXPThemes;
-    try
-      BUTTON_THEME := OpenThemeData(FWindowHandle, 'BUTTON');
-      SCROLLBAR_THEME := OpenThemeData(FWindowHandle, 'SCROLLBAR');
-      REBAR_THEME := OpenThemeData(FWindowHandle, 'REBAR');
-      TOOLBAR_THEME := OpenThemeData(FWindowHandle, 'TOOLBAR');
-      WINDOW_THEME := OpenThemeData(FWindowHandle, 'WINDOW');
-      COMBO_THEME := OpenThemeData(FWindowHandle, 'COMBOBOX');
-      EXPLORERBAR_THEME := OpenThemeData(FWindowHandle, 'EXPLORERBAR');
-      STATUSBAR_THEME := OpenThemeData(FWindowHandle, 'STATUS');
-      SPIN_THEME := OpenThemeData(FWindowHandle, 'SPIN');
-    except
-      VisualStylesClose;
-    end;
-  end;
-end;
-
-procedure TTBXThemeManager.WndProc(var Message: TMessage);
-const
-  ActiveFlags: array [Boolean] of Integer = (TSC_APPDEACTIVATE, TSC_APPACTIVATE);
-begin
-  case Message.Msg of
-    WM_DISPLAYCHANGE, WM_SYSCOLORCHANGE, WM_THEMECHANGED:
-      begin
-        UpdateVariables;
-        ResetBrushedFillCache;
-        Notify;
-      end;
-    WM_ACTIVATEAPP:
-      Broadcast(TBX_SYSCOMMAND, ActiveFlags[Boolean(Message.WParam)], 0);
-  end;
-  with Message do Result := DefWindowProc(FWindowHandle, Msg, wParam, lParam);
-end;} {vb-}
-
-{vb+}
 procedure TTBXThemeManager.UpdateMenuRelated;
 begin
   if IsWindowsXP and GetSystemParametersInfoBool(SPI_GETFLATMENU, False) then
@@ -1045,24 +881,14 @@ begin
       XPThemeDataCache[ThemedControl] := Result;
     end;
 end;
-{vb+end}
 
 initialization
-{if GetSysColorBrush(COLOR_HOTLIGHT) = 0 then clHotLight := clHighlight
-else clHotLight := TColor($80000000 or 26);
-Themes := nil;
-ThemeManager := TTBXThemeManager.Create;} {vb-}
-  {vb+}
-  if GetSysColorBrush(COLOR_HOTLIGHT) = 0
-    then clHotLight := clHighlight
-    else clHotLight := TColor($80000000 or 26);
+  if GetSysColorBrush(COLOR_HOTLIGHT) = 0 then clHotLight := clHighlight
+  else clHotLight := TColor($80000000 or 26);
   ThemeManager := TTBXThemeManager.Create;
-  {vb+end}
+
 finalization
-{ThemeManager.Free;
-SetLength(Themes, 0);}
-  {vb+}
   FreeAndNil(ThemeManager);
   Themes := nil;
-  {vb+end}
+
 end.

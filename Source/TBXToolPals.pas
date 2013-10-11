@@ -198,8 +198,7 @@ type
 
 implementation
 
-{uses ImgList, TBXUxThemes;} {vb-}
-uses ImgList, TB2Common, TBXColorConsts, TBXUxThemes {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+uses ImgList, TB2Common, TBXColorConsts, TBXUxThemes {$IFDEF JR_D9}, Types {$ENDIF};
 
 var
   DefaultColorSet: TTBXCustomColorSet;
@@ -215,7 +214,6 @@ begin
   FColCount := 1;
   FRowCount := 1;
   FSelectedCell.X := -1;
-//  Options := Options + [tboToolbarStyle];
 end;
 
 procedure TTBXCustomToolPalette.DoCalcCellSize(Canvas: TCanvas; var AWidth, AHeight: Integer);
@@ -899,139 +897,71 @@ type
 
 procedure TTBXDefaultColorSet.GetColorInfo(Col, Row: Integer; out Color: TColor; out ColorName: string);
 
-  {procedure Clr(const AName: string; AColor: TColor);
-  begin
-    Color := AColor;
-    ColorName := AName;
-  end;} {vb-}
-
-  {vb+}
   procedure Clr(ResStringRec: PResStringRec; AColor: TColor);
   begin
     Color := AColor;
     ColorName := LoadResString(ResStringRec);
   end;
-  {vb+end}
 
 begin
-  {Color := clNone;
-  Name := '';
-  case Row of
-    0:
-      case Col of
-        0: Clr('Black', $000000);
-        1: Clr('Brown', $003399);
-        2: Clr('Olive Green', $003333);
-        3: Clr('Dark Green', $003300);
-        4: Clr('Dark Teal', $663300);
-        5: Clr('Dark blue', $800000);
-        6: Clr('Indigo', $993333);
-        7: Clr('Gray-80%', $333333);
-      end;
-
-    1:
-      case Col of
-        0: Clr('Dark Red', $000080);
-        1: Clr('Orange', $0066FF);
-        2: Clr('Dark Yellow', $008080);
-        3: Clr('Green', $008000);
-        4: Clr('Teal', $808000);
-        5: Clr('Blue', $FF0000);
-        6: Clr('Blue-Gray', $996666);
-        7: Clr('Gray-50%', $808080);
-      end;
-
-    2:
-      case Col of
-        0: Clr('Red', $0000FF);
-        1: Clr('Light Orange', $0099FF);
-        2: Clr('Lime', $00CC99);
-        3: Clr('Sea Green', $669933);
-        4: Clr('Aqua', $CCCC33);
-        5: Clr('Light Blue', $FF6633);
-        6: Clr('Violet', $800080);
-        7: Clr('Gray-40%', $969696);
-      end;
-
-    3:
-      case Col of
-        0: Clr('Pink', $FF00FF);
-        1: Clr('Gold', $00CCFF);
-        2: Clr('Yellow', $00FFFF);
-        3: Clr('Bright Green', $00FF00);
-        4: Clr('Turquoise', $FFFF00);
-        5: Clr('Sky Blue', $FFCC00);
-        6: Clr('Plum', $663399);
-        7: Clr('Gray-25%', $C0C0C0);
-      end;
-
-    4:
-      case Col of
-        0: Clr('Rose', $CC99FF);
-        1: Clr('Tan', $99CCFF);
-        2: Clr('Light Yellow', $99FFFF);
-        3: Clr('Light Green', $CCFFCC);
-        4: Clr('Light Turquoise', $FFFFCC);
-        5: Clr('Pale Blue', $FFCC99);
-        6: Clr('Lavender', $FF99CC);
-        7: Clr('White', $FFFFFF);
-      end;
-  end;} {vb-}
-  {vb+}
   Color := clNone;
+  ColorName := '';
   case Row of
     0: case Col of
-        0: Clr(@STBXColorBlack, $000000);
-        1: Clr(@STBXColorBrown, $003399);
-        2: Clr(@STBXColorOliveGreen, $003333);
-        3: Clr(@STBXColorDarkGreen, $003300);
-        4: Clr(@STBXColorDarkTeal, $663300);
-        5: Clr(@STBXColorDarkBlue, $800000);
-        6: Clr(@STBXColorIndigo, $993333);
-        7: Clr(@STBXColorGray80, $333333);
+         0: Clr(@STBXColorBlack, $000000);
+         1: Clr(@STBXColorBrown, $003399);
+         2: Clr(@STBXColorOliveGreen, $003333);
+         3: Clr(@STBXColorDarkGreen, $003300);
+         4: Clr(@STBXColorDarkTeal, $663300);
+         5: Clr(@STBXColorDarkBlue, $800000);
+         6: Clr(@STBXColorIndigo, $993333);
+         7: Clr(@STBXColorGray80, $333333);
        end;
+
     1: case Col of
-        0: Clr(@STBXColorDarkRed, $000080);
-        1: Clr(@STBXColorOrange, $0066FF);
-        2: Clr(@STBXColorDarkYellow, $008080);
-        3: Clr(@STBXColorGreen, $008000);
-        4: Clr(@STBXColorTeal, $808000);
-        5: Clr(@STBXColorBlue, $FF0000);
-        6: Clr(@STBXColorBlueGray, $996666);
-        7: Clr(@STBXColorGray50, $808080);
+         0: Clr(@STBXColorDarkRed, $000080);
+         1: Clr(@STBXColorOrange, $0066FF);
+         2: Clr(@STBXColorDarkYellow, $008080);
+         3: Clr(@STBXColorGreen, $008000);
+         4: Clr(@STBXColorTeal, $808000);
+         5: Clr(@STBXColorBlue, $FF0000);
+         6: Clr(@STBXColorBlueGray, $996666);
+         7: Clr(@STBXColorGray50, $808080);
        end;
+
     2: case Col of
-        0: Clr(@STBXColorRed, $0000FF);
-        1: Clr(@STBXColorLightOrange, $0099FF);
-        2: Clr(@STBXColorLime, $00CC99);
-        3: Clr(@STBXColorSeaGreen, $669933);
-        4: Clr(@STBXColorAqua, $CCCC33);
-        5: Clr(@STBXColorLightBlue, $FF6633);
-        6: Clr(@STBXColorViolet, $800080);
-        7: Clr(@STBXColorGray40, $969696);
+         0: Clr(@STBXColorRed, $0000FF);
+         1: Clr(@STBXColorLightOrange, $0099FF);
+         2: Clr(@STBXColorLime, $00CC99);
+         3: Clr(@STBXColorSeaGreen, $669933);
+         4: Clr(@STBXColorAqua, $CCCC33);
+         5: Clr(@STBXColorLightBlue, $FF6633);
+         6: Clr(@STBXColorViolet, $800080);
+         7: Clr(@STBXColorGray40, $969696);
        end;
+
     3: case Col of
-        0: Clr(@STBXColorPink, $FF00FF);
-        1: Clr(@STBXColorGold, $00CCFF);
-        2: Clr(@STBXColorYellow, $00FFFF);
-        3: Clr(@STBXColorBrightGreen, $00FF00);
-        4: Clr(@STBXColorTurquoise, $FFFF00);
-        5: Clr(@STBXColorSkyBlue, $FFCC00);
-        6: Clr(@STBXColorPlum, $663399);
-        7: Clr(@STBXColorGray25, $C0C0C0);
+         0: Clr(@STBXColorPink, $FF00FF);
+         1: Clr(@STBXColorGold, $00CCFF);
+         2: Clr(@STBXColorYellow, $00FFFF);
+         3: Clr(@STBXColorBrightGreen, $00FF00);
+         4: Clr(@STBXColorTurquoise, $FFFF00);
+         5: Clr(@STBXColorSkyBlue, $FFCC00);
+         6: Clr(@STBXColorPlum, $663399);
+         7: Clr(@STBXColorGray25, $C0C0C0);
        end;
+
     4: case Col of
-        0: Clr(@STBXColorRose, $CC99FF);
-        1: Clr(@STBXColorTan, $99CCFF);
-        2: Clr(@STBXColorLightYellow, $99FFFF);
-        3: Clr(@STBXColorLightGreen, $CCFFCC);
-        4: Clr(@STBXColorLightTurquoise, $FFFFCC);
-        5: Clr(@STBXColorPaleBlue, $FFCC99);
-        6: Clr(@STBXColorLavender, $FF99CC);
-        7: Clr(@STBXColorWhite, $FFFFFF);
+         0: Clr(@STBXColorRose, $CC99FF);
+         1: Clr(@STBXColorTan, $99CCFF);
+         2: Clr(@STBXColorLightYellow, $99FFFF);
+         3: Clr(@STBXColorLightGreen, $CCFFCC);
+         4: Clr(@STBXColorLightTurquoise, $FFFFCC);
+         5: Clr(@STBXColorPaleBlue, $FFCC99);
+         6: Clr(@STBXColorLavender, $FF99CC);
+         7: Clr(@STBXColorWhite, $FFFFFF);
       end;
   end;
-  {vb+end}
 end;
 
 constructor TTBXDefaultColorSet.Create(AOwner: TComponent);

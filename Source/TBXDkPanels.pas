@@ -53,11 +53,9 @@ type
     procedure ArrangeToolbars; override;
     procedure Paint; override;
     procedure ResizeVisiblePanels(NewSize: Integer);
-    {vb+}
     {$IFDEF JR_D9}
     property OnMouseActivate;
     {$ENDIF}
-    {vb+end}
   end;
 
 
@@ -69,8 +67,7 @@ type
     var NewSize: Integer; Stage: TTBXResizingStage; var AllowResize: Boolean) of object;
   TDockKinds = set of (dkStandardDock, dkMultiDock);
 
-  {TTBXDockablePanel = class(TTBCustomDockableWindow)} {vb-}
-  TTBXCustomDockablePanel = class(TTBCustomDockableWindow) {vb+}
+  TTBXCustomDockablePanel = class(TTBCustomDockableWindow)
   private
     FBorderSize: Integer;
     FCaptionRotation: TDPCaptionRotation;
@@ -79,8 +76,8 @@ type
     FEffectiveColor: TColor;
     FFloatingWidth: Integer;
     FFloatingHeight: Integer;
-    FHorzResizeCursor: TCursor; {vb+}
-    FHorzSplitCursor : TCursor; {vb+}
+    FHorzResizeCursor: TCursor;
+    FHorzSplitCursor : TCursor;
     FIsResizing: Boolean;
     FIsSplitting: Boolean;
     FMinClientWidth: Integer;
@@ -93,8 +90,8 @@ type
     FSplitHeight: Integer;
     FSplitWidth: Integer;
     FSupportedDocks: TDockKinds;
-    FVertResizeCursor: TCursor; {vb+}
-    FVertSplitCursor : TCursor; {vb+}
+    FVertResizeCursor: TCursor;
+    FVertSplitCursor : TCursor;
     FOnDockedResizing: TTBXDockedResizing;
     function  CalcSize(ADock: TTBDock): TPoint;
     procedure SetBorderSize(Value: Integer);
@@ -150,7 +147,6 @@ type
     procedure UpdateEffectiveColor;
     property  IsResizing: Boolean read FIsResizing;
     property  IsSplitting: Boolean read FIsSplitting;
-    {vb+}
     property CaptionRotation: TDPCaptionRotation read FCaptionRotation write SetCaptionRotation default dpcrAuto;
     property Color default clNone;
     property CloseButtonWhenDocked default True;
@@ -161,8 +157,8 @@ type
     property FloatingWidth: Integer read FFloatingWidth write SetFloatingWidth default 0;
     property FloatingHeight: Integer read FFloatingHeight write SetFloatingHeight default 0;
     property Height stored False;
-    property HorzResizeCursor: TCursor read FHorzResizeCursor write FHorzResizeCursor default crSizeWE; {vb+}
-    property HorzSplitCursor: TCursor read FHorzSplitCursor write FHorzSplitCursor default crHSplit; {vb+}
+    property HorzResizeCursor: TCursor read FHorzResizeCursor write FHorzResizeCursor default crSizeWE;
+    property HorzSplitCursor: TCursor read FHorzSplitCursor write FHorzSplitCursor default crHSplit;
     { note: client size constraints should be restored before other size related properties }
     property MaxClientHeight: Integer read FMaxClientHeight write FMaxClientHeight default 0;
     property MaxClientWidth: Integer read FMaxClientWidth write FMaxClientWidth default 0;
@@ -174,11 +170,10 @@ type
     property SupportedDocks: TDockKinds read FSupportedDocks write FSupportedDocks;
     property SmoothDockedResize: Boolean read FSmoothDockedResize write FSmoothDockedResize default True;
     property SnapDistance: Integer read FSnapDistance write SetSnapDistance default 0;
-    property VertResizeCursor: TCursor read FVertResizeCursor write FVertResizeCursor default crSizeNS; {vb+}
-    property VertSplitCursor: TCursor read FVertSplitCursor write FVertSplitCursor default crVSplit; {vb+}
+    property VertResizeCursor: TCursor read FVertResizeCursor write FVertResizeCursor default crSizeNS;
+    property VertSplitCursor: TCursor read FVertSplitCursor write FVertSplitCursor default crVSplit;
     property Width stored False;
     property OnDockedResizing: TTBXDockedResizing read FOnDockedResizing write FOnDockedResizing;
-    {vb+end}
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -192,7 +187,7 @@ type
 
   { TTBXDockablePanel }
 
-  TTBXDockablePanel = class(TTBXCustomDockablePanel) {vb+}
+  TTBXDockablePanel = class(TTBXCustomDockablePanel)
   published
     { client size constraints should be restored before other size related properties }
     property MaxClientHeight;
@@ -225,8 +220,8 @@ type
     property Font;
     property Height;
     property HideWhenInactive;
-    property HorzResizeCursor; {vb+}
-    property HorzSplitCursor; {vb+}
+    property HorzResizeCursor;
+    property HorzSplitCursor;
     property LastDock;
     property ParentFont;
     property ParentShowHint;
@@ -243,8 +238,8 @@ type
     property SnapDistance;
     property TabOrder;
     property UseLastDock;
-    property VertResizeCursor; {vb+}
-    property VertSplitCursor; {vb+}
+    property VertResizeCursor;
+    property VertSplitCursor;
     property Visible;
     property Width;
 
@@ -259,11 +254,9 @@ type
     property OnDockChanging;
     property OnDockChangingHidden;
     property OnDockedResizing;
-    {vb+}
     {$IFDEF JR_D9}
     property OnMouseActivate;
     {$ENDIF}
-    {vb+end}
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
@@ -293,8 +286,7 @@ type
     procedure MouseTimerHandler(Sender: TObject);
     procedure RemoveMouseTimer;
     procedure SetPaintOptions(Value: TControlPaintOptions);
-    {procedure TBMThemeChange(var Message); message TBM_THEMECHANGE;} {vb-}
-    procedure TBMThemeChange(var Message: TMessage); message TBM_THEMECHANGE; {vb+}
+    procedure TBMThemeChange(var Message: TMessage); message TBM_THEMECHANGE;
     procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
     procedure WMKillFocus(var Message: TMessage); message WM_KILLFOCUS;
     procedure WMSetFocus(var Message: TMessage); message WM_SETFOCUS;
@@ -368,11 +360,9 @@ type
     property OnDragOver;
     property OnEndDock;
     property OnEndDrag;
-    {vb+}
-    {$IFDEF JR_D9}
+{$IFDEF JR_D9}
     property OnMouseActivate;
-    {$ENDIF}
-    {vb+end}
+{$ENDIF}
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -455,7 +445,7 @@ type
 
   TTBXLabel = class(TTBXCustomLabel)
   published
-    property Action; {vb+}
+    property Action;
     property Align;
     property Alignment;
     property Anchors;
@@ -471,7 +461,6 @@ type
     property FocusControl;
     property Font;
     property Margins;
-//    property PaintOptions;
     property ParentBiDiMode;
     property ParentColor;
     property ParentFont;
@@ -493,11 +482,9 @@ type
     property OnDragOver;
     property OnEndDock;
     property OnEndDrag;
-    {vb+}
-    {$IFDEF JR_D9}
+{$IFDEF JR_D9}
     property OnMouseActivate;
-    {$ENDIF}
-    {vb+end}
+{$ENDIF}
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -531,8 +518,7 @@ type
     procedure Paint; override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     property Cursor default crHandPoint;
-    {property ImageIndex: TImageIndex read FImageIndex write SetImageIndex;} {vb-}
-    property ImageIndex: TImageIndex read FImageIndex write SetImageIndex default 0; {vb+}
+    property ImageIndex: TImageIndex read FImageIndex write SetImageIndex default 0;
     property Images: TCustomImageList read FImages write SetImages;
     property SmartFocus default True;
     property TabStop default True;
@@ -546,7 +532,7 @@ type
 
   TTBXLink = class(TTBXCustomLink)
   published
-    property Action; {vb+}
+    property Action;
     property Align;
     property Alignment;
     property Anchors;
@@ -563,7 +549,6 @@ type
     property ImageIndex;
     property Images;
     property Margins;
-//    property PaintOptions;
     property ParentBiDiMode;
     property ParentColor;
     property ParentFont;
@@ -588,11 +573,9 @@ type
     property OnEndDrag;
     property OnEnter;
     property OnExit;
-    {vb+}
-    {$IFDEF JR_D9}
+{$IFDEF JR_D9}
     property OnMouseActivate;
-    {$ENDIF}
-    {vb+end}
+{$ENDIF}
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -677,8 +660,7 @@ type
     property DropDownMenu: TPopupMenu read FDropDownMenu write SetDropDownMenu;
     property GlyphSpacing: Integer read FGlyphSpacing write SetGlyphSpacing default 4;
     property GroupIndex: Integer read FGroupIndex write SetGroupIndex default 0;
-    {property ImageIndex: TImageIndex read FImageIndex write SetImageIndex;} {vb-}
-    property ImageIndex: TImageIndex read FImageIndex write SetImageIndex default 0; {vb+}
+    property ImageIndex: TImageIndex read FImageIndex write SetImageIndex default 0;
     property Images: TCustomImageList read FImages write SetImages;
     property Layout: TButtonLayout read FLayout write SetLayout default blGlyphLeft;
     property ModalResult: TModalResult read FModalResult write FModalResult default 0;
@@ -698,7 +680,7 @@ type
   { TTBXButton }
   TTBXButton = class(TTBXCustomButton)
   published
-    property Action; {vb+}
+    property Action;
     property Align;
     property Alignment;
     property GroupIndex;
@@ -724,7 +706,6 @@ type
     property Layout;
     property Margins;
     property ModalResult;
-//    property PaintOptions;
     property ParentBiDiMode;
     property ParentFont;
     property ParentShowHint;
@@ -750,11 +731,9 @@ type
     property OnDropDown;
     property OnEndDock;
     property OnEndDrag;
-    {vb+}
-    {$IFDEF JR_D9}
+{$IFDEF JR_D9}
     property OnMouseActivate;
-    {$ENDIF}
-    {vb+end}
+{$ENDIF}
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -803,7 +782,7 @@ type
 
   TTBXCheckBox = class(TTBXCustomCheckBox)
   published
-    property Action; {vb+}
+    property Action;
     property Align;
     property Alignment;
     property AllowGrayed;
@@ -820,7 +799,6 @@ type
     property Enabled;
     property Font;
     property Margins;
-//    property PaintOptions;
     property ParentBiDiMode;
     property ParentColor;
     property ParentFont;
@@ -845,11 +823,9 @@ type
     property OnDragOver;
     property OnEndDock;
     property OnEndDrag;
-    {vb+}
-    {$IFDEF JR_D9}
+{$IFDEF JR_D9}
     property OnMouseActivate;
-    {$ENDIF}
-    {vb+end}
+{$ENDIF}
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -895,7 +871,7 @@ type
 
   TTBXRadioButton = class(TTBXCustomRadioButton)
   published
-    property Action; {vb+}
+    property Action;
     property Align;
     property Alignment;
     property Anchors;
@@ -912,7 +888,6 @@ type
     property Font;
     property GroupIndex;
     property Margins;
-//    property PaintOptions;
     property ParentBiDiMode;
     property ParentColor;
     property ParentFont;
@@ -936,11 +911,9 @@ type
     property OnDragOver;
     property OnEndDock;
     property OnEndDrag;
-    {vb+}
-    {$IFDEF JR_D9}
+{$IFDEF JR_D9}
     property OnMouseActivate;
-    {$ENDIF}
-    {vb+end}
+{$ENDIF}
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -1010,7 +983,7 @@ type
     procedure UpdateButtons;
     property AutoScroll: Boolean read FAutoScroll write FAutoScroll default True;
     property ButtonSize: Integer read FButtonSize write SetButtonSize default 10;
-    property DoubleBuffered default True; {vb+}
+    property DoubleBuffered default True;
     property Orientation: TTBXPageScrollerOrientation read FOrientation write SetOrientation default tpsoVertical;
     property Position: Integer read FPosition write SetPosition default 0;
     property Margin: Integer read FMargin write FMargin default 0;
@@ -1072,11 +1045,9 @@ type
     property OnEnter;
     property OnExit;
     property OnGetSiteInfo;
-    {vb+}
-    {$IFDEF JR_D9}
+{$IFDEF JR_D9}
     property OnMouseActivate;
-    {$ENDIF}
-    {vb+end}
+{$ENDIF}
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
@@ -1092,8 +1063,7 @@ type
 implementation
 
 uses
-  {TB2Common, TBXUtils, SysUtils;} {vb-}
-  TB2Common, TBXConsts, TBXUtils, SysUtils {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+  TB2Common, TBXConsts, TBXUtils, SysUtils {$IFDEF JR_D9}, Types {$ENDIF};
 
 type
   TWinControlAccess = class(TWinControl);
@@ -1219,14 +1189,12 @@ begin
   if Control.UseRightToLeftAlignment then Result := ReverseAlignment[Result];
 end;
 
-{function CompareEffectiveDockPos(const Item1, Item2, ExtraData: Pointer): Integer; far;} {vb-}
-function CompareEffectiveDockPos(Item1, Item2: Pointer): Integer; {vb+}
+function CompareEffectiveDockPos(Item1, Item2: Pointer): Integer;
 begin
   Result := TTBCustomDockableWindow(Item1).EffectiveDockPos - TTBCustomDockableWindow(Item2).EffectiveDockPos;
 end;
 
-{function CompareDockPos(const Item1, Item2, ExtraData: Pointer): Integer; far;} {vb-}
-function CompareDockPos(Item1, Item2: Pointer): Integer; {vb+}
+function CompareDockPos(Item1, Item2: Pointer): Integer;
 var
   P1, P2: Integer;
 begin
@@ -1316,7 +1284,6 @@ var
   LeftRight: Boolean;
   I, J, K, L, DragIndex, ResizeIndex, ForcedWidth: Integer;
   EmptySize, ClientW, ClientH, DockSize, TotalSize, TotalMinimumSize, TotalMaximumSize: Integer;
-  {DragIndexPos: Integer;} {vb-}
   T: TTBXDockablePanel;
   S: TPoint;
   CurRowPixel, CurRowSize: Integer;
@@ -1327,7 +1294,6 @@ var
   MinWidth, MaxWidth, EffectiveMinWidth, EffectiveMaxWidth: Integer;
   R: TRect;
 
-  {vb+}
   function IndexOfDraggingToolbar(const List: TList): Integer;
   { Returns index of toolbar in List that's currently being dragged, or -1 }
   var
@@ -1340,7 +1306,6 @@ var
       end;
     Result := -1;
   end;
-  {vb+end}
 
   procedure GetSizes(Panel: TTBXDockablePanel; out Size, MinSize, MaxSize: Integer);
   var
@@ -1431,45 +1396,20 @@ begin
     NewDockList := TList.Create;
     NewDockList.Count := DockList.Count;
     for I := 0 to NewDockList.Count - 1 do NewDockList[I] := DockList[I];
-    {I := NewDockList.IndexOf(DragToolbar); {vb-}
-    I := IndexOfDraggingToolbar(NewDockList); {vb+}
-    {ListSortEx(NewDockList, CompareDockPos, nil);} {vb-}
-    NewDockList.Sort(CompareDockPos); {vb+}
-    {DragIndex := NewDockList.IndexOf(DragToolbar); {vb-}
-    DragIndex := IndexOfDraggingToolbar(NewDockList); {vb+}
-    {if (I <> -1) and DragSplitting then {vb-}
-    {vb+}
-    if (I >= 0) and
-      TTBCustomDockableWindow(NewDockList[DragIndex]).DragSplitting then
-    {vb+end}
+    I := IndexOfDraggingToolbar(NewDockList);
+    NewDockList.Sort(CompareDockPos);
+    DragIndex := IndexOfDraggingToolbar(NewDockList);
+    if (I >= 0) and TTBCustomDockableWindow(NewDockList[DragIndex]).DragSplitting then
     begin
       { When splitting, don't allow the toolbar being dragged to change
         positions in the dock list }
       NewDockList.Move(DragIndex, I);
       DragIndex := I;
     end;
-    {ListSortEx(DockVisibleList, CompareDockPos, nil);} {vb-}
-    DockVisibleList.Sort(CompareDockPos); {vb+}
+    DockVisibleList.Sort(CompareDockPos);
 
     { Create a temporary array that holds new position data for the toolbars
       and get size info }
-    (*SetLength(PosData, 0);
-    for I := 0 to NewDockList.Count - 1 do
-    begin
-      T := NewDockList[I];
-      if ToolbarVisibleOnDock(T) then
-      begin
-        SetLength(PosData, Length(PosData) + 1);
-        with PosData[Length(PosData) - 1] do
-        begin
-          Panel := T as TTBXDockablePanel;
-          Pos := Panel.DockPos;
-          GetSizes(Panel, Size, MinSize, MaxSize{, OrigWidth});
-        end;
-      end;
-    end;*) {vb-}
-
-    {vb+}
     SetLength(PosData, NewDockList.Count);
     J := 0;
     for I := 0 to NewDockList.Count - 1 do
@@ -1487,7 +1427,6 @@ begin
       end;
     end;
     if Length(PosData) <> J then SetLength(PosData, J);
-    {vb+end}
 
     { Update drag index... }
     if DragIndex >= 0 then
@@ -1499,12 +1438,10 @@ begin
         end;
 
     { Count total sizes and set initial positions }
-    {DragIndexPos := 0;} {vb-}
     TotalSize := 0; TotalMinimumSize := 0; TotalMaximumSize := 0;
     for I := 0 to Length(PosData) - 1 do
       with PosData[I] do
       begin
-        {if I = DragIndex then DragIndexPos := Panel.DockPos;} {vb-}
         Pos := TotalSize;
         Inc(TotalSize, Size);
         Inc(TotalMinimumSize, MinSize);
@@ -1687,7 +1624,6 @@ begin
       Brush.Color := clBtnHighlight;
       Brush.Style := bsFDiagonal;
       Rectangle(R.Left, R.Top, R.Right, R.Bottom);
-      {Pen.Style := psSolid;} {vb-}
     end;
   end;
 end;
@@ -1711,8 +1647,7 @@ end;
 procedure TTBXMultiDock.ValidateInsert(AComponent: TComponent);
 begin
   if not (AComponent is TTBXDockablePanel) then
-    {raise EInvalidOperation.CreateFmt('Cannot insert %s into TTBXMultiDock', [AComponent.ClassName]);} {vb-}
-    raise EInvalidOperation.CreateResFmt(@STBXCannotInsertIntoMultiDock, [AComponent.ClassName]); {vb+}
+    raise EInvalidOperation.CreateResFmt(@STBXCannotInsertIntoMultiDock, [AComponent.ClassName]);
 end;
 
 //----------------------------------------------------------------------------//
@@ -1764,8 +1699,6 @@ begin
   inherited CreateParams(Params);
   if not (csDesigning in ComponentState) then
     with Params.WindowClass do style := style and not (CS_HREDRAW or CS_VREDRAW);
-//  if cpoTransparent in PaintOptions then
-//    Params.ExStyle := Params.ExStyle or WS_EX_TRANSPARENT;
 end;
 
 destructor TTBXPanelObject.Destroy;
@@ -1930,13 +1863,11 @@ begin
   end;
 end;
 
-{procedure TTBXPanelObject.TBMThemeChange(var Message);} {vb-}
-procedure TTBXPanelObject.TBMThemeChange(var Message: TMessage); {vb+}
+procedure TTBXPanelObject.TBMThemeChange(var Message: TMessage);
 var
   R: TRect;
 begin
-  {if HandleAllocated then} {vb-}
-  if (Message.wParam = TSC_AFTERVIEWCHANGE) and HandleAllocated then {vb+}
+  if (Message.wParam = TSC_AFTERVIEWCHANGE) and HandleAllocated then
   begin
     R := ClientRect;
     InvalidateRect(Handle, @R, True);
@@ -1945,7 +1876,7 @@ end;
 
 procedure TTBXPanelObject.WMEraseBkgnd(var Message: TMessage);
 begin
-  if not DoubleBuffered or (Message.wParam = Message.lParam) then
+  if not DoubleBuffered or (Message.wParam = WPARAM(Message.lParam)) then
   begin
     if Color = clNone then
       DrawParentBackground(Self, TWMEraseBkgnd(Message).DC, ClientRect)
@@ -2170,8 +2101,7 @@ var
   OrigCursorPos, OldCursorPos: TPoint;
   Msg: TMsg;
   EffectiveIndex: Integer;
-  {EffectivePanel: TTBXDockablePanel;} {vb-}
-  EffectivePanel: TTBXCustomDockablePanel; {vb+}
+  EffectivePanel: TTBXCustomDockablePanel;
   PanelRect, DockRect, EdgeRect, OrigEdgeRect, OldEdgeRect: TRect;
   EdgePosition: TTBDockPosition;
   ScreenDC: HDC;
@@ -2536,7 +2466,7 @@ begin
     if FFloatingWidth = 0 then
     begin
       if Docked and (CurrentDock.Position in [dpTop, dpBottom]) then
-        FFloatingWidth := Width  {CurrentDock.ClientWidth} - CalcNCSizes.X
+        FFloatingWidth := Width - CalcNCSizes.X
       else
         FFloatingWidth := FDockedWidth;
     end;
@@ -2544,7 +2474,7 @@ begin
     if FFloatingHeight = 0 then
     begin
       if Docked and (CurrentDock.Position in [dpLeft, dpRight]) then
-        FFloatingHeight := {CurrentDock.ClientHeight} Height - CalcNCSizes.Y
+        FFloatingHeight := Height - CalcNCSizes.Y
       else
         FFloatingHeight := FDockedHeight;
     end;
@@ -2582,8 +2512,7 @@ begin
   Result := Docked and (CurrentDock is TTBXMultiDock) and HandleAllocated;
   if not Result then Exit;
   Dock := TDockAccess(CurrentDock);
-  {ListSortEx(Dock.DockVisibleList, CompareEffectiveDockPos, nil);} {vb-}
-  Dock.DockVisibleList.Sort(CompareEffectiveDockPos); {vb+}
+  Dock.DockVisibleList.Sort(CompareEffectiveDockPos);
   if Dock.Position in [dpLeft, dpRight] then
   begin
     case EdgePosition of
@@ -2652,12 +2581,10 @@ begin
   FMinClientHeight := 32;
   FDockedWidth := 128;
   FDockedHeight := 128;
-  {vb+}
   FHorzResizeCursor := crSizeWE;
   FHorzSplitCursor := crHSplit;
   FVertResizeCursor := crSizeNS;
   FVertSplitCursor := crVSplit;
-  {vb+end}
   CloseButtonWhenDocked := True;
   DblClickUndock := False;
   FShowCaptionWhenDocked := True;
@@ -2742,59 +2669,6 @@ begin
     if Vertical then Height := Sz else Width := Sz;
 end;
 
-{procedure TTBXCustomDockablePanel.DrawNCArea(const DrawToDC: Boolean;
-  const ADC: HDC; const Clip: HRGN);
-var
-  DC: HDC;
-  R, CR: TRect;
-  ACanvas: TCanvas;
-  Sz: Integer;
-  DockPanelInfo: TTBXDockPanelInfo;
-  S: string;
-begin
-  if not Docked or not HandleAllocated then Exit;
-
-  if not DrawToDC then DC := GetWindowDC(Handle)
-  else DC := ADC;
-
-  Assert(DC <> 0, 'TTBXToolWindow.DrawNCArea Error');
-  try
-    GetDockPanelInfo(DockPanelInfo);
-    GetWindowRect(Handle, R);
-    OffsetRect(R, -R.Left, -R.Top);
-    if not DrawToDC then
-    begin
-      SelectNCUpdateRgn(Handle, DC, Clip);
-      CR := R;
-      with DockPanelInfo.BorderSize, CR do
-      begin
-        InflateRect(CR, -X, -Y);
-        if DockPanelInfo.ShowCaption then
-        begin
-          Sz := GetSystemMetrics(SM_CYSMCAPTION);
-          if DockPanelInfo.IsVertical then Inc(Top, Sz)
-          else Inc(Left, Sz);
-        end;
-        ExcludeClipRect(DC, Left, Top, Right, Bottom);
-      end;
-    end;
-    S := Caption;
-    DockPanelInfo.Caption := PChar(S);
-    ACanvas := TCanvas.Create;
-    try
-      ACanvas.Handle := DC;
-      ACanvas.Brush.Color := EffectiveColor;
-      CurrentTheme.PaintDockPanelNCArea(ACanvas, R, DockPanelInfo);
-    finally
-      ACanvas.Handle := 0;
-      ACanvas.Free;
-    end;
-  finally
-    if not DrawToDC then ReleaseDC(Handle, DC);
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXCustomDockablePanel.DrawNCArea(const DrawToDC: Boolean;
   const ADC: HDC; const Clip: HRGN);
 var
@@ -2853,7 +2727,6 @@ begin
     end;
   end;
 end;
-{vb+end}
 
 procedure TTBXCustomDockablePanel.GetBaseSize(var ASize: TPoint);
 begin
@@ -2865,8 +2738,7 @@ var
   X, Y, Z: Integer;
 begin
   Z := GetSystemMetrics(SM_CYSMCAPTION) - 1;
-  {if LeftRight or not IsVertCaption then} {vb-}
-  if not IsVertCaption then {vb+}
+  if not IsVertCaption then
   begin
     X := (ClientWidth + DockedBorderSize) - Z;
     Y := DockedBorderSize;
@@ -3192,23 +3064,11 @@ begin
   else FEffectiveColor := Color;
 end;
 
-{procedure TTBXCustomDockablePanel.WMEraseBkgnd(var Message: TWMEraseBkgnd);
-var
-  BRUSH: HBRUSH;
-begin
-  BRUSH := CreateSolidBrush(ColorToRGB(EffectiveColor));
-  FillRect(Message.DC, Clientrect, BRUSH);
-  DeleteObject(BRUSH);
-  Message.Result := 1;
-end;} {vb-}
-
-{vb+}
 procedure TTBXCustomDockablePanel.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 begin
   FillRectEx(Message.DC, ClientRect, EffectiveColor);
   Message.Result := 1;
 end;
-{vb+end}
 
 procedure TTBXCustomDockablePanel.WMNCCalcSize(var Message: TWMNCCalcSize);
 begin
@@ -3289,12 +3149,7 @@ begin
         begin
           { caption area }
           IsVertical := not IsVertCaption;
-          if CloseButtonWhenDocked then
-          begin
-            {Sz := GetSystemMetrics(SM_CYSMCAPTION);
-            if IsVertical then Inc(Sz, 4) else Dec(Sz, 4);} {vb-}
-            Sz := GetSystemMetrics(SM_CYSMCAPTION)- 1; {vb+}
-          end
+          if CloseButtonWhenDocked then Sz := GetSystemMetrics(SM_CYSMCAPTION) - 1
           else Sz := 0;
 
           if (IsVertical and (P.X >= R.Right - Sz) and (P.Y < R.Top + Sz)) or
@@ -3309,68 +3164,15 @@ begin
   else inherited;
 end;
 
-{procedure TTBXCustomDockablePanel.WMNCLButtonDown(var Message: TWMNCLButtonDown);
-var
-  OldCursor: HCURSOR;
-begin
-  if Message.HitTest in [HTLEFT..HTBOTTOM] then BeginDockedSizing(Message.HitTest)
-  else if Message.HitTest in [HT_TBX_SPLITRESIZELEFT..HT_TBX_SPLITRESIZEBOTTOM] then BeginSplitResizing(Message.HitTest)
-  else
-  begin
-    if (Message.HitTest = HT_TB2k_Border) and IsMovable then
-    begin
-      OldCursor := SetCursor(LoadCursor(0, IDC_SIZEALL));
-      try
-        inherited;
-      finally
-        SetCursor(OldCursor);
-      end;
-    end
-    else inherited;
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXCustomDockablePanel.WMNCLButtonDown(var Message: TWMNCLButtonDown);
 begin
-  if Message.HitTest in [HTLEFT..HTBOTTOM]
-    then BeginDockedSizing(Message.HitTest)
-    else if Message.HitTest in [HT_TBX_SPLITRESIZELEFT..HT_TBX_SPLITRESIZEBOTTOM]
-      then BeginSplitResizing(Message.HitTest)
-      else inherited; { setting IDC_SIZEALL already made in patched TB2 }
+  if Message.HitTest in [HTLEFT..HTBOTTOM] then
+    BeginDockedSizing(Message.HitTest)
+  else if Message.HitTest in [HT_TBX_SPLITRESIZELEFT..HT_TBX_SPLITRESIZEBOTTOM] then
+    BeginSplitResizing(Message.HitTest)
+  else inherited; { setting IDC_SIZEALL already made in patched TB2 }
 end;
-{vb+end}
 
-{procedure TTBXCustomDockablePanel.WMSetCursor(var Message: TWMSetCursor);
-begin
-  if Docked and CurrentDock.AllowDrag and
-     (Message.CursorWnd = WindowHandle) and
-     (Smallint(Message.HitTest) = HT_TB2k_Border) and
-     ShowCaptionWhenDocked then
-  begin
-    SetCursor(LoadCursor(0, IDC_ARROW));
-    Message.Result := 1;
-    Exit;
-  end
-  else if Docked and CurrentDock.AllowDrag and (Message.CursorWnd = WindowHandle) then
-  begin
-    if (Message.HitTest = HT_TBX_SPLITRESIZELEFT) or (Message.HitTest = HT_TBX_SPLITRESIZERIGHT) then
-    begin
-      SetCursor(LoadCursor(0, IDC_SIZEWE));
-      Message.Result := 1;
-      Exit;
-    end
-    else if (Message.HitTest = HT_TBX_SPLITRESIZETOP) or (Message.HitTest = HT_TBX_SPLITRESIZEBOTTOM) then
-    begin
-      SetCursor(LoadCursor(0, IDC_SIZENS));
-      Message.Result := 1;
-      Exit;
-    end;
-  end;
-  inherited;
-end;} {vb-}
-
-{vb+}
 procedure TTBXCustomDockablePanel.WMSetCursor(var Message: TWMSetCursor);
 var Cur: TCursor;
 begin
@@ -3398,7 +3200,6 @@ begin
   end;
   inherited;
 end;
-{vb+end}
 
 procedure TTBXCustomDockablePanel.WMWindowPosChanged(var Message: TWMWindowPosChanged);
 begin
@@ -3684,11 +3485,12 @@ end;
 procedure TTBXCustomLabel.CMDialogChar(var Message: TCMDialogChar);
 begin
   if (FFocusControl <> nil) and Enabled and ShowAccelChar and IsAccel(Message.CharCode, Caption) then
-    with FFocusControl do if CanFocus then
-    begin
-      SetFocus;
-      Message.Result := 1;
-    end;
+    with FFocusControl do
+      if CanFocus then
+      begin
+        SetFocus;
+        Message.Result := 1;
+      end;
 end;
 
 constructor TTBXCustomLabel.Create(AOwner: TComponent);
@@ -3701,7 +3503,7 @@ end;
 
 function TTBXCustomLabel.GetTextMargins: TRect;
 const
-  BottomMargin: array [Boolean] of Integer = (0, 1);
+  BottomMargin: array[Boolean] of Integer = (0, 1);
 begin
   with Result do
   begin
@@ -3714,7 +3516,6 @@ end;
 
 procedure TTBXCustomLabel.Notification(AComponent: TComponent; Operation: TOperation);
 begin
-  inherited;
   inherited Notification(AComponent, Operation);
   if (Operation = opRemove) and (AComponent = FFocusControl) then FFocusControl := nil;
 end;
@@ -3724,15 +3525,16 @@ var
   Rect: TRect;
 begin
   inherited;
-  if Underline then with Canvas do
-  begin
-    Rect := ClientRect;
-    ApplyMargins(Rect, Margins);
-    ApplyMargins(Rect, GetTextMargins);
-    Pen.Color := UnderlineColor;
-    MoveTo(Rect.Left, Rect.Bottom);
-    LineTo(Rect.Right, Rect.Bottom);
-  end;
+  if Underline then
+    with Canvas do
+    begin
+      Rect := ClientRect;
+      ApplyMargins(Rect, Margins);
+      ApplyMargins(Rect, GetTextMargins);
+      Pen.Color := UnderlineColor;
+      MoveTo(Rect.Left, Rect.Bottom);
+      LineTo(Rect.Right, Rect.Bottom);
+    end;
 end;
 
 procedure TTBXCustomLabel.SetFocusControl(Value: TWinControl);
@@ -4002,8 +3804,13 @@ var
               end;
             WM_LBUTTONDOWN, WM_LBUTTONDBLCLK,
             WM_RBUTTONDOWN, WM_RBUTTONDBLCLK,
-            WM_MBUTTONDOWN, WM_MBUTTONDBLCLK: begin
+            WM_MBUTTONDOWN, WM_MBUTTONDBLCLK:
+              begin
+                {$IFDEF WIN64}
+                P := SmallPointToPoint(TSmallPoint(Int64Rec(lParam).Lo));
+                {$ELSE}
                 P := SmallPointToPoint(TSmallPoint(lParam));
+                {$ENDIF}
                 Windows.ClientToScreen(hwnd, P);
                 if FindDragTarget(P, True) = Self then Repost := False;
               end;
@@ -4197,7 +4004,7 @@ end;
 
 procedure TTBXCustomButton.GetItemInfo(out ItemInfo: TTBXItemInfo);
 const
-  ViewTypes: array [TButtonStyle] of Integer =
+  ViewTypes: array[TButtonStyle] of Integer =
     (VT_TOOLBAR or TVT_EMBEDDED, VT_TOOLBAR);
 begin
   FillChar(ItemInfo, SizeOf(ItemInfo), 0);
@@ -4452,10 +4259,8 @@ begin
       end;
     end;
 
-    {if Images <> nil then} {vb-}
-    if Assigned(Images) and (ImageIndex >= 0) and
-      (ImageIndex < Images.Count) then {vb+}
-        CurrentTheme.PaintImage(Canvas, IR, ItemInfo, Images, ImageIndex);
+    if Assigned(Images) and (ImageIndex >= 0) and (ImageIndex < Images.Count) then
+      CurrentTheme.PaintImage(Canvas, IR, ItemInfo, Images, ImageIndex);
 
     if Length(Text) > 0 then
     begin
@@ -4626,7 +4431,7 @@ end;
 procedure TTBXCustomButton.WMLButtonDblClk(var Message: TWMLButtonDblClk);
 begin
   Perform(WM_LBUTTONDOWN, Message.Keys, Longint(Message.Pos));
-  DblClick; {vb+}
+  DblClick;
 end;
 
 //----------------------------------------------------------------------------//
@@ -4898,7 +4703,7 @@ end;
 
 procedure TTBXCustomPageScroller.CMParentColorChanged(var Message: TMessage);
 begin
-  if (Message.WParam = 0) then
+  if Message.WParam = 0 then
   begin
     Message.WParam := 1;
     Message.LParam := GetEffectiveColor(Parent);
@@ -4915,7 +4720,7 @@ constructor TTBXCustomPageScroller.Create(AOwner: TComponent);
 begin
   inherited;
   ControlStyle := ControlStyle + [csAcceptsControls, csClickEvents, csDoubleClicks];
-  DoubleBuffered := True; {vb+}
+  DoubleBuffered := True;
   FAutoScroll := True;
   FButtonSize := 10;
   FScrollTimer := TTimer.Create(Self);
@@ -5233,25 +5038,12 @@ begin
   if NewPos > FPosRange then NewPos := FPosRange;
 end;
 
-{procedure TTBXCustomPageScroller.WMEraseBkgnd(var Message: TWmEraseBkgnd);
-begin
-  if Color = clNone then
-  begin
-    DrawParentBackground(Self, Message.DC, ClientRect);
-    Message.Result := 1;
-  end
-  else inherited;
-end;} {vb-}
-
-{vb+}
 procedure TTBXCustomPageScroller.WMEraseBkgnd(var Message: TWmEraseBkgnd);
 begin
-  if Color = clNone
-    then DrawParentBackground(Self, Message.DC, ClientRect)
-    else FillRectEx(Message.DC, ClientRect, Color);
+  if Color = clNone then DrawParentBackground(Self, Message.DC, ClientRect)
+  else FillRectEx(Message.DC, ClientRect, Color);
   Message.Result := 1;
 end;
-{vb+end}
 
 procedure TTBXCustomPageScroller.WMMouseMove(var Message: TWMMouseMove);
 begin
@@ -5406,7 +5198,7 @@ procedure TTBXCustomCheckBox.CMDialogKey(var Message: TCMDialogKey);
 begin
   with Message do
     if (CharCode = VK_RETURN) and Focused and
-      (KeyDataToShiftState(Message.KeyData) = []) then
+       (KeyDataToShiftState(Message.KeyData) = []) then
     begin
       Click;
       Result := 1;
@@ -5517,14 +5309,9 @@ begin
     Rect.Top := (Rect.Top + Rect.Bottom + 1 - Sz) div 2;
     Rect.Bottom := Rect.Top + Sz;
     Brush.Color := clBtnShadow;
-    {Flags := EnabledState[Enabled];
-    if Enabled then Flags := Flags or StateFlags[State] or
-      HotState[MouseInControl] or PushedState[Pushed and MouseInControl] or FocusedState[Focused];} {vb-}
-    {vb+}
     Flags := EnabledState[Enabled] or StateFlags[State];
     if Enabled then Flags := Flags or HotState[MouseInControl] or
       PushedState[Pushed and MouseInControl] or FocusedState[Focused];
-    {vb+end}
     CurrentTheme.PaintFrameControl(Canvas, Rect, PFC_CHECKBOX, Flags, nil);
   end;
 end;
@@ -5697,14 +5484,9 @@ begin
     Rect.Top := (Rect.Top + Rect.Bottom + 1 - Sz) div 2;
     Rect.Bottom := Rect.Top + Sz;
     Brush.Color := clBtnShadow;
-    {Flags := EnabledState[Enabled];
-    if Enabled then Flags := Flags or CheckedState[Checked] or
-      HotState[MouseInControl] or PushedState[Pushed and MouseInControl] or FocusedState[Focused];} {vb-}
-    {vb+}
     Flags := EnabledState[Enabled] or CheckedState[Checked];
     if Enabled then Flags := Flags or HotState[MouseInControl] or
       PushedState[Pushed and MouseInControl] or FocusedState[Focused];
-    {vb+end}
     CurrentTheme.PaintFrameControl(Canvas, Rect, PFC_RADIOBUTTON, Flags, nil);
   end;
 end;

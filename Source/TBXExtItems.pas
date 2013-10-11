@@ -42,11 +42,9 @@ type
     FReadOnly: Boolean;
     FShowImage: Boolean;
     FOnChange: TTBXEditChange;
-    {vb+}
     FOnKeyDown: TKeyEvent;
     FOnKeyPress: TKeyPressEvent;
     FOnKeyUp: TKeyEvent;
-    {vb+end}
     procedure FontSettingsChanged(Sender: TObject);
     procedure SetAlignment(Value: TAlignment);
     procedure SetPasswordChar(Value: Char);
@@ -58,17 +56,14 @@ type
     procedure DoBeginEdit(Viewer: TTBEditItemViewer); override;
     procedure DoChange(const AText: string); virtual;
     procedure DoTextChanged(Reason: Integer); override;
-    {function  GetImageIndex: Integer; virtual;} {vb-}
-    function  GetImageIndex: Integer; reintroduce; virtual; {vb+}
+    function  GetImageIndex: Integer; reintroduce; virtual;
     function  GetItemViewerClass(AView: TTBView): TTBItemViewerClass; override;
     procedure GetPopupPosition(ParentView: TTBView; PopupWindow: TTBPopupWindow; var PopupPositionRec: TTBPopupPositionRec); override;
     function  GetPopupWindowClass: TTBPopupWindowClass; override;
     procedure HandleEditChange(Edit: TEdit); virtual;
-    {vb+}
     procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState); dynamic;
     procedure KeyPress(Sender: TObject; var Key: Char); dynamic;
     procedure KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState); dynamic;
-    {vb+end}
   public
     function StartEditing(AView: TTBView): Boolean;
     constructor Create(AOwner: TComponent); override;
@@ -84,11 +79,9 @@ type
     property ReadOnly: Boolean read FReadOnly write FReadOnly default False;
     property ShowImage: Boolean read FShowImage write SetShowImage default False;
     property OnChange: TTBXEditChange read FOnChange write FOnChange;
-    {vb+}
     property OnKeyDown: TKeyEvent read FOnKeyDown write FOnKeyDown;
     property OnKeyPress: TKeyPressEvent read FOnKeyPress write FOnKeyPress;
     property OnKeyUp: TKeyEvent read FOnKeyUp write FOnKeyUp;
-    {vb+end}
     property OnSelect;
   end;
 
@@ -195,10 +188,8 @@ type
     property Postfix: string read FPostfix write SetPostfix;
     property Prefix: string read FPrefix write SetPrefix;
     property Snap: Boolean read FSnap write FSnap default True;
-    {property SpaceAfterPrefix: Boolean read FSpaceAfterPrefix write SetSpaceAfterPrefix;
-    property SpaceBeforePostfix: Boolean read FSpaceBeforePostfix write SetSpaceBeforePostfix;} {vb-}
-    property SpaceAfterPrefix: Boolean read FSpaceAfterPrefix write SetSpaceAfterPrefix default False; {vb+}
-    property SpaceBeforePostfix: Boolean read FSpaceBeforePostfix write SetSpaceBeforePostfix default False; {vb+}
+    property SpaceAfterPrefix: Boolean read FSpaceAfterPrefix write SetSpaceAfterPrefix default False;
+    property SpaceBeforePostfix: Boolean read FSpaceBeforePostfix write SetSpaceBeforePostfix default False;
     property Value: Extended read GetValue write SetValue stored IsValueStored;
   published
     property Text stored False;
@@ -388,7 +379,7 @@ type
     procedure SetFontSettings(Value: TFontSettings);
     procedure SetShowAccelChar(Value: Boolean);
   protected
-    function GetItemViewerClass (AView: TTBView): TTBItemViewerClass; override;
+    function GetItemViewerClass(AView: TTBView): TTBItemViewerClass; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -399,7 +390,7 @@ type
     property FontSettings: TFontSettings read FFontSettings write SetFontSettings;
     property Margin: Integer read FMargin write SetMargin default 0;
     property Orientation: TTBXLabelOrientation read FOrientation write SetOrientation default tbxoAuto;
-    property PopupMenu; {vb+}
+    property PopupMenu;
     property ShowAccelChar: Boolean read FShowAccelChar write SetShowAccelChar default True;
     property Visible;
     property OnAdjustFont: TAdjustFontEvent read FOnAdjustFont write FOnAdjustFont;
@@ -425,7 +416,7 @@ type
     FColor: TColor;
     procedure SetColor(Value: TColor);
   protected
-    function GetItemViewerClass (AView: TTBView): TTBItemViewerClass; override;
+    function GetItemViewerClass(AView: TTBView): TTBItemViewerClass; override;
   public
     constructor Create(AOwner: TComponent); override;
   published
@@ -445,7 +436,7 @@ type
     property MinHeight;
     property MinWidth;
     property Options;
-    property PopupMenu; {vb+}
+    property PopupMenu;
     property ShortCut;
     property Visible;
     property OnAdjustFont;
@@ -485,7 +476,6 @@ type
     property MRUList: TTBMRUList read FMRUList write SetMRUList;
   end;
 
-{vb+}
 { TTBXDragHandleItem }
 
 const
@@ -529,7 +519,7 @@ type
     property Enabled;
     property Height: TDragHandleHeight read FHeight write SetHeight default dhDefDragHandleHeight;
     property Hint: String read GetHint write SetHint stored IsHintStored;
-    property PopupMenu; {vb+}
+    property PopupMenu;
     property ShowHint: Boolean read GetShowHint write SetShowHint default True;
     property Visible;
     property OnDraw: TTBXDHDrawEvent read FOnDraw write FOnDraw;
@@ -550,15 +540,13 @@ type
     procedure Paint(const Canvas: TCanvas; const ClientAreaRect: TRect;
       IsHoverItem, IsPushed, UseDisabledShadow: Boolean); override;
   end;
-{vb+end}
 
 implementation
 
-//uses TB2Common, TB2Consts, TypInfo, Math, ImgList {$IFNDEF JR_D5}, DsgnIntf{$ENDIF}; {vb-}
-{vb+}
-uses TB2Common, TB2Consts, TBXConsts, TBXUtils, TypInfo, Math, ImgList,
-     Forms {$IFDEF JR_D9}, Types {$ENDIF} {$IFNDEF JR_D5}, DsgnIntf{$ENDIF};
-{vb+end}
+
+uses
+  TB2Common, TB2Consts, TBXConsts, TBXUtils, TypInfo, Math, ImgList,
+  Forms {$IFDEF JR_D9}, Types {$ENDIF} {$IFNDEF JR_D5}, DsgnIntf{$ENDIF};
 
 const
   { Repeat intervals for spin edit items }
@@ -569,7 +557,7 @@ type
   TTBViewAccess = class(TTBView);
   TTBItemAccess = class(TTBCustomItem);
   TTBMRUListAccess = class(TTBMRUList);
-  TTBCustomDockableWindowAccess = class(TTBCustomDockableWindow); {vb+}
+  TTBCustomDockableWindowAccess = class(TTBCustomDockableWindow);
   TCustomEditAccess = class(TCustomEdit);
   TFontSettingsAccess = class(TFontSettings);
 
@@ -644,7 +632,6 @@ end;
 function TTBXEditItem.DoAcceptText(var NewText: string): Boolean;
 begin
   Result := inherited DoAcceptText(NewText);
-//  if not Result then DoChange(Text);
 end;
 
 function TTBXEditItem.DoAutoComplete(var AText: string): Boolean;
@@ -660,11 +647,9 @@ begin
     EditControl.PasswordChar := PasswordChar;
     EditControl.SelectAll;
     EditControl.ReadOnly := ReadOnly;
-    {vb+}
     EditControl.OnKeyDown := KeyDown;
     EditControl.OnKeyPress := KeyPress;
     EditControl.OnKeyUp := KeyUp;
-    {vb+end}
     EditorFontSettings.Apply(EditControl.Font);
     FAutoCompleteCounter := 0;
     inherited;
@@ -700,8 +685,7 @@ end;
 
 function TTBXEditItem.GetItemViewerClass(AView: TTBView): TTBItemViewerClass;
 begin
-  if not (tboUseEditWhenVertical in EditOptions) and
-     (AView.Orientation = tbvoVertical) then
+  if not (tboUseEditWhenVertical in EditOptions) and (AView.Orientation = tbvoVertical) then
     Result := TTBXItemViewer
   else
     Result := TTBXEditItemViewer;
@@ -739,8 +723,7 @@ begin
         Edit.SelLength := Length(S2) - Length(S);
         S := S2;
       end;
-      {if S <> FLastEditChange then} {vb-}
-      if AnsiCompareText(S, FLastEditChange) <> 0 then {vb+}
+      if AnsiCompareText(S, FLastEditChange) <> 0 then
       begin
         DoChange(S); // note, Edit.Text may be different from Self.Text
         FLastEditChange := S;
@@ -751,17 +734,17 @@ begin
   end;
 end;
 
-procedure TTBXEditItem.KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState); {vb+}
+procedure TTBXEditItem.KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Assigned(FOnKeyDown) then FOnKeyDown(Self, Key, Shift);
 end;
 
-procedure TTBXEditItem.KeyPress(Sender: TObject; var Key: Char); {vb+}
+procedure TTBXEditItem.KeyPress(Sender: TObject; var Key: Char);
 begin
   if Assigned(FOnKeyPress) then FOnKeyPress(Self, Key);
 end;
 
-procedure TTBXEditItem.KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState); {vb+}
+procedure TTBXEditItem.KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Assigned(FOnKeyUp) then FOnKeyUp(Self, Key, Shift);
 end;
@@ -917,10 +900,8 @@ begin
       W := MeasureEditCaption.CX;
       if W > 0 then Inc(W, MenuLeftCaptionMargin + MenuRightCaptionMargin + MenuImageTextSpace);
       Inc(R.Left, GetPopupMargin(Self) + MenuImageTextSpace + W);
-      {vb+}
       if TTBXEditItem(Item).EditCaption = '' then
         Inc(R.Left, MenuLeftCaptionMargin);
-      {vb+end}
       Dec(R.Right, EditMenuRightIndent);
     end;
 
@@ -1017,19 +998,13 @@ begin
     if not EditMenuFullSelect then R.Right := M + W
     else Dec(R.Right, EditMenuRightIndent);
     PaintMenuItemFrame(Canvas, R, ItemInfo);
-    {Inc(R.Left, M + MenuImageTextSpace);} {vb-}
-    Inc(R.Left, M + MenuImageTextSpace + MenuLeftCaptionMargin); {vb+}
+    Inc(R.Left, M + MenuImageTextSpace + MenuLeftCaptionMargin);
     R.Right := ClientAreaRect.Right - EditMenuRightIndent;
 
     if Length(S) > 0 then
     begin
-      {Inc(R.Left, MenuLeftCaptionMargin);} {vb-}
-      {C := ColorToRGB(GetItemTextColor(ItemInfo));} {rl-}
-      {rl+}
-      if Item.FontSettings.Color = clNone
-        then C := ColorToRGB(GetItemTextColor(ItemInfo))
-        else C := ColorToRGB(Item.FontSettings.Color);
-      {rl+end}
+      if Item.FontSettings.Color = clNone then C := ColorToRGB(GetItemTextColor(ItemInfo))
+      else C := ColorToRGB(Item.FontSettings.Color);
       OldFnt := SelectObject(DC, Fnt);
       OldColor := SetTextColor(DC, C);
       PaintCaption(Canvas, R, ItemInfo, S, DT_SINGLELINE or DT_LEFT or DT_VCENTER, False);
@@ -1070,25 +1045,13 @@ begin
     OldFnt := SelectObject(DC, Fnt);
     SetBkMode(DC, TRANSPARENT);
     SetBkColor(DC, GetSysColor(FillColors[Item.Enabled]));
-    {SetTextColor(DC, GetSysColor(TextColors[Item.Enabled]));} {rl-}
-    {rl+}
-    if (Item.EditorFontSettings.Color = clNone) or not Item.Enabled
-      then C := GetSysColor(TextColors[Item.Enabled])
-      else C := ColorToRGB(Item.EditorFontSettings.Color);
+    if (Item.EditorFontSettings.Color = clNone) or not Item.Enabled then C := GetSysColor(TextColors[Item.Enabled])
+    else C := ColorToRGB(Item.EditorFontSettings.Color);
     SetTextColor(DC, C);
-    {rl+end}
     DrawText(DC, PChar(S), Length(S), R, DT_SINGLELINE or DT_NOPREFIX or Alignments[Item.Alignment]);
     SelectObject(DC, OldFnt);
     DeleteObject(Fnt);
   end;
-
-{  if not IsToolbarStyle then
-  begin
-    R := ClientAreaRect;
-    Self.GetEditRect(R);
-    OffsetRect(R, -BoundsRect.Left, -BoundsRect.Top);
-    Canvas.FrameRect(R);
-  end;  }
 end;
 
 function TTBXEditItemViewer.GetEditControlClass: TEditClass;
@@ -1241,22 +1204,6 @@ begin
   else Result := GetSystemMetrics(SM_CXMENUCHECK) + 2;
 end;
 
-{function TTBXDropDownItemViewer.HandleEditMessage(var Message: TMessage): Boolean;
-begin
-  if Message.Msg = WM_KEYDOWN then
-  begin
-    if TWMKeyDown(Message).CharCode = VK_F4 then
-    begin
-      TTBViewAccess(View).OpenChildPopup(True);
-      Result := True;
-      Exit;
-    end;
-  end;
-
-  Result := inherited HandleEditMessage(Message);
-end;} {vb-}
-
-{vb+}
 function TTBXDropDownItemViewer.HandleEditMessage(var Message: TMessage): Boolean;
 begin
   if (Message.Msg = WM_KEYDOWN) and (Message.wParam = VK_F4) then
@@ -1268,7 +1215,6 @@ begin
   end
   else Result := inherited HandleEditMessage(Message);
 end;
-{vb+end}
 
 function TTBXDropDownItemViewer.IsPtInButtonPart(X, Y: Integer): Boolean;
 begin
@@ -1308,7 +1254,7 @@ begin
   FList.OnChange := ListChangeHandler;
   FList.OnClick := ListClickHandler;
   FList.OnAdjustImageIndex := AdjustImageIndexHandler;
-  if not (csDesigning in ComponentState) then Add(FList); {vb+}
+  if not (csDesigning in ComponentState) then Add(FList);
   MinListWidth := 64;
 end;
 
@@ -1319,8 +1265,7 @@ var
   TemplateL, MinL, L: Integer;
 begin
   Result := False;
-  {if Length(AText) > 0 then} {rl-}
-  if (AutoComplete) and (Length(AText) > 0) then {rl+}
+  if AutoComplete and (Length(AText) > 0) then
   begin
     { choose the shortest matching string from items }
     TemplateL := Length(AText);
@@ -1389,8 +1334,7 @@ end;
 
 function TTBXComboBoxItem.GetItemViewerClass(AView: TTBView): TTBItemViewerClass;
 begin
-  if not (tboUseEditWhenVertical in EditOptions) and
-     (AView.Orientation = tbvoVertical) then
+  if not (tboUseEditWhenVertical in EditOptions) and (AView.Orientation = tbvoVertical) then
     Result := TTBXItemViewer
   else
     Result := TTBXComboBoxItemViewer;
@@ -1476,7 +1420,6 @@ begin
       IsChanging := False;
     end;
   end;
-  {if not (csDesigning in ComponentState) then Add(FList);} {vb-}
 end;
 
 procedure TTBXComboBoxItem.SetItemIndex(Value: Integer);
@@ -1534,34 +1477,6 @@ end;
 
 { TTBXComboBoxItemViewer }
 
-{function TTBXComboBoxItemViewer.HandleEditMessage(var Message: TMessage): Boolean;
-begin
-  if (Message.Msg = WM_KEYDOWN) then with TTBXComboBoxItem(Item) do
-  begin
-    case Message.wParam of
-      VK_UP:
-        begin
-          ItemIndex := ItemIndex- 1;
-          EditControl.Text := Text;
-          EditControl.SelectAll;
-          Result := True;
-        end;
-
-      VK_DOWN:
-        begin
-          ItemIndex := ItemIndex+ 1;
-          EditControl.Text := Text;
-          EditControl.SelectAll;
-          Result := True;
-        end;
-    else
-      Result := inherited HandleEditMessage(Message);
-    end
-  end
-  else Result := inherited HandleEditMessage(Message);
-end;} {vb-}
-
-{vb+}
 function TTBXComboBoxItemViewer.HandleEditMessage(var Message: TMessage): Boolean;
 var
   I: Integer;
@@ -1583,7 +1498,6 @@ begin
   end
   else Result := inherited HandleEditMessage(Message);
 end;
-{vb+end}
 
 //============================================================================//
 
@@ -1624,12 +1538,6 @@ procedure TTBXLabelItem.SetFontSettings(Value: TFontSettings);
 begin
   FFontSettings := Value;
 end;
-
-{procedure TTBXLabelItem.SetFontSize(Value: TTBXFontSize);
-begin
-  FFontSize := Value;
-  Change(True);
-end;  }
 
 procedure TTBXLabelItem.SetMargin(Value: Integer);
 begin
@@ -2154,7 +2062,7 @@ var
       R := GetInt2;
       Count1 := P - PStart;
 
-      if (ValueType = evtFloat) and (P^ = DecimalSeparator) then
+      if (ValueType = evtFloat) and (P^ = {$IFDEF JR_D17}FormatSettings.DecimalSeparator{$ELSE}DecimalSeparator{$ENDIF}) then
       begin
         Inc(P);
         PStart := P;
@@ -2276,16 +2184,14 @@ end;
 procedure TTBXCustomSpinEditItem.SetIncrement(const NewIncrement: Extended);
 begin
   if NewIncrement <= 0 then
-    {raise EPropertyError.Create('Increment should be a positive value');} {vb-}
-    raise EPropertyError.CreateRes(@STBXSpinEditItemIncrementError); {vb+}
+    raise EPropertyError.CreateRes(@STBXSpinEditItemIncrementError);
   FIncrement := NewIncrement;
 end;
 
 procedure TTBXCustomSpinEditItem.SetPostfix(const NewPostfix: string);
 begin
   if not ValidateUnits(NewPostfix) then
-    {raise EPropertyError.Create('Invalid postfix');} {vb-}
-    raise EPropertyError.CreateRes(@STBXSpinEditItemPostfixError); {vb+}
+    raise EPropertyError.CreateRes(@STBXSpinEditItemPostfixError);
   FPostfix := NewPostfix;
   SetValueEx(GetValue, tcrNumericProperty);
 end;
@@ -2293,8 +2199,7 @@ end;
 procedure TTBXCustomSpinEditItem.SetPrefix(const NewPrefix: string);
 begin
   if not ValidateUnits(NewPrefix) then
-    {raise EPropertyError.Create('Invalid prefix');} {vb-}
-    raise EPropertyError.CreateRes(@STBXSpinEditItemPrefixError); {vb+}
+    raise EPropertyError.CreateRes(@STBXSpinEditItemPrefixError);
   FPrefix := NewPrefix;
   SetValueEx(GetValue, tcrNumericProperty);
 end;
@@ -2519,14 +2424,12 @@ begin
   end;
 end;
 
-{vb+}
-
 { TTBXDragHandleItem }
 
 constructor TTBXDragHandleItem.Create(AOwner: TComponent);
 begin
   inherited;
-  ItemStyle := ItemStyle- [tbisSelectable]+ [tbisClicksTransparent];
+  ItemStyle := ItemStyle - [tbisSelectable] + [tbisClicksTransparent];
   Hint := STBXDragHandleItemHint;
   ShowHint := True;
   FCursor := crSizeAll;
@@ -2594,9 +2497,8 @@ end;
 
 procedure TTBXDragHandleItem.SetShowHint(Value: Boolean);
 begin
-  if Value
-    then Options := Options+ [tboShowHint]
-    else Options := Options- [tboShowHint];
+  if Value then Options := Options + [tboShowHint]
+  else Options := Options - [tboShowHint];
 end;
 
 { TTBXDragHandleItemViewer }
@@ -2788,6 +2690,5 @@ begin
   OffsetPoint(R.TopLeft, -1, -1);
   DrawDots(R, GripFgColor);
 end;
-{vb+end}
 
 end.

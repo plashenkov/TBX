@@ -11,24 +11,17 @@ interface
 {$I TB2Ver.inc}
 {$I TBX.inc}
 
-{vb+}
 {x$DEFINE TBX_NO_ANIMATION}
   { Enabling the above define disables all menu animation. For debugging
     purpose only. }
-{vb+end}
 
 uses
   Windows, Messages, Classes, SysUtils, Controls, Graphics, ImgList, Forms,
   TB2Item, TB2Dock, TB2Toolbar, TB2ToolWindow, TB2Anim, TBXUtils, TBXThemes;
 
 const
-  {vb+}
-  TBXPatchEdition = '5';
-  TBXPatchEditionText = 'TBX patch edition '+ TBXPatchEdition;
-  {vb+end}
-  TBXVersion = 2.1;
-  {TBXVersionString = '2.1';} {vb-}
-  TBXVersionString = '2.1.'+ TBXPatchEdition+ 'p'; {vb+}
+  TBXVersion = 2.5;
+  TBXVersionString = '2.5';
   TBXVersionText = 'TBX version ' + TBXVersionString;
 
 { TBX Messages }
@@ -101,16 +94,10 @@ type
 
 function GetStateFlags(const ItemInfo: TTBXItemInfo): Integer;
 function GetTBXTextColor(StateFlags: Integer): TColor;
-{procedure DrawTBXCaption(Canvas: TCanvas; Rect: TRect; const Text: string;
-  Format: Cardinal; StateFlags: Integer);
-procedure DrawTBXImage(Canvas: TCanvas; Rect: TRect; ImageList: TCustomImageList;
-  ImageIndex: Integer; StateFlags: Integer);} {vb-}
-{vb+}
 procedure DrawTBXCaption(Canvas: TCanvas; const Rect: TRect; const Text: string;
   Format: Cardinal; StateFlags: Integer);
 procedure DrawTBXImage(Canvas: TCanvas; const Rect: TRect;
   ImageList: TCustomImageList; ImageIndex: Integer; StateFlags: Integer);
-{vb+end}
 
 
 type
@@ -120,12 +107,10 @@ type
     Font: TFont; StateFlags: Integer) of object; // state flags are the combination of ISF_* constants
   TDrawImageEvent = procedure(Item: TTBCustomItem; Viewer: TTBItemViewer;
     Canvas: TCanvas; ImageRect: TRect; ImageOffset: TPoint; StateFlags: Integer) of object;
-  {vb+}
   TTBXAdvancedDrawImageEvent = procedure(Item: TTBCustomItem; Viewer: TTBItemViewer;
     Canvas: TCanvas; ImageRect: TRect; ImageOffset: TPoint; StateFlags: Integer;
-      var DefaultDraw: Boolean) of object;
+    var DefaultDraw: Boolean) of object;
   TTBXClosePopupEvent = procedure(Item, ClickedItem: TTBCustomItem) of object;
-  {vb+end}
 
   TTBXCustomItem = class(TTBCustomItem)
   private
@@ -136,10 +121,8 @@ type
     FMinWidth: Integer;
     FToolBoxPopup: Boolean;
     FOnAdjustFont: TAdjustFontEvent;
-    {vb+}
     FOnAdvancedDrawImage: TTBXAdvancedDrawImageEvent;
     FOnClosePopup: TTBXClosePopupEvent;
-    {vb+end}
     FOnDrawImage: TDrawImageEvent;
     procedure FontSettingsChanged(Sender: TObject);
     function  GetStretch: Boolean;
@@ -152,16 +135,16 @@ type
     function CreatePopup(const ParentView: TTBView; const ParentViewer: TTBItemViewer;
       const PositionAsSubmenu, SelectFirstItem, Customizing: Boolean;
       const APopupPoint: TPoint; const Alignment: TTBPopupAlignment): TTBPopupWindow; override;
-    procedure DoClosePopup(ClickedItem: TTBCustomItem); virtual; {vb+}
+    procedure DoClosePopup(ClickedItem: TTBCustomItem); virtual;
     function GetItemViewerClass(AView: TTBView): TTBItemViewerClass; override;
     procedure GetPopupPosition(ParentView: TTBView; PopupWindow: TTBPopupWindow;
       var PopupPositionRec: TTBPopupPositionRec); override;
     function GetPopupWindowClass: TTBPopupWindowClass; override;
     property ToolBoxPopup: Boolean read FToolBoxPopup write FToolBoxPopup default False;
     property OnAdjustFont: TAdjustFontEvent read FOnAdjustFont write FOnAdjustFont;
-    property OnAdvancedDrawImage: TTBXAdvancedDrawImageEvent read FOnAdvancedDrawImage write FOnAdvancedDrawImage; {vb+}
+    property OnAdvancedDrawImage: TTBXAdvancedDrawImageEvent read FOnAdvancedDrawImage write FOnAdvancedDrawImage;
     property OnDrawImage: TDrawImageEvent read FOnDrawImage write FOnDrawImage;
-    property OnClosePopup: TTBXClosePopupEvent read FOnClosePopup write FOnClosePopup; {vb+}
+    property OnClosePopup: TTBXClosePopupEvent read FOnClosePopup write FOnClosePopup;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -174,7 +157,7 @@ type
     property Stretch: Boolean read GetStretch write SetStretch default False;
   end;
 
-  TTBXItem = class (TTBXCustomItem)
+  TTBXItem = class(TTBXCustomItem)
     property Action;
     property AutoCheck;
     property Caption;
@@ -193,18 +176,14 @@ type
     property MinHeight;
     property MinWidth;
     property Options;
-    {vb+}
     property PopupMenu;
     property RadioItem;
-    {vb+end}
     property ShortCut;
     property Stretch;
     property Visible;
     property OnAdjustFont;
-    {vb+}
     property OnAdjustImageIndex;
     property OnAdvancedDrawImage;
-    {vb+end}
     property OnDrawImage;
     property OnClick;
     property OnSelect;
@@ -239,30 +218,24 @@ type
 
   TTBXSubmenuItem = class(TTBXCustomItem)
   private
-    {vb+}
     FAutoEmptyItem: Boolean;
     FAutoEmptyItemCaption: String;
     function GetAutoEmptyItemCaption: String;
-    {vb+end}
     function GetDropdownCombo: Boolean;
     procedure SetDropdownCombo(Value: Boolean);
-    {vb+}
     procedure SetAutoEmptyItemCaption(const Value: String);
     function IsAutoEmptyItemCaptionStored: Boolean;
   protected
     procedure DoPopup(Sender: TTBCustomItem; FromLink: Boolean); override;
     procedure DoClosePopup(ClickedItem: TTBCustomItem); override;
-    {vb+end}
   public
     constructor Create(AOwner: TComponent); override;
   published
     property Action;
     property AlwaysSelectFirst;
     property AutoCheck;
-    {vb+}
     property AutoEmptyItem: Boolean read FAutoEmptyItem write FAutoEmptyItem default True;
     property AutoEmptyItemCaption: String read GetAutoEmptyItemCaption write SetAutoEmptyItemCaption stored IsAutoEmptyItemCaptionStored;
-    {vb+end}
     property Caption;
     property Checked;
     property DisplayMode;
@@ -281,24 +254,20 @@ type
     property MinHeight;
     property MinWidth;
     property Options;
-    {vb+}
     property PopupMenu;
     property RadioItem;
-    {vb+end}
     property ShortCut;
     property Stretch;
-    property SubitemsPopupMenu; {vb+}
+    property SubitemsPopupMenu;
     property SubMenuImages;
     property ToolBoxPopup;
     property Visible;
     property OnAdjustFont;
-    {vb+}
     property OnAdjustImageIndex;
     property OnAdvancedDrawImage;
-    {vb+end}
     property OnDrawImage;
     property OnClick;
-    property OnClosePopup; {vb+}
+    property OnClosePopup;
     property OnPopup;
     property OnSelect;
   end;
@@ -323,9 +292,9 @@ type
     procedure CalcSize(const Canvas: TCanvas; var AWidth, AHeight: Integer); override;
     procedure Paint(const Canvas: TCanvas; const ClientAreaRect: TRect;
       IsHoverItem, IsPushed, UseDisabledShadow: Boolean); override;
-    function  IsToolbarSize: Boolean; override;
+    function IsToolbarSize: Boolean; override;
   public
-    function  IsToolbarStyle: Boolean; override;
+    function IsToolbarStyle: Boolean; override;
   end;
 
   TTBXVisibilityToggleItem = class(TTBXCustomItem)
@@ -354,17 +323,15 @@ type
     property MinHeight;
     property MinWidth;
     property Options;
-    property PopupMenu; {vb+}
+    property PopupMenu;
     property ShortCut;
     property Stretch;
     property Visible;
     property OnAdjustFont;
-    {vb+}
     property OnAdjustImageIndex;
     property OnAdvancedDrawImage;
-    {vb+end}
     property OnClick;
-    property OnDrawImage; {vb+}
+    property OnDrawImage;
     property OnSelect;
   end;
 
@@ -375,7 +342,7 @@ type
     FControlRect: TRect;
     FShadows: TShadows;
     procedure CMHintShow(var Message: TCMHintShow); message CM_HINTSHOW;
-    procedure CMShowingChanged(var Message: TMessage); message CM_SHOWINGCHANGED; {vb+}
+    procedure CMShowingChanged(var Message: TMessage); message CM_SHOWINGCHANGED;
     procedure TBMGetViewType(var Message: TMessage); message TBM_GETVIEWTYPE;
     procedure WMNCCalcSize(var Message: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCPaint(var Message: TMessage); message WM_NCPAINT;
@@ -390,10 +357,10 @@ type
     function  GetNCSize: TPoint; override;
     function  GetShowShadow: Boolean; virtual;
     function  GetViewClass: TTBViewClass; override;
-    procedure PaintScrollArrows; override; {vb+}
+    procedure PaintScrollArrows; override;
   public
     destructor Destroy; override;
-    function  GetFillColor: TColor;
+    function GetFillColor: TColor;
   end;
 
   TTBXPopupView = class(TTBPopupView);
@@ -405,7 +372,6 @@ type
     procedure GetMargins(AOrientation: TTBViewOrientation; var Margins: TRect); override;
   end;
 
-{vb+}
 { TTBXChevronPopupSettings }
 
 const
@@ -426,7 +392,6 @@ type
     property HorzWrapOffset: Integer read FHorzWrapOffset write FHorzWrapOffset default cpsDefHorzWrapOffset;
     property PopupOrientation: TTBOrientation read FPopupOrientation write FPopupOrientation default tboVertical;
   end;
-{vb+end}
 
   { TTBXToolbar }
 
@@ -434,14 +399,14 @@ type
 
   TTBXToolbar = class(TTBCustomToolbar)
   private
-    FChevronPopupSettings: TTBXChevronPopupSettings; {vb+}
+    FChevronPopupSettings: TTBXChevronPopupSettings;
     FEffectiveColor: TColor;
     FItemTransparency: TTBXItemTransparency;
     FSnapDistance: Integer;
     procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
     procedure CMControlChange(var Message: TCMControlChange); message CM_CONTROLCHANGE;
     procedure CMParentColorChanged(var Message: TMessage); message CM_PARENTCOLORCHANGED;
-    procedure SetChevronPopupSettings(Value: TTBXChevronPopupSettings); {vb+}
+    procedure SetChevronPopupSettings(Value: TTBXChevronPopupSettings);
     procedure SetItemTransparency(const Value: TTBXItemTransparency);
     procedure SetSnapDistance(Value: Integer);
     procedure TBMGetViewType(var Message: TMessage); message TBM_GETVIEWTYPE;
@@ -455,10 +420,8 @@ type
     function  GetFloatingWindowParentClass: TTBFloatingWindowParentClass; override;
     procedure GetToolbarInfo(out ToolbarInfo: TTBXToolbarInfo); virtual;
     function  GetViewClass: TTBToolbarViewClass; override;
-    {vb+}
     procedure Loaded; override;
     procedure RedrawAll;
-    {vb+end}
     procedure SetParent(AParent: TWinControl); override;
     procedure UpdateEffectiveColor;
   public
@@ -476,7 +439,7 @@ type
     property Caption;
     property ChevronHint;
     property ChevronMoveItems;
-    property ChevronPopupSettings: TTBXChevronPopupSettings read FChevronPopupSettings write SetChevronPopupSettings; {vb+}
+    property ChevronPopupSettings: TTBXChevronPopupSettings read FChevronPopupSettings write SetChevronPopupSettings;
     property ChevronPriorityForNewItems;
     property CloseButton;
     property CloseButtonWhenDocked;
@@ -494,7 +457,7 @@ type
     property HideWhenInactive;
     property Images;
     property Items;
-    property ItemsPopupMenu; {vb+}
+    property ItemsPopupMenu;
     property ItemTransparency: TTBXItemTransparency read FItemTransparency write SetItemTransparency default itAuto;
     property LastDock;
     property LinkSubitems;
@@ -525,11 +488,9 @@ type
     {$ENDIF}
     property OnDragDrop;
     property OnDragOver;
-    {vb+}
     {$IFDEF JR_D9}
     property OnMouseActivate;
     {$ENDIF}
-    {vb+end}
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
@@ -549,7 +510,7 @@ type
   TTBXChevronItem = class(TTBChevronItem)
   public
     function GetChevronPopupPosition(
-      var PopupPositionRec: TTBPopupPositionRec): Boolean; override; {vb+}
+      var PopupPositionRec: TTBPopupPositionRec): Boolean; override;
     procedure GetPopupPosition(ParentView: TTBView;
       PopupWindow: TTBPopupWindow; var PopupPositionRec: TTBPopupPositionRec); override;
     function GetPopupWindowClass: TTBPopupWindowClass; override;
@@ -575,18 +536,12 @@ type
     function GetPopupWindowClass: TTBPopupWindowClass; override;
     procedure GetPopupPosition(ParentView: TTBView; PopupWindow: TTBPopupWindow;
       var PopupPositionRec: TTBPopupPositionRec); override;
-    {procedure OpenPopupEx(const SelectFirstItem, TrackRightButton: Boolean;
-      const ControlRect: TRect; const Alignment: TTBPopupAlignment);
-    procedure PopupEx(const ControlRect: TRect; TrackRightButton: Boolean;
-      Alignment: TTBPopupAlignment = tbpaLeft);} {vb-}
-    {vb+}
     function OpenPopupEx(const SelectFirstItem, TrackRightButton: Boolean;
       const ControlRect: TRect; const Alignment: TTBPopupAlignment;
       const ReturnClickedItemOnly: Boolean): TTBCustomItem;
     function PopupEx(const ControlRect: TRect; TrackRightButton: Boolean;
       Alignment: TTBPopupAlignment = tbpaLeft;
       ReturnClickedItemOnly: Boolean = False): TTBCustomItem;
-    {vb+end}
   end;
 
   TTBXPopupMenu = class(TTBPopupMenu)
@@ -596,9 +551,8 @@ type
   protected
     function GetRootItemClass: TTBRootItemClass; override;
   public
-    {procedure PopupEx(const ControlRect: TRect);} {vb-}
     function PopupEx(const ControlRect: TRect;
-      ReturnClickedItemOnly: Boolean = False): TTBCustomItem; {vb+}
+      ReturnClickedItemOnly: Boolean = False): TTBCustomItem;
     property ToolBoxPopup: Boolean read FToolBoxPopup write FToolBoxPopup default False;
   end;
 
@@ -607,17 +561,15 @@ type
     FCloseButtonHover: Boolean;
     FSnapDistance: Integer;
     procedure CMMouseLeave(var Message: TMessage); message CM_MOUSELEAVE;
-    {vb+}
     {$IFDEF JR_D10}
     procedure WMCaptureChanged(var Message: TMessage); message WM_CAPTURECHANGED;
     {$ENDIF}
-    {vb+end}
     procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
     procedure WMNCMouseLeave(var Message: TMessage); message $2A2 {WM_NCMOUSELEAVE};
     procedure WMNCMouseMove(var Message: TWMNCMouseMove); message WM_NCMOUSEMOVE;
     procedure WMWindowPosChanging(var Message: TWMWindowPosChanging); message WM_WINDOWPOSCHANGING;
   protected
-    procedure AlignControls(AControl: TControl; var Rect: TRect); override; {vb+}
+    procedure AlignControls(AControl: TControl; var Rect: TRect); override;
     procedure CancelNCHover;
     procedure DrawNCArea(const DrawToDC: Boolean; const ADC: HDC;
       const Clip: HRGN; RedrawWhat: TTBToolWindowNCRedrawWhat); override;
@@ -658,7 +610,7 @@ type
 
   TTBXDock = class(TTBDock)
   private
-    FEffectiveColor: TColor; {vb+}
+    FEffectiveColor: TColor;
     FMoving: Boolean;
     FResizing: Boolean;
     FUseParentBackground: Boolean;
@@ -673,18 +625,17 @@ type
     procedure DrawBackground(DC: HDC; const DrawRect: TRect); override;
     procedure Resize; override;
     procedure SetUseParentBackground(Value: Boolean);
-    procedure UpdateEffectiveColor; {vb+}
+    procedure UpdateEffectiveColor;
     function  UsingBackground: Boolean; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property EffectiveColor: TColor read FEffectiveColor; {vb+}
+    property EffectiveColor: TColor read FEffectiveColor;
   published
     property Color default clNone;
     property UseParentBackground: Boolean read FUseParentBackground write SetUseParentBackground default False;
   end;
 
-  {vb+}
   { TTBXMenuAnimation }
 
   TAnimationMode = (amNone, amSysDefault, amRandom, amUnfold, amSlide, amFade);
@@ -702,11 +653,10 @@ type
     property AnimationMode: TAnimationMode read FAnimationMode write SetAnimationMode;
     property AvailableModes: TAnimationModes read FAvailableModes;
   end;
-  {vb+end}
 
 var
   CurrentTheme: TTBXTheme;
-  TBXMenuAnimation: TTBXMenuAnimation; {vb+}
+  TBXMenuAnimation: TTBXMenuAnimation;
 
 {$IFNDEF JR_D6}
 var
@@ -732,8 +682,7 @@ procedure TBXGetColorValues(Proc: TGetStrProc);
 { Internal routines - do not use }
 function GetPopupMargin(ItemViewer: TTBItemViewer): Integer;
 function GetEffectiveColor(C: TControl): TColor;
-{procedure DrawParentBackground(Control: TControl; DC: HDC; R: TRect);} {vb-}
-procedure DrawParentBackground(Control: TControl; DC: HDC; const R: TRect); {vb+}
+procedure DrawParentBackground(Control: TControl; DC: HDC; const R: TRect);
 procedure AddToList(var List: TList; Item: Pointer);
 procedure RemoveFromList(var List: TList; Item: Pointer);
 
@@ -743,11 +692,8 @@ implementation
 
 uses
   TBXExtItems, TBXLists, TB2Common, TBXUxThemes, MultiMon, TBXDefaultTheme,
-  {ComCtrls, Menus;} {vb-}
-  {vb+}
   ComCtrls, Menus, MMSystem, {$IFDEF JR_D7}UxTheme, Themes,{$ENDIF}
   {$IFDEF JR_D9} Types, {$ENDIF} Math, TBXConsts;
-  {vb+end}
 
 type
   TTBItemAccess = class(TTBCustomItem);
@@ -760,7 +706,7 @@ type
   TControlAccess = class(TControl);
   TTBXThemeAccess = class(TTBXTheme);
   TDockAccess = class(TTBDock);
-  TTBPopupWindowAccess = class(TTBPopupWindow); {vb+}
+  TTBPopupWindowAccess = class(TTBPopupWindow);
 
   { TTBNexus }
   TTBXNexus = class
@@ -768,7 +714,7 @@ type
     FNotifies: TList;
     procedure TBXSysCommand(var Message: TMessage); message TBX_SYSCOMMAND;
   protected
-    procedure Broadcast(Msg: Cardinal; WParam, LParam: Integer);
+    procedure Broadcast(Msg: Cardinal; Param1, Param2: Integer);
   public
     constructor Create(const DefaultTheme: string);
     destructor Destroy; override;
@@ -811,68 +757,6 @@ begin
   end;
 end;
 
-(*procedure DrawParentBackground(Control: TControl; DC: HDC; R: TRect);
-var
-  Parent: TWinControl;
-  Theme: HTHEME;
-  R2: TRect;
-  Shift: TPoint;
-  UsingThemes: Boolean;
-  Msg: TMessage;
-begin
-  Parent := Control.Parent;
-  if Parent = nil then FillRectEx(DC, R, clBtnFace)
-  else
-  begin
-    Shift.X := 0; Shift.Y := 0;
-    Shift := Parent.ScreenToClient(Control.ClientToScreen(Shift));
-    SaveDC(DC);
-    try
-      SetWindowOrgEx(DC, Shift.X, Shift.Y, nil);
-      Msg.Msg := WM_ERASEBKGND;
-      Msg.WParam := DC;
-      Msg.LParam := DC;
-      Msg.Result := 0;
-      Parent.Dispatch(Msg);
-    finally
-      RestoreDC(DC, -1);
-    end;
-
-    if Msg.Result <> 0 then Exit;
-
-    UsingThemes := USE_THEMES and not (csDesigning in Control.ComponentState);
-    if Parent is TTBDock then
-    begin
-      SaveDC(DC);
-      SetWindowOrgEx(DC, Control.Left, Control.Top, nil);
-      TDockAccess(Parent).DrawBackground(DC, R);
-      RestoreDC(DC, -1);
-    end
-    else if not UsingThemes then
-      FillRectEx(DC, R, GetEffectiveColor(Parent))
-    else
-    begin
-      { Unfortunately, DrawThemeParentBackground does seem to have some problems
-        with the back buffer. Therefore some sort of workaround is used which
-        will work for tab sheets }
-      //  if Control is TWinControl then
-      //    DrawThemeParentBackground(TWinControl(Control).Handle, DC, @R);
-
-      if Parent is TTabSheet then
-      begin
-        Theme := OpenThemeData(Parent.Handle, 'TAB');
-        R2 := Parent.ClientRect;
-        R2.TopLeft := Control.ScreenToClient(Parent.ClientToScreen(R2.TopLeft));
-        R2.BottomRight := Control.ScreenToClient(Parent.ClientToScreen(R2.BottomRight));
-        DrawThemeBackground(Theme, DC, TABP_BODY, 0, R2, @R);
-        CloseThemeData(Theme);
-      end
-      else FillRectEx(DC, R, GetEffectiveColor(Parent));
-    end;
-  end;
-end;*) {vb-}
-
-{vb+}
 procedure DrawParentBackground(Control: TControl; DC: HDC; const R: TRect);
 label
   DrawTabSheet;
@@ -904,11 +788,12 @@ begin
       R2 := R;
       OffsetRect(R2, -R2.Left, -R2.Top);
       BufDC := CreateBufDC(DC, R2.Right, R2.Bottom, BufDCRec);
-      { Fortunately, DrawThemeParentBackground have no problems if DC is memory DC }
+      { Fortunately, DrawThemeParentBackground has no problems if DC is memory DC }
       {$IFDEF JR_D7}
-      if ThemeServices.ThemesEnabled
-        then ResultOK := UxTheme.DrawThemeParentBackground(TWinControl(Control).Handle, BufDC, @R2) = S_OK
-        else ResultOK := TBXUxThemes.DrawThemeParentBackground(TWinControl(Control).Handle, BufDC, @R2) = S_OK;
+      if ThemeServices.ThemesEnabled then
+        ResultOK := UxTheme.DrawThemeParentBackground(TWinControl(Control).Handle, BufDC, @R2) = S_OK
+      else
+        ResultOK := TBXUxThemes.DrawThemeParentBackground(TWinControl(Control).Handle, BufDC, @R2) = S_OK;
       {$ELSE}
       ResultOK := TBXUxThemes.DrawThemeParentBackground(TWinControl(Control).Handle, BufDC, @R2) = S_OK;
       {$ENDIF}
@@ -922,7 +807,6 @@ begin
   end
   else FillRectEx(DC, R, clBtnFace);
 end;
-{vb+end}
 
 function GetViewType(View: TTBView): Integer;
 var
@@ -1066,7 +950,6 @@ begin
   end;
 end;
 
-{vb+}
 { common case for the toolbar and toolwindow }
 procedure DockableWindowDrawNCArea(const DrawToDC: Boolean; const ADC: HDC;
   Clip: HRGN; Window: TTBCustomDockableWindow; EffectiveColor: TColor;
@@ -1189,7 +1072,6 @@ begin
     end;
   end;
 end;
-{vb+end}
 
 //============================================================================//
 
@@ -1245,9 +1127,8 @@ begin
   Result := CurrentTheme.GetItemTextColor(ItemInfo);
 end;
 
-{procedure DrawTBXCaption(Canvas: TCanvas; Rect: TRect; const Text: string; Format: Cardinal; StateFlags: Integer);} {vb-}
 procedure DrawTBXCaption(Canvas: TCanvas; const Rect: TRect; const Text: string;
-  Format: Cardinal; StateFlags: Integer); {vb+}
+  Format: Cardinal; StateFlags: Integer);
 const
   HoverKinds: array [Boolean] of TTBXHoverKind = (hkNone, hkMouseHover);
 var
@@ -1276,10 +1157,8 @@ begin
   CurrentTheme.PaintCaption(Canvas, Rect, ItemInfo, Text, Format, False);
 end;
 
-{procedure DrawTBXImage(Canvas: TCanvas; Rect: TRect; ImageList: TCustomImageList;
-  ImageIndex: Integer; StateFlags: Integer);} {vb-}
 procedure DrawTBXImage(Canvas: TCanvas; const Rect: TRect;
-  ImageList: TCustomImageList; ImageIndex: Integer; StateFlags: Integer); {vb+}
+  ImageList: TCustomImageList; ImageIndex: Integer; StateFlags: Integer);
 const
   HoverKinds: array [Boolean] of TTBXHoverKind = (hkNone, hkMouseHover);
 var
@@ -1483,12 +1362,10 @@ begin
   inherited;
 end;
 
-{vb+}
 procedure TTBXCustomItem.DoClosePopup(ClickedItem: TTBCustomItem);
 begin
   if Assigned(FOnClosePopup) then FOnClosePopup(Self, ClickedItem);
 end;
-{vb+end}
 
 procedure TTBXCustomItem.FontSettingsChanged(Sender: TObject);
 begin
@@ -1621,11 +1498,8 @@ begin
   { Setup font }
   TextFlags := 0;
   IsCaptionShown := CaptionShown;
-  {IsTextRotated := (View.Orientation = tbvoVertical) and ToolbarStyle;} {rl-}
-  {rl+}
   IsTextRotated := (View.Orientation = tbvoVertical) and ToolbarStyle and
     not (tboNoRotation in Item.EffectiveOptions);
-  {rl+end}
   if IsCaptionShown then
   begin
     S := GetCaptionText;
@@ -1757,15 +1631,13 @@ procedure TTBXItemViewer.DrawItemImage(Canvas: TCanvas; ARect: TRect; ItemInfo: 
 var
   ImgList: TCustomImageList;
   I: TTBXCustomItem;
-  DefaultDraw: Boolean; {vb+}
+  DefaultDraw: Boolean;
 begin
   ImgList := GetImageList;
   if (ImgList <> nil) and (Item.ImageIndex >= 0) and (Item.ImageIndex < ImgList.Count) then
   begin
-    {vb+}
-    if Item is TTBXCustomItem
-      then I := TTBXCustomItem(Item)
-      else I := nil;
+    if Item is TTBXCustomItem then I := TTBXCustomItem(Item)
+    else I := nil;
     if Assigned(I) and Assigned(I.FOnAdvancedDrawImage) then
     begin
       DefaultDraw := True;
@@ -1774,22 +1646,10 @@ begin
           GetStateFlags(ItemInfo), DefaultDraw);
       if not DefaultDraw then Exit;
     end;
-    {vb+end}
     CurrentTheme.PaintImage(Canvas, ARect, ItemInfo, ImgList, Item.ImageIndex);
-    {if Item is TTBXCustomItem then
-    begin
-      I := TTBXCustomItem(Item);
-      if Assigned(I.FOnDrawImage) then
-        I.FOnDrawImage(I, Self, Canvas, ARect,
-          CurrentTheme.GetImageOffset(Canvas, ItemInfo, ImgList),
-          GetStateFlags(ItemInfo));
-    end;} {vb-}
-    {vb+}
     if Assigned(I) and Assigned(I.FOnDrawImage) then
       I.FOnDrawImage(I, Self, Canvas, ARect,
-        CurrentTheme.GetImageOffset(Canvas, ItemInfo, ImgList),
-          GetStateFlags(ItemInfo));
-    {vb+end}
+        CurrentTheme.GetImageOffset(Canvas, ItemInfo, ImgList), GetStateFlags(ItemInfo));
   end;
 end;
 
@@ -1936,7 +1796,6 @@ var
   View: TTBViewAccess;
   ItemInfo: TTBXItemInfo;
 
-  {M: Integer;} {vb-}
   R: TRect;
   ComboRect: TRect;
   CaptionRect: TRect;
@@ -2054,11 +1913,8 @@ begin
   TextFlags := GetTextFlags;
   IsCaptionShown := CaptionShown;
 
-  {IsTextRotated := (View.Orientation = tbvoVertical) and ToolbarStyle;} {rl-}
-  {rl+}
   IsTextRotated := (View.Orientation = tbvoVertical) and ToolbarStyle and
     not (tboNoRotation in Item.EffectiveOptions);
-  {rl+end}
   if IsCaptionShown then
   begin
     S := GetCaptionText;
@@ -2069,7 +1925,6 @@ begin
   end
   else
   begin
-    {StateFlags := 0;} {vb-}
     SetLength(S, 0);
     IsTextRotated := False;
     TextSize.CX := 0;
@@ -2139,23 +1994,16 @@ begin
       ItemInfo.Pushed := IsPushed;
       ItemInfo.Selected := Item.Checked;
     end;
-    {InflateRect(R, -2, -2);} {vb-}
   end
   else // not toolbar style
   begin
     GetMargins(MID_MENUITEM, Margins);
     PaintMenuItem(Canvas, R, ItemInfo);
-    {Inc(R.Left, Margins.LeftWidth);
-    Dec(R.Right, Margins.RightWidth);
-    Inc(R.Top, Margins.TopHeight);
-    Dec(R.Bottom, Margins.BottomHeight);} {vb-}
   end;
-  {vb+}
   Inc(R.Left, Margins.LeftWidth);
   Dec(R.Right, Margins.RightWidth);
   Inc(R.Top, Margins.TopHeight);
   Dec(R.Bottom, Margins.BottomHeight);
-  {vb+end}
 
   { Caption }
   if IsCaptionShown then
@@ -2206,9 +2054,6 @@ begin
     else with CurrentTheme do
     begin
       TextFlags := DT_LEFT or DT_VCENTER or TextFlags;
-      {vb-}
-      {TextSize := GetTextSize(Canvas, S, TextFlags, False, StateFlags); { TODO : Check if this line is required }
-      {vb-end}
       GetTextMetrics(Canvas.Handle, TextMetrics);
 
       CaptionRect := R;
@@ -2255,14 +2100,14 @@ begin
 
     if ToolBarStyle then
     begin
-      if IsSpecialDropDown then OffsetRect(ImageRect, (-CurrentTheme.DropdownArrowWidth + 1) div 2, 0);
-      {if ItemLayout = tbxlGlyphLeft then ImageRect.Right := ImageRect.Left + ImgSize.CX + 2} {vb-}
-      if ItemLayout = tbxlGlyphLeft then ImageRect.Right := ImageRect.Left + ImgSize.CX + Margins.LeftWidth {vb+}
+      if IsSpecialDropDown then
+        OffsetRect(ImageRect, (-CurrentTheme.DropdownArrowWidth + 1) div 2, 0);
+      if ItemLayout = tbxlGlyphLeft then
+        ImageRect.Right := ImageRect.Left + ImgSize.CX + Margins.LeftWidth
       else
       begin
         ImageRect.Top := (ImageRect.Top + ImageRect.Bottom - ImgSize.cy - 2 - TextSize.cy) div 2;
-        {ImageRect.Bottom := ImageRect.Top + ImgSize.CY;} {vb-}
-        ImageRect.Bottom := ImageRect.Top + ImgSize.cy + Margins.TopHeight; {vb+}
+        ImageRect.Bottom := ImageRect.Top + ImgSize.cy + Margins.TopHeight;
       end;
     end
     else ImageRect.Right := ImageRect.Left + ClientAreaRect.Bottom - ClientAreaRect.Top;
@@ -2275,17 +2120,12 @@ begin
       Bottom := Top + CY;
       DrawItemImage(Canvas, ImageRect, ItemInfo);
     end
-    {else if not ToolbarStyle and Item.Checked then
-      CurrentTheme.PaintCheckMark(Canvas, ImageRect, ItemInfo);} {vb-}
-    {vb+}
-    else
-      if not ToolbarStyle and Item.Checked then
-      begin
-        if Item.RadioItem then
-          with ItemInfo do ItemOptions := ItemOptions or IO_RADIO;
-        CurrentTheme.PaintCheckMark(Canvas, ImageRect, ItemInfo);
-      end;
-    {vb+end}
+    else if not ToolbarStyle and Item.Checked then
+    begin
+      if Item.RadioItem then
+        with ItemInfo do ItemOptions := ItemOptions or IO_RADIO;
+      CurrentTheme.PaintCheckMark(Canvas, ImageRect, ItemInfo);
+    end;
   end;
 end;
 
@@ -2294,19 +2134,16 @@ end;
 
 { TTBXSubmenuItem }
 
-{vb+}
 type
   TTBXEmptyItem = class(TTBXCustomItem);
-{vb+end}
 
 constructor TTBXSubmenuItem.Create(AOwner: TComponent);
 begin
   inherited;
   ItemStyle := ItemStyle + [tbisSubMenu, tbisSubitemsEditable];
-  FAutoEmptyItem := True; {vb+}
+  FAutoEmptyItem := True;
 end;
 
-{vb+}
 procedure TTBXSubmenuItem.DoClosePopup(ClickedItem: TTBCustomItem);
 begin
   if (Count > 0) and (Items[0] is TTBXEmptyItem) then
@@ -2334,33 +2171,30 @@ begin
     then Result := FAutoEmptyItemCaption
     else Result := STBXAutoEmptyItemCaption;
 end;
-{vb+end}
 
 function TTBXSubmenuItem.GetDropdownCombo: Boolean;
 begin
   Result := tbisCombo in ItemStyle;
 end;
 
-{vb+}
 procedure TTBXSubmenuItem.SetAutoEmptyItemCaption(const Value: String);
 begin
-  if Value <> STBXAutoEmptyItemCaption
-    then FAutoEmptyItemCaption := Value
-    else FAutoEmptyItemCaption := '';
+  if Value <> STBXAutoEmptyItemCaption then FAutoEmptyItemCaption := Value
+  else FAutoEmptyItemCaption := '';
 end;
 
 function TTBXSubmenuItem.IsAutoEmptyItemCaptionStored: Boolean;
 begin
   Result := FAutoEmptyItemCaption <> '';
 end;
-{vb+end}
 
 procedure TTBXSubmenuItem.SetDropdownCombo(Value: Boolean);
 begin
-  if (tbisCombo in ItemStyle) <> Value then begin
+  if (tbisCombo in ItemStyle) <> Value then
+  begin
     if Value then ItemStyle := ItemStyle + [tbisCombo]
     else ItemStyle := ItemStyle - [tbisCombo];
-    Change (True);
+    Change(True);
   end;
 end;
 
@@ -2536,7 +2370,6 @@ begin
   end;
 end;
 
-{vb+}
 procedure TTBXPopupWindow.CMShowingChanged(var Message: TMessage);
 const
   ShowFlags: array[Boolean] of UINT = (
@@ -2585,7 +2418,6 @@ begin
   SetWindowPos(WindowHandle, 0, 0, 0, 0, 0, ShowFlags[Showing]);
   if Showing then SendNotifyMessage(WindowHandle, WM_TB2K_POPUPSHOWING, TPS_NOANIM, 0);
 end;
-{vb+end}
 
 procedure TTBXPopupWindow.CreateParams(var Params: TCreateParams);
 const
@@ -2613,8 +2445,7 @@ begin
   if (CurrentTheme.GetPopupShadowType = PST_WINDOWS2K) and not
     ((Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 5)) then Exit;
 
-  {PR := Rect(0, 0, 0, 0);} {vb-}
-  SetRectEmpty(PR); {vb+}
+  SetRectEmpty(PR);
   if CurrentTheme.GetPopupShadowType = PST_OFFICEXP then
   begin
     if (View <> nil) and (View.ParentView <> nil) then
@@ -2641,22 +2472,6 @@ begin
   FShadows.Show(Handle);
 end;
 
-{destructor TTBXPopupWindow.Destroy;
-begin
-  DestroyShadow;
-  inherited;
-end;
-
-procedure TTBXPopupWindow.DestroyShadow;
-var
-  SaveShadows: TObject;
-begin
-  SaveShadows := FShadows;
-  FShadows := nil;
-  SaveShadows.Free;
-end;} {vb-}
-
-{vb+}
 destructor TTBXPopupWindow.Destroy;
 var
   ParentItem, ClickedItem: TTBCustomItem;
@@ -2684,7 +2499,6 @@ procedure TTBXPopupWindow.DestroyShadow;
 begin
   FreeAndNil(FShadows);
 end;
-{vb+end}
 
 function TTBXPopupWindow.GetFillColor: TColor;
 begin
@@ -2708,7 +2522,6 @@ begin
   Result := TTBXPopupView;
 end;
 
-{vb+}
 procedure TTBXPopupWindow.PaintScrollArrows;
 
   function _GetPopupMargin: Integer;
@@ -2758,7 +2571,6 @@ begin
       DrawMargins;
   inherited;
 end;
-{vb+end}
 
 procedure TTBXPopupWindow.TBMGetViewType(var Message: TMessage);
 var
@@ -2766,18 +2578,15 @@ var
 begin
   Message.Result := PVT_POPUPMENU;
   if View <> nil then
-    {if Self is TTBXChevronPopupWindow then
-      Message.Result := PVT_CHEVRONMENU} {vb-}
     if (Self is TTBXChevronPopupWindow) and View.IsToolbar then
-      Message.Result := PVT_CHEVRONMENU {vb+ ^for vertical chevron popup}
+      Message.Result := PVT_CHEVRONMENU
     else
     begin
       PI := View.ParentItem;
       if PI <> nil then
       begin
-        {if (PI.Count = 1) and (PI.Items[0] is TTBXCustomList) then} {vb-}
         if (PI.Count = 1) and (PI.Items[0] is TTBXCustomList) and
-          not TTBXCustomItem(PI).ToolBoxPopup then {vb+}
+          not TTBXCustomItem(PI).ToolBoxPopup then
             Message.Result := PVT_LISTBOX
         else if PI is TTBXEditItem then
         begin
@@ -2789,22 +2598,6 @@ begin
     end;
 end;
 
-{procedure TTBXPopupWindow.WMEraseBkgnd(var Message: TWmEraseBkgnd);
-var
-  Canvas: TCanvas;
-  R: TRect;
-begin
-  TBEndAnimation(WindowHandle);
-  Canvas := TCanvas.Create;
-  Canvas.Handle := Message.DC;
-  R := ClientRect;
-  CurrentTheme.PaintBackgnd(Canvas, R, R, R, GetFillColor, False, GetViewType(View));
-  Canvas.Handle := 0;
-  Canvas.Free;
-  Message.Result := 1;
-end;} {vb-}
-
-{vb+}
 procedure TTBXPopupWindow.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 var
   Canvas: TCanvas;
@@ -2821,7 +2614,6 @@ begin
   end;
   Message.Result := 1;
 end;
-{vb+end}
 
 procedure TTBXPopupWindow.WMNCCalcSize(var Message: TWMNCCalcSize);
 var
@@ -2838,8 +2630,7 @@ begin
   Message.Result := 1;
 end;
 
-{procedure TBXPopupNCPaintProc(Wnd: HWND; DC: HDC; AppData: Longint);} {vb-}
-procedure TBXPopupNCPaintProc(Wnd: HWND; DC: HDC; AppData: TObject); {vb+}
+procedure TBXPopupNCPaintProc(Wnd: HWND; DC: HDC; AppData: TObject);
 var
   R, R2: TRect;
   Canvas: TCanvas;
@@ -2900,8 +2691,7 @@ begin
   try
     Assert(DC <> 0, 'TTBXPopupWindow.WMNCPaint');
     SelectNCUpdateRgn(Handle, DC, HRGN(Message.WParam));
-    {TBXPopupNCPaintProc(Handle, DC, LongInt(Self.View));} {vb-}
-    TBXPopupNCPaintProc(Handle, DC, Self.View); {vb+}
+    TBXPopupNCPaintProc(Handle, DC, Self.View);
   finally
     ReleaseDC(Handle, DC);
   end;
@@ -2909,8 +2699,7 @@ end;
 
 procedure TTBXPopupWindow.WMPrint(var Message: TMessage);
 begin
-  {HandleWMPrint(Handle, Message, TBXPopupNCPaintProc, LongInt(Self.View));} {vb-}
-  HandleWMPrint(Handle, Message, TBXPopupNCPaintProc, Self.View); {vb+}
+  HandleWMPrint(Handle, Message, TBXPopupNCPaintProc, Self.View);
 end;
 
 procedure TTBXPopupWindow.WMTB2kPopupShowing(var Message: TMessage);
@@ -2965,7 +2754,6 @@ begin
 end;
 
 
-{vb+}
 //============================================================================//
 
 { TTBXChevronPopupSettings }
@@ -2989,7 +2777,6 @@ begin
   else
     inherited;
 end;
-{vb+end}
 
 //============================================================================//
 
@@ -3033,7 +2820,7 @@ constructor TTBXToolbar.Create(AOwner: TComponent);
 begin
   inherited;
   AddThemeNotification(Self);
-  FChevronPopupSettings := TTBXChevronPopupSettings.Create; {vb+}
+  FChevronPopupSettings := TTBXChevronPopupSettings.Create;
   FEffectiveColor := Color;
   Color := clNone;
   ControlStyle := ControlStyle - [csOpaque];
@@ -3043,78 +2830,10 @@ end;
 destructor TTBXToolbar.Destroy;
 begin
   RemoveThemeNotification(Self);
-  FChevronPopupSettings.Free; {vb+}
+  FChevronPopupSettings.Free;
   inherited;
 end;
 
-{procedure TTBXToolbar.DrawNCArea(const DrawToDC: Boolean; const ADC: HDC; const Clip: HRGN);
-var
-  DC: HDC;
-  R, CR, R2: TRect;
-  ACanvas: TCanvas;
-  ToolbarInfo: TTBXToolbarInfo;
-  UsingBackground: Boolean;
-begin
-  if not Docked or not HandleAllocated then Exit;
-
-  if not DrawToDC then DC := GetWindowDC(Handle)
-  else DC := ADC;
-
-  UsingBackground := TDockAccess(CurrentDock).UsingBackground;
-
-  try
-    GetToolbarInfo(ToolbarInfo);
-    GetWindowRect(Handle, R);
-    OffsetRect(R, -R.Left, -R.Top);
-    if not DrawToDC then
-    begin
-      SelectNCUpdateRgn(Handle, DC, Clip);
-      CR := R;
-      with ToolbarInfo.BorderSize, CR do
-      begin
-        InflateRect(CR, -X, -Y);
-        if ToolbarInfo.IsVertical then Inc(Top, GetTBXDragHandleSize(ToolbarInfo))
-        else Inc(Left, GetTBXDragHandleSize(ToolbarInfo));
-        ExcludeClipRect(DC, Left, Top, Right, Bottom);
-      end;
-    end;
-
-    ACanvas := TCanvas.Create;
-    try
-      ACanvas.Handle := DC;
-      if CurrentTheme.SolidToolbarNCArea then
-      begin
-        ACanvas.Brush.Color := EffectiveColor;
-        ACanvas.Brush.Style := bsSolid;
-      end
-      else if UsingBackground then
-      begin
-        ACanvas.Brush.Color := EffectiveColor;
-        R2 := CurrentDock.ClientRect;
-        OffsetRect(R2, -Left, -Top);
-        TDockAccess(CurrentDock).DrawBackground(DC, R2);
-        if (Color = clNone) and CurrentDock.BackgroundOnToolbars then
-          ACanvas.Brush.Style := bsClear;
-      end
-      else
-      begin
-        ACanvas.Brush.Color := GetEffectiveColor(CurrentDock);
-        ACanvas.FillRect(R);
-        ACanvas.Brush.Color := EffectiveColor;
-        ACanvas.Brush.Style := bsSolid;
-      end;
-
-      CurrentTheme.PaintToolbarNCArea(ACanvas, R, ToolbarInfo);
-    finally
-      ACanvas.Handle := 0;
-      ACanvas.Free;
-    end;
-  finally
-    if not DrawToDC then ReleaseDC(Handle, DC);
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXToolbar.DrawNCArea(const DrawToDC: Boolean; const ADC: HDC;
   const Clip: HRGN);
 var
@@ -3126,7 +2845,6 @@ begin
     DockableWindowDrawNCArea(DrawToDC, ADC, Clip, Self, EffectiveColor, ToolbarInfo);
   end;
 end;
-{vb+end}
 
 function TTBXToolbar.Embedded: Boolean;
 begin
@@ -3175,12 +2893,10 @@ begin
   Result := TTBXToolbarView;
 end;
 
-{vb+}
 procedure TTBXToolbar.SetChevronPopupSettings(Value: TTBXChevronPopupSettings);
 begin
   FChevronPopupSettings.Assign(Value);
 end;
-{vb+end}
 
 procedure TTBXToolbar.SetItemTransparency(const Value: TTBXItemTransparency);
 begin
@@ -3188,7 +2904,6 @@ begin
   Invalidate;
 end;
 
-{vb+}
 procedure TTBXToolbar.Loaded;
 begin
   inherited;
@@ -3215,7 +2930,6 @@ begin
     end;
   end;
 end;
-{vb+end}
 
 procedure TTBXToolbar.SetParent(AParent: TWinControl);
 begin
@@ -3294,90 +3008,12 @@ begin
   else FEffectiveColor := Color;
 end;
 
-{procedure TTBXToolbar.WMEraseBkgnd(var Message: TWmEraseBkgnd);
-var
-  Canvas: TCanvas;
-  R, CR: TRect;
-  Transparent: Boolean;
-begin
-  Transparent := False;
-  CR := ClientRect;
-  if Color = clNone then
-    if Docked and (TDockAccess(CurrentDock).UsingBackground) and CurrentDock.BackgroundOnToolbars
-      and not CurrentTheme.SolidToolbarClientArea then
-    begin
-      R := CurrentDock.ClientRect;
-      R.TopLeft := ScreenToClient(CurrentDock.ClientToScreen(R.TopLeft));
-      R.BottomRight := ScreenToClient(CurrentDock.ClientToScreen(R.BottomRight));
-      TDockAccess(CurrentDock).DrawBackground(Message.DC, R);
-      Message.Result := 1;
-      Transparent := True;
-    end
-    else if Embedded then
-    begin
-      Transparent := True;
-      DrawParentBackground(Self, Message.DC, CR);
-    end;
-
-  Canvas := TCanvas.Create;
-  Canvas.Handle := Message.DC;
-  try
-    if Docked then
-    begin
-      R := CurrentDock.ClientRect;
-      R.TopLeft := ScreenToClient(CurrentDock.ClientToScreen(R.TopLeft));
-      R.BottomRight := ScreenToClient(CurrentDock.ClientToScreen(R.BottomRight));
-    end
-    else R := Rect(0, 0, 0, 0);
-    CurrentTheme.PaintBackgnd(Canvas, R, CR, CR, EffectiveColor, Transparent, GetWinViewType(Self));
-    Message.Result := 1;
-  finally
-    Canvas.Handle := 0;
-    Canvas.Free;
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXToolbar.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 begin
   DockableWindowDrawBackground(Message.DC, Self, Embedded, EffectiveColor);
   Message.Result := 1;
 end;
-{vb+end}
 
-{procedure TTBXToolbar.WMSize(var Message: TWMSize);
-var
-  I: Integer;
-  V: TTBItemViewer;
-  R: TRect;
-begin
-  inherited;
-  if Docked and TDockAccess(CurrentDock).UsingBackground and
-    TDockAccess(CurrentDock).BackgroundOnToolbars and
-    ((CurrentDock is TTBXDock) and not TTBXDock(CurrentDock).FResizing) then
-  begin
-    for I := 0 to View.ViewerCount - 1 do
-    begin
-      V := View.Viewers[I];
-      if V.Show and not IsRectEmpty(V.BoundsRect) and not (V.Item is TTBControlItem)
-      then View.Invalidate(V);
-    end;
-    Self.Update;
-    InvalidateRect(Handle, nil, True);
-    for I := 0 to View.ViewerCount - 1 do
-    begin
-      V := View.Viewers[I];
-      if V.Show and not IsRectEmpty(V.BoundsRect) and not (V.Item is TTBControlItem)
-      then
-      begin
-        R := V.BoundsRect;
-        ValidateRect(Handle, @R);
-      end;
-    end;
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXToolbar.WMSize(var Message: TWMSize);
 begin
   inherited;
@@ -3388,13 +3024,11 @@ begin
     Self.RedrawAll;
   end;
 end;
-{vb+end}
 
 //============================================================================//
 
 { TTBXChevronItem }
 
-{vb+}
 function TTBXChevronItem.GetChevronPopupPosition(
   var PopupPositionRec: TTBPopupPositionRec): Boolean;
 begin
@@ -3407,7 +3041,6 @@ begin
       PopupPositionRec.PopupOrientation := FPopupOrientation;
     end;
 end;
-{vb+end}
 
 function TTBXChevronItem.GetItemViewerClass(AView: TTBView): TTBItemViewerClass;
 begin
@@ -3525,11 +3158,9 @@ begin
   Result := TTBXPopupWindow;
 end;
 
-{procedure TTBXRootItem.OpenPopupEx(const SelectFirstItem, TrackRightButton: Boolean;
-  const ControlRect: TRect; const Alignment: TTBPopupAlignment);} {vb-}
 function TTBXRootItem.OpenPopupEx(const SelectFirstItem, TrackRightButton: Boolean;
   const ControlRect: TRect; const Alignment: TTBPopupAlignment;
-  const ReturnClickedItemOnly: Boolean): TTBCustomItem; {vb+}
+  const ReturnClickedItemOnly: Boolean): TTBCustomItem;
 var
   ModalHandler: TTBModalHandler;
   Popup: TTBPopupWindow;
@@ -3543,11 +3174,11 @@ begin
       State := Popup.View.State;
       Include(State, vsIgnoreFirstMouseUp);
       TTBViewAccess(Popup.View).SetState(State);
-      ModalHandler.RootPopup := Popup; {vb+}
+      ModalHandler.RootPopup := Popup;
       ModalHandler.Loop(Popup.View, False, False, False, TrackRightButton);
       DoneActionData := TTBViewAccess(Popup.View).DoneActionData;
     finally
-      ModalHandler.RootPopup := nil; {vb+}
+      ModalHandler.RootPopup := nil;
       { Remove vsModal state from the root view before any TTBView.Destroy
         methods get called, so that NotifyFocusEvent becomes a no-op }
       State := Popup.View.State;
@@ -3558,19 +3189,15 @@ begin
   finally
     ModalHandler.Free;
   end;
-  {ProcessDoneAction(DoneActionData);} {vb-}
-  Result := ProcessDoneAction(DoneActionData, ReturnClickedItemOnly); {vb+}
+  Result := ProcessDoneAction(DoneActionData, ReturnClickedItemOnly);
 end;
 
-{procedure TTBXRootItem.PopupEx(const ControlRect: TRect;
-  TrackRightButton: Boolean; Alignment: TTBPopupAlignment);} {vb-}
 function TTBXRootItem.PopupEx(const ControlRect: TRect;
   TrackRightButton: Boolean; Alignment: TTBPopupAlignment = tbpaLeft;
-  ReturnClickedItemOnly: Boolean = False): TTBCustomItem; {vb+}
+  ReturnClickedItemOnly: Boolean = False): TTBCustomItem;
 begin
-  {OpenPopupEx(False, TrackRightButton, ControlRect, Alignment);} {vb-}
   Result := OpenPopupEx(False, TrackRightButton, ControlRect,
-    Alignment, ReturnClickedItemOnly); {vb+}
+    Alignment, ReturnClickedItemOnly);
 end;
 
 
@@ -3583,15 +3210,6 @@ begin
   Result := TTBXRootItem;
 end;
 
-(*procedure TTBXPopupMenu.PopupEx(const ControlRect: TRect);
-begin
-  {$IFDEF JR_D5}
-  PPoint(@PopupPoint)^ := Point(ControlRect.Left, ControlRect.Bottom);
-  {$ENDIF}
-  TTBXRootItem(Items).PopupEx(ControlRect, TrackButton = tbRightButton, TTBPopupAlignment(Alignment))
-end;*) {vb-}
-
-{vb+}
 function TTBXPopupMenu.PopupEx(const ControlRect: TRect;
   ReturnClickedItemOnly: Boolean = False): TTBCustomItem;
 begin
@@ -3605,7 +3223,6 @@ begin
   Result := TTBXRootItem(Items).PopupEx(ControlRect, TrackButton = tbRightButton,
     TTBPopupAlignment(Alignment), ReturnClickedItemOnly);
 end;
-{vb+end}
 
 procedure TTBXPopupMenu.TBMGetViewType(var Message: TMessage);
 begin
@@ -3617,7 +3234,6 @@ end;
 
 { TTBXFloatingWindowParent }
 
-{vb+}
 procedure TTBXFloatingWindowParent.AlignControls(AControl: TControl;
   var Rect: TRect);
 var
@@ -3626,13 +3242,12 @@ begin
   if Assigned(DockableWindow) and (DockableWindow is TTBToolWindow) then
   begin
     { force controls redrawing on toolwindow }
-    for I := 0 to ControlCount- 1 do
+    for I := 0 to ControlCount - 1 do
       with Controls[I] do
         if Visible then Update;
     RedrawWindow(Handle, @Rect, 0, RDW_ERASE or RDW_INVALIDATE); { background }
   end;
 end;
-{vb+end}
 
 procedure TTBXFloatingWindowParent.CancelNCHover;
 begin
@@ -3650,69 +3265,6 @@ begin
   CancelNCHover;
 end;
 
-{procedure TTBXFloatingWindowParent.DrawNCArea(const DrawToDC: Boolean;
-  const ADC: HDC; const Clip: HRGN; RedrawWhat: TTBToolWindowNCRedrawWhat);
-const
-  CDown: array [Boolean] of Integer = (0, CDBS_PRESSED);
-  CHover: array [Boolean] of Integer = (0, CDBS_HOT);
-  CBord: array [Boolean] of Integer = (0, WRP_BORDER);
-  CCapt: array [Boolean] of Integer = (0, WRP_CAPTION);
-  CBtn: array [Boolean] of Integer = (0, WRP_CLOSEBTN);
-var
-  DC: HDC;
-  R: TRect;
-  Canvas: TCanvas;
-  WindowInfo: TTBXWindowInfo;
-  DockWindow: TTBCustomDockableWindowAccess;
-begin
-  if not HandleAllocated then Exit;
-  if not DrawToDC then DC := GetWindowDC(Handle)
-  else DC := ADC;
-  try
-    if not DrawToDC then SelectNCUpdateRgn(Handle, DC, Clip);
-    GetWindowRect(Handle, R);
-    OffsetRect(R, -R.Left, -R.Top);
-    with R do IntersectClipRect(DC, Left, Top, Right, Bottom);
-    Canvas := TCanvas.Create;
-    try
-      Canvas.Handle := DC;
-      GetWindowRect(Handle, R);
-      OffsetRect(R, -R.Left, -R.Top);
-      DockWindow := TTBCustomDockableWindowAccess(DockableWindow);
-
-      FillChar(WindowInfo, SizeOf(WindowInfo), 0);
-      WindowInfo.ParentHandle := Handle;
-      WindowInfo.WindowHandle := DockWindow.Handle;
-      WindowInfo.ViewType := GetWinViewType(DockWindow);
-      WindowInfo.ClientWidth := ClientWidth;
-      WindowInfo.ClientHeight := ClientHeight;
-      WindowInfo.ShowCaption := DockWindow.ShowCaption;
-      WindowInfo.FloatingBorderSize := DockWindow.GetFloatingBorderSize;
-      if DockWindow.CloseButton and DockWindow.ShowCaption then
-      begin
-        WindowInfo.CloseButtonState := CDBS_VISIBLE;
-        if CloseButtonDown then WindowInfo.CloseButtonState := WindowInfo.CloseButtonState or CDBS_PRESSED
-        else if CloseButtonHover then WindowInfo.CloseButtonState := WindowInfo.CloseButtonState or CDBS_HOT;
-      end;
-      WindowInfo.RedrawPart :=
-        CBord[twrdBorder in RedrawWhat] or
-        CCapt[twrdCaption in RedrawWhat] or
-        CBtn[twrdCloseButton in RedrawWhat];
-      WindowInfo.Caption := PChar(Caption);
-      WindowInfo.EffectiveColor := GetEffectiveColor(DockWindow);
-      WindowInfo.Active := not DockWindow.InactiveCaption;
-      Canvas.Brush.Color := WindowInfo.EffectiveColor;
-      CurrentTheme.PaintFloatingBorder(Canvas, R, WindowInfo);
-    finally
-      Canvas.Handle := 0;
-      Canvas.Free;
-    end;
-  finally
-    if not DrawToDC then ReleaseDC(Handle, DC);
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXFloatingWindowParent.DrawNCArea(const DrawToDC: Boolean;
   const ADC: HDC; const Clip: HRGN; RedrawWhat: TTBToolWindowNCRedrawWhat);
 const
@@ -3803,7 +3355,6 @@ begin
   inherited;
 end;
 {$ENDIF}
-{vb+end}
 
 procedure TTBXFloatingWindowParent.WMEraseBkgnd(var Message: TMessage);
 begin
@@ -3902,75 +3453,6 @@ begin
   inherited;
 end;
 
-{procedure TTBXToolWindow.DrawNCArea(const DrawToDC: Boolean;
-  const ADC: HDC; const Clip: HRGN);
-var
-  DC: HDC;
-  R, CR, R2: TRect;
-  ACanvas: TCanvas;
-  ToolbarInfo: TTBXToolbarInfo;
-  UsingBackground: Boolean;
-begin
-  if not Docked or not HandleAllocated then Exit;
-
-  if not DrawToDC then DC := GetWindowDC(Handle)
-  else DC := ADC;
-
-  UsingBackground := TDockAccess(CurrentDock).UsingBackground;
-
-  try
-    GetToolbarInfo(ToolbarInfo);
-    GetWindowRect(Handle, R);
-    OffsetRect(R, -R.Left, -R.Top);
-    if not DrawToDC then
-    begin
-      SelectNCUpdateRgn(Handle, DC, Clip);
-      CR := R;
-      with ToolbarInfo.BorderSize, CR do
-      begin
-        InflateRect(CR, -X, -Y);
-        if ToolbarInfo.IsVertical then Inc(Top, GetTBXDragHandleSize(ToolbarInfo))
-        else Inc(Left, GetTBXDragHandleSize(ToolbarInfo));
-        ExcludeClipRect(DC, Left, Top, Right, Bottom);
-      end;
-    end;
-    ACanvas := TCanvas.Create;
-    try
-      ACanvas.Handle := DC;
-      ACanvas.Brush.Color := EffectiveColor;
-      if CurrentTheme.SolidToolbarNCArea then
-      begin
-        ACanvas.Brush.Color := EffectiveColor;
-        ACanvas.Brush.Style := bsSolid;
-      end
-      else if UsingBackground then
-      begin
-        ACanvas.Brush.Color := EffectiveColor;
-        R2 := CurrentDock.ClientRect;
-        OffsetRect(R2, -Left, -Top);
-        TDockAccess(CurrentDock).DrawBackground(DC, R2);
-        if (Color = clNone) and CurrentDock.BackgroundOnToolbars then
-          ACanvas.Brush.Style := bsClear;
-      end
-      else
-      begin
-        ACanvas.Brush.Color := GetEffectiveColor(CurrentDock);
-        ACanvas.FillRect(R);
-        ACanvas.Brush.Color := EffectiveColor;
-        ACanvas.Brush.Style := bsSolid;
-      end;
-
-      CurrentTheme.PaintToolbarNCArea(ACanvas, R, ToolbarInfo);
-    finally
-      ACanvas.Handle := 0;
-      ACanvas.Free;
-    end;
-  finally
-    if not DrawToDC then ReleaseDC(Handle, DC);
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXToolWindow.DrawNCArea(const DrawToDC: Boolean; const ADC: HDC;
   const Clip: HRGN);
 var
@@ -3982,7 +3464,6 @@ begin
     DockableWindowDrawNCArea(DrawToDC, ADC, Clip, Self, EffectiveColor, ToolbarInfo);
   end;
 end;
-{vb+end}
 
 function TTBXToolWindow.GetFloatingBorderSize: TPoint;
 begin
@@ -4080,54 +3561,12 @@ begin
   else FEffectiveColor := Color;
 end;
 
-{procedure TTBXToolWindow.WMEraseBkgnd(var Message: TWmEraseBkgnd);
-var
-  Canvas: TCanvas;
-  R, CR: TRect;
-  Transparent: Boolean;
-begin
-  Transparent := False;
-  CR := ClientRect;
-  if Color = clNone then
-    if Docked and (TDockAccess(CurrentDock).UsingBackground) and CurrentDock.BackgroundOnToolbars
-      and not CurrentTheme.SolidToolbarClientArea then
-    begin
-      R := CurrentDock.ClientRect;
-      R.TopLeft := ScreenToClient(CurrentDock.ClientToScreen(R.TopLeft));
-      R.BottomRight := ScreenToClient(CurrentDock.ClientToScreen(R.BottomRight));
-      SaveDC(Message.DC);
-      with CR do IntersectClipRect(Message.DC, Left, Top, Right, Bottom);
-      TDockAccess(CurrentDock).DrawBackground(Message.DC, R);
-      RestoreDC(Message.DC, -1);
-      Message.Result := 1;
-      Transparent := True;
-    end;
-
-  Canvas := TCanvas.Create;
-  Canvas.Handle := Message.DC;
-  try
-    if Docked then
-    begin
-      R := CurrentDock.ClientRect;
-      R.TopLeft := ScreenToClient(CurrentDock.ClientToScreen(R.TopLeft));
-      R.BottomRight := ScreenToClient(CurrentDock.ClientToScreen(R.BottomRight));
-    end
-    else R := Rect(0, 0, 0, 0);
-    CurrentTheme.PaintBackgnd(Canvas, R, CR, CR, EffectiveColor, Transparent, GetWinViewType(Self));
-    Message.Result := 1;
-  finally
-    Canvas.Handle := 0;
-    Canvas.Free;
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXToolWindow.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 begin
   DockableWindowDrawBackground(Message.DC, Self, False, EffectiveColor);
   Message.Result := 1;
 end;
-{vb+end}
+
 //============================================================================//
 
 { Additional system colors }
@@ -4216,10 +3655,9 @@ end;
 procedure TTBXNexus.AddNotifie(AObject: TObject);
 begin
   if FNotifies.IndexOf(AObject) < 0 then FNotifies.Add(AObject);
-  Exit; asm db 0,'TBX (C) 2001-2003 Alex Denisov',0 end;
 end;
 
-procedure TTBXNexus.Broadcast(Msg: Cardinal; WParam, LParam: Integer);
+procedure TTBXNexus.Broadcast(Msg: Cardinal; Param1, Param2: Integer);
 var
   M: TMessage;
   I: Integer;
@@ -4227,8 +3665,8 @@ begin
   if FNotifies.Count > 0 then
   begin
     M.Msg := Msg;
-    M.WParam := WParam;
-    M.LParam := LParam;
+    M.WParam := WPARAM(Param1);
+    M.LParam := LPARAM(Param2);
     M.Result := 0;
     for I := 0 to FNotifies.Count - 1 do TObject(FNotifies[I]).Dispatch(M);
   end;
@@ -4296,7 +3734,7 @@ var
   I: Integer;
 begin
   inherited;
-  UpdateEffectiveColor; {vb+}
+  UpdateEffectiveColor;
   for I := 0 to Self.ControlCount - 1 do
     if Controls[I] is TWinControl then
       InvalidateAll(TWinControl(Controls[I]));
@@ -4305,7 +3743,7 @@ end;
 constructor TTBXDock.Create(AOwner: TComponent);
 begin
   inherited;
-  FEffectiveColor := Color; {vb+}
+  FEffectiveColor := Color;
   Color := clNone;
   AddThemeNotification(Self);
 end;
@@ -4316,28 +3754,9 @@ begin
   inherited;
 end;
 
-{procedure TTBXDock.DrawBackground(DC: HDC; const DrawRect: TRect);
-const
-  DOCK_POSITIONS: array [TTBDockPosition] of Integer = (DP_TOP, DP_BOTTOM, DP_LEFT, DP_RIGHT);
-var
-  Canvas: TCanvas;
-begin
-  if UseParentBackground then DrawParentBackground(Self, DC, ClientRect)
-  else if ThemedBackground then
-  begin
-    Canvas := TCanvas.Create;
-    Canvas.Handle := DC;
-    CurrentTheme.PaintDock(Canvas, ClientRect, DrawRect, DOCK_POSITIONS[Position]);
-    Canvas.Handle := 0;
-    Canvas.Free;
-  end
-  else inherited;
-end;} {vb-}
-
-{vb+}
 procedure TTBXDock.DrawBackground(DC: HDC; const DrawRect: TRect);
 const
-  DOCK_POSITIONS: array [TTBDockPosition] of Integer = (DP_TOP, DP_BOTTOM, DP_LEFT, DP_RIGHT);
+  DOCK_POSITIONS: array[TTBDockPosition] of Integer = (DP_TOP, DP_BOTTOM, DP_LEFT, DP_RIGHT);
 var
   Canvas: TCanvas;
   R: TRect;
@@ -4360,52 +3779,7 @@ begin
   end
   else inherited;
 end;
-{vb+end}
 
-{procedure TTBXDock.Resize;
-var
-  I, J: Integer;
-  V: TTBItemViewer;
-  R: TRect;
-begin
-  inherited Resize;
-  if UsingBackground then
-  begin
-    for J := 0 to ToolbarCount - 1 do
-    begin
-      Invalidate;
-      if Toolbars[J] is TTBXToolbar then with TTBXToolbar(Toolbars[J]) do
-      begin
-        for I := 0 to View.ViewerCount - 1 do
-        begin
-          V := View.Viewers[I];
-          if V.Show and not IsRectEmpty(V.BoundsRect) and not (V.Item is TTBControlItem)
-          then View.Invalidate(V);
-        end;
-        Update;
-        if HandleAllocated then
-          RedrawWindow(Handle, nil, 0, RDW_FRAME or RDW_INVALIDATE or RDW_ERASE);
-        for I := 0 to View.ViewerCount - 1 do
-        begin
-          V := View.Viewers[I];
-          if V.Show and not IsRectEmpty(V.BoundsRect) and not (V.Item is TTBControlItem)
-          then
-          begin
-            R := V.BoundsRect;
-            ValidateRect(Handle, @R);
-          end;
-        end;
-      end
-      else if Toolbars[J] is TTBXToolWindow then with TTBXToolWindow(Toolbars[J]) do
-      begin
-        if HandleAllocated then
-          RedrawWindow(Handle, nil, 0, RDW_FRAME or RDW_INVALIDATE or RDW_ERASE);
-      end;
-    end;
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXDock.Resize;
 var
   DC: HDC;
@@ -4433,7 +3807,6 @@ begin
     end;
   end;
 end;
-{vb+end}
 
 procedure TTBXDock.SetUseParentBackground(Value: Boolean);
 begin
@@ -4446,44 +3819,19 @@ begin
   end;
 end;
 
-{vb+}
 procedure TTBXDock.UpdateEffectiveColor;
 begin
-  if Color <> clNone
-    then FEffectiveColor := Color
-    else if Parent <> nil
-      then FEffectiveColor := GetEffectiveColor(Parent)
-      else FEffectiveColor := clBtnFace;
+  if Color <> clNone then FEffectiveColor := Color
+  else if Parent <> nil then FEffectiveColor := GetEffectiveColor(Parent)
+  else FEffectiveColor := clBtnFace;
 end;
-{vb+end}
 
-{procedure TTBXDock.TBMGetEffectiveColor(var Message: TMessage);
-begin
-  if Color <> clNone then Message.WParam := Color
-  else if Parent <> nil then Message.WParam := GetEffectiveColor(Parent)
-  else Message.WParam := clBtnFace;
-  Message.Result := 1;
-end;} {vb-}
-
-{vb+}
 procedure TTBXDock.TBMGetEffectiveColor(var Message: TMessage);
 begin
   Message.wParam := FEffectiveColor;
   Message.Result := 1;
 end;
-{vb+end}
 
-{procedure TTBXDock.TBMThemeChange(var Message: TMessage);
-begin
-  case Message.WParam of
-    TSC_AFTERVIEWCHANGE:
-      begin
-        Invalidate;
-      end;
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXDock.TBMThemeChange(var Message: TMessage);
 begin
   if Message.wParam = TSC_AFTERVIEWCHANGE then
@@ -4492,7 +3840,6 @@ begin
     if HandleAllocated then Invalidate;
   end;
 end;
-{vb+end}
 
 function TTBXDock.ThemedBackground: Boolean;
 begin
@@ -4505,27 +3852,6 @@ begin
     inherited UsingBackground;
 end;
 
-{procedure TTBXDock.WMEraseBkgnd(var Message: TWMEraseBkgnd);
-var
-  R: TRect;
-  C: TColor;
-begin
-  R := Self.ClientRect;
-  if UsingBackground then
-  begin
-    DrawBackground(Message.DC, R);
-    Message.Result := 1;
-  end
-  else
-  begin
-    C := Color;
-    if C = clNone then C := GetEffectiveColor(Parent);
-    FillRectEx(Message.DC, R, C);
-    Message.Result := 1;
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXDock.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 var
   CR: TRect;
@@ -4536,17 +3862,14 @@ begin
     else FillRectEx(Message.DC, CR, EffectiveColor);
   Message.Result := 1;
 end;
-{vb+end}
 
 procedure TTBXDock.WMMove(var Message: TWMMove);
 begin
   FMoving := True;
   inherited;
-  {vb+}
   { invalidate themed background (for example gradient in the Office2003 theme) }
   if ThemedBackground and HandleAllocated then
     InvalidateRect(Handle, nil, False);
-  {vb+end}
   FMoving := False;
 end;
 
@@ -4557,7 +3880,6 @@ begin
   FResizing := False;
 end;
 
-{vb+}
 { TTBXMenuAnimation }
 
 constructor TTBXMenuAnimation.Create;
@@ -4618,7 +3940,7 @@ begin
   FAnimationMode := Value;
 end;
 
-{ Work around first delayed menu showing in the Windows 2000+ on slow comps. }
+{ Workaround first delayed menu showing in the Windows 2000+ on slow comps. }
 
 procedure FixFirstPlaySoundDelayThreadProc(Param: Pointer); stdcall;
 begin
@@ -4654,14 +3976,8 @@ begin
     end;
   end;
 end;
-{vb+end}
 
 initialization
-  {CurrentTheme := nil;
-  RegisterTBXTheme('Default', TTBXDefaultTheme);
-  TBXNexus := TTBXNexus.Create('Default');
-  InitAdditionalSysColors;} {vb-}
-  {vb+}
   if not IsLibrary then
     FixFirstPlaySoundDelay;
   RegisterTBXTheme('Default', TTBXDefaultTheme);
@@ -4670,13 +3986,10 @@ initialization
   {$IFNDEF JR_D7}
   InitAdditionalSysColors;
   {$ENDIF}
-  {vb+end}
+
 finalization
-  {TBXNexus.Free;
-  ColorRegistry := nil;} {vb-}
-  {vb+}
   FreeAndNil(TBXMenuAnimation);
   FreeAndNil(TBXNexus);
   ColorRegistry := nil;
-  {vb+end}
+
 end.

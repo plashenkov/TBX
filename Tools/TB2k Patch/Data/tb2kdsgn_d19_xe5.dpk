@@ -1,7 +1,8 @@
-package tb2kdsgn_d15;
+package tb2kdsgn_d19_xe5;
 
 {$R *.res}
 {$R '..\Source\TB2Reg.dcr'}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -12,17 +13,19 @@ package tb2kdsgn_d15;
 {$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
+{$OPTIMIZATION OFF}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
 {$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $3F800000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'Toolbar2000 Design Package (Jordan Russell)'}
 {$DESIGNONLY}
 {$IMPLICITBUILD OFF}
@@ -31,7 +34,7 @@ requires
   rtl,
   vcl,
   dclstd,
-  tb2k_d15;
+  tb2k_d19_xe5;
 
 contains
   TB2Reg in '..\Source\TB2Reg.pas',

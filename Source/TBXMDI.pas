@@ -129,8 +129,7 @@ implementation
 {$R TBX_MDI.res}
 
 uses
-  {TBXThemes, TB2Common, TB2Consts, CommCtrl;} {vb-}
-  TBXThemes, TB2Common, TB2Consts, CommCtrl {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+  TBXThemes, TB2Common, TB2Consts, CommCtrl {$IFDEF JR_D9}, Types {$ENDIF};
 
 type
   TTBViewAccess = class(TTBView);
@@ -383,9 +382,9 @@ var
   ItemInfo: TTBXItemInfo;
 begin
   FillChar(ItemInfo, SizeOf(ItemInfo), 0);
-  ItemInfo.ViewType := TVT_NORMALTOOLBAR; //GetViewType(View);
+  ItemInfo.ViewType := TVT_NORMALTOOLBAR;
   ItemInfo.ItemOptions := IO_TOOLBARSTYLE or CDesigning[csDesigning in Item.ComponentState];
-  ItemInfo.Enabled := Item.Enabled{ or View.Customizing};
+  ItemInfo.Enabled := Item.Enabled;
   ItemInfo.Pushed := IsPushed;
   ItemInfo.Selected := False;
   ItemInfo.ImageShown := False;

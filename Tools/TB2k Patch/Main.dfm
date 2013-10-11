@@ -1,6 +1,6 @@
 object Form_Main: TForm_Main
-  Left = 0
-  Top = 0
+  Left = 230
+  Top = 130
   Caption = 'Toolbar2000 v2.2.2 Patch'
   ClientHeight = 293
   ClientWidth = 618

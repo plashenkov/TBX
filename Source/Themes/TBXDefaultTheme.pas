@@ -70,27 +70,7 @@ type
 implementation
 
 uses
-  {Classes, Controls, CommCtrl, TBXUtils, TBXUxThemes, TB2Common, TB2Item, TBX, Forms;} {vb-}
-  Classes, Controls, CommCtrl, TBXUtils, TBXUxThemes, TB2Common, TB2Item, TBX, Forms {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
-
-{var
-  SmCaptionFont: TFont;
-
-procedure InitializeStock;
-var
-  NonClientMetrics: TNonClientMetrics;
-begin
-  SmCaptionFont := TFont.Create;
-  NonClientMetrics.cbSize := SizeOf(NonClientMetrics);
-  if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then
-    SmCaptionFont.Handle := CreateFontIndirect(NonClientMetrics.lfSmCaptionFont);
-end;
-
-procedure FinalizeStock;
-begin
-  SmCaptionFont.Free;
-  SmCaptionFont := nil;
-end;} {vb-}
+  Classes, Controls, CommCtrl, TBXUtils, TBXUxThemes, TB2Common, TB2Item, TBX, Forms {$IFDEF JR_D9}, Types {$ENDIF};
 
 procedure DrawButtonBitmap(Canvas: TCanvas; R: TRect);
 const
@@ -138,12 +118,8 @@ begin
     TMI_SPLITBTN_ARROWWIDTH:
       if USE_THEMES then
       begin
-        {if GetThemePartSize(TOOLBAR_THEME, StockCompatibleBitmap.Canvas.Handle,
-          TP_SPLITBUTTONDROPDOWN, TS_NORMAL, nil, TS_TRUE, Sz) = S_OK then} {vb-}
-        {vb+}
         if GetThemePartSize(XPTheme(tcToolBar), StockCompatibleBitmap.Canvas.Handle,
           TP_SPLITBUTTONDROPDOWN, TS_NORMAL, nil, TS_TRUE, Sz) = S_OK then
-        {vb+end}
         begin
           Result := Sz.cx + 2;
         end
@@ -303,12 +279,8 @@ begin
           LeftWidth := 2; RightWidth := 2;
           TopHeight := 2; BottomHeight := 2;
           if USE_THEMES then
-            {GetThemeMargins(TOOLBAR_THEME, StockBitmap1.Canvas.Handle, TP_BUTTON, TS_HOT, TMT_CAPTIONMARGINS,
-              nil, TMargins(Margins));} {vb-}
-            {vb+}
             GetThemeMargins(XPTheme(tcToolBar), StockBitmap1.Canvas.Handle,
               TP_BUTTON, TS_HOT, TMT_CAPTIONMARGINS, nil, TMargins(Margins));
-            {vb+end}
         end;
 
       MID_MENUITEM:
@@ -322,11 +294,8 @@ begin
           if USE_THEMES then
           begin
             R := Rect(0, 0, 100, 100);
-            {GetThemeBackgroundContentRect(STATUSBAR_THEME, StockBitmap1.Canvas.Handle, SP_PANE, 0, R, @R2);} {vb-}
-            {vb+}
             GetThemeBackgroundContentRect(XPTheme(tcStatus),
               StockBitmap1.Canvas.Handle, SP_PANE, 0, R, @R2);
-            {vb+end}
             LeftWidth := R2.Left - R.Left;
             RightWidth := R.Right - R2.Right;
             TopHeight := R2.Top - R.Top;
@@ -402,25 +371,6 @@ begin
   end;
 end;
 
-{procedure TTBXDefaultTheme.PaintCheckMark(Canvas: TCanvas; ARect: TRect; const ItemInfo: TTBXItemInfo);
-var
-  X, Y: Integer;
-begin
-  X := (ARect.Left + ARect.Right) div 2 - 1;
-  Y := (ARect.Top + ARect.Bottom) div 2 + 2;
-  if ItemInfo.Enabled then Canvas.Pen.Color := clBtnText
-  else Canvas.Pen.Color := clGrayText;
-  Canvas.Polyline([Point(X-2, Y-2), Point(X, Y), Point(X+4, Y-4),
-    Point(X+4, Y-3), Point(X, Y+1), Point(X-2, Y-1), Point(X-2, Y-2)]);
-  if ItemInfo.Enabled then
-  begin
-    Canvas.Pen.Color := clBtnHighlight;
-    Canvas.Polyline([Point(X-3, Y-2), Point(X-3, Y-1), Point(X, Y+2),
-      Point(X+5, Y-3), Point(X+5, Y-5)]);
-  end;
-end;} {vb-}
-
-{vb+}
 procedure TTBXDefaultTheme.PaintCheckMark(Canvas: TCanvas; ARect: TRect;
   const ItemInfo: TTBXItemInfo);
 const
@@ -449,7 +399,6 @@ begin
       DrawPattern(DC, X, Y, CheckMarkPattern2, clBtnHighlight, False);
   end;
 end;
-{vb+end}
 
 procedure TTBXDefaultTheme.PaintChevron(Canvas: TCanvas; ARect: TRect;
   const ItemInfo: TTBXItemInfo);
@@ -577,11 +526,8 @@ begin
         else if BtnHot then StateFlags := CBXS_HOT
         else StateFlags := CBXS_NORMAL;
         if BtnHot then InflateRect(R, 1, 1);
-        {DrawThemeBackground(COMBO_THEME, Handle, CP_DROPDOWNBUTTON, StateFlags, R, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcComboBox), Handle, CP_DROPDOWNBUTTON,
           StateFlags, R, nil);
-        {vb+end}
       end
       else
       begin
@@ -617,11 +563,8 @@ begin
         else if BtnPressed then StateFlags := UPS_PRESSED
         else if BtnHot then StateFlags := UPS_HOT
         else StateFlags := UPS_NORMAL;
-        {DrawThemeBackground(SPIN_THEME, Handle, SPNP_UP, StateFlags, BR, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcSpin), Handle, SPNP_UP,
           StateFlags, BR, nil);
-        {vb+end}
         { Lower with XP themes }
         BR := R;
         BR.Top := (R.Top + R.Bottom) div 2;
@@ -630,11 +573,8 @@ begin
         else if BtnPressed then StateFlags := DNS_PRESSED
         else if BtnHot then StateFlags := DNS_HOT
         else StateFlags := DNS_NORMAL;
-        {DrawThemeBackground(SPIN_THEME, Handle, SPNP_DOWN, StateFlags, BR, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcSpin), Handle, SPNP_DOWN,
           StateFlags, BR, nil);
-        {vb+end}
       end
       else
       begin
@@ -778,11 +718,8 @@ begin
           simulate it with regions... }
         RegionFlags := TS_HOT;
         if ComboPart = cpSplitRight then Dec(R.Left);
-        {GetThemeBackgroundRegion(TOOLBAR_THEME, Canvas.Handle, XPPart[ComboPart], RegionFlags, R, Region);} {vb-}
-        {vb+}
         GetThemeBackgroundRegion(XPTheme(tcToolBar), Canvas.Handle,
           XPPart[ComboPart], RegionFlags, R, Region);
-        {vb+end}
         if ComboPart = cpSplitRight then Inc(R.Left);
         if Embedded or not Boolean(ItemOptions and IO_DESIGNING) then
         begin
@@ -800,11 +737,8 @@ begin
         DeleteObject(Region);
       end;
 
-      {DrawThemeBackground(TOOLBAR_THEME, DC, XPPart[ComboPart], Flags, R, nil);} {vb-}
-      {vb+}
       DrawThemeBackground(XPTheme(tcToolBar), DC, XPPart[ComboPart],
         Flags, R, nil);
-      {vb+end}
     end
     else
     begin
@@ -921,36 +855,24 @@ begin
         if Active then Flags := FS_ACTIVE else Flags := FS_INACTIVE;
         R := ARect;
         R.Top := R.Bottom - FloatingBorderSize.Y;
-        {DrawThemeBackground(WINDOW_THEME, DC, WP_SMALLFRAMEBOTTOM, Flags, R, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcWindow), DC,
           WP_SMALLFRAMEBOTTOM, Flags, R, nil);
-        {vb+end}
         R.Top := ARect.Top;
         R.Bottom := R.Top + FloatingBorderSize.Y;
         {if WindowInfo.ShowCaption then} { TODO : how to paint a captionless window frame }
           Inc(R.Bottom, GetSystemMetrics(SM_CYSMCAPTION));
 
-        {DrawThemeBackground(WINDOW_THEME, DC, WP_SMALLCAPTION, Flags, R, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcWindow), DC, WP_SMALLCAPTION,
           Flags, R, nil);
-        {vb+end}
         R.Top := R.Bottom;
         R.Bottom := ARect.Bottom - FloatingBorderSize.Y;
         R.Right := R.Left + FloatingBorderSize.X;
-        {DrawThemeBackground(WINDOW_THEME, DC, WP_SMALLFRAMELEFT, Flags, R, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcWindow), DC, WP_SMALLFRAMELEFT,
           Flags, R, nil);
-        {vb+end}
         R.Right := ARect.Right;
         R.Left := R.Right - FloatingBorderSize.X;
-        {DrawThemeBackground(WINDOW_THEME, DC, WP_SMALLFRAMERIGHT, Flags, R, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcWindow), DC, WP_SMALLFRAMERIGHT,
           Flags, R, nil);
-        {vb+end}
       end;
 
       if not ShowCaption then Exit;
@@ -987,11 +909,8 @@ begin
         if (CDBS_PRESSED and CloseButtonState) <> 0 then Flags := CBS_PUSHED
         else if (CDBS_HOT and CloseButtonState) <> 0 then Flags := CBS_HOT
         else Flags := CBS_NORMAL;
-        {DrawThemeBackground(WINDOW_THEME, DC, WP_SMALLCLOSEBUTTON, Flags, R, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcWindow), DC, WP_SMALLCLOSEBUTTON,
           Flags, R, nil);
-        {vb+end}
       end;
     end;
 end;
@@ -1020,8 +939,7 @@ begin
       FrameRectEx(DC, R, C, False);
       InflateRect(R, 1, 1);
       if Pushed or Selected or E or ((ItemOptions and IO_DESIGNING) <> 0)
-        {then DrawThemeBackground(COMBO_THEME, DC, 0, 0, R, nil);} {vb-}
-        then DrawThemeBackground(XPTheme(tcComboBox), DC, 0, 0, R, nil); {vb+}
+        then DrawThemeBackground(XPTheme(tcComboBox), DC, 0, 0, R, nil);
       InflateRect(R, -2, -2);
       FrameRectEx(DC, R, clWindow, False);
     end
@@ -1124,11 +1042,8 @@ begin
     if ItemInfo.Pushed then XPFlags := CBS_PUSHED
     else if ItemInfo.HoverKind <> hkNone then XPFlags := CBS_HOT
     else XPFlags := CBS_NORMAL;
-    {DrawThemeBackground(WINDOW_THEME, Canvas.Handle, XPPart, XPFLags, ARect, nil);} {vb-}
-    {vb+}
     DrawThemeBackground(XPTheme(tcWindow), Canvas.Handle,
       XPPart, XPFLags, ARect, nil);
-    {vb+end}
   end
   else
   begin
@@ -1287,11 +1202,8 @@ begin
       end;
     end
     else
-      {DrawThemeBackground(TOOLBAR_THEME, Canvas.Handle, XPFlags[Horizontal], TS_NORMAL, ARect, nil);} {vb-}
-      {vb+}
       DrawThemeBackground(XPTheme(tcToolBar), Canvas.Handle,
         XPFlags[Horizontal], TS_NORMAL, ARect, nil);
-      {vb+end}
   end;
 end;
 
@@ -1302,16 +1214,12 @@ const
   GripperPart: array [Boolean] of Cardinal = (RP_GRIPPER, RP_GRIPPERVERT);
   Pattern: array [0..15] of Byte = (0, 0, $CC, 0, $78, 0, $30, 0, $78, 0, $CC, 0, 0, 0, 0, 0);
 var
-//  DC: HDC;
   DHSize: Integer;
-//  Sz: TSize;
   R2: TRect;
   Flags: Cardinal;
   Z: Integer;
   BtnVisible, Horz, CloseButtondown, CloseButtonHover: Boolean;
 begin
-{  DC := Canvas.Handle;
-  if ToolbarInfo.EffectiveColor <> clNone then FillRectEx(DC, R, ToolbarInfo.EffectiveColor);     }
   Canvas.FillRect(R);
 
   { Border }
@@ -1319,7 +1227,6 @@ begin
   if USE_THEMES then
   begin
     Frame3D(Canvas.Handle, R, Lighten(ToolbarInfo.EffectiveColor, 24), Lighten(ToolbarInfo.EffectiveColor, -32), False);
-//    DrawThemeEdge(TOOLBAR_THEME, Canvas.Handle, RP_BAND, 0, R, BDR_RAISEDINNER, BF_RECT or BF_ADJUST, @R)
   end
   else
     Windows.DrawEdge(Canvas.Handle, R, BDR_RAISEDINNER, BF_RECT or BF_ADJUST);
@@ -1363,11 +1270,8 @@ begin
         R2.Right := R2.Left + Z and not $3 + 2;
       end;
 
-      {DrawThemeBackground(REBAR_THEME, Canvas.Handle, GripperPart[ToolbarInfo.IsVertical], 0, R2, nil)} {vb-}
-      {vb+}
       DrawThemeBackground(XPTheme(tcRebar), Canvas.Handle,
-        GripperPart[ToolbarInfo.IsVertical], 0, R2, nil)
-      {vb+end}
+        GripperPart[ToolbarInfo.IsVertical], 0, R2, nil);
     end
     else
     begin
@@ -1422,11 +1326,8 @@ begin
       Flags := TS_NORMAL;
       if CloseButtonDown then Flags := TS_PRESSED
       else if CloseButtonHover then Flags := TS_HOT;
-      {DrawThemeBackground(TOOLBAR_THEME, Canvas.Handle, TP_BUTTON, Flags, R2, nil);} {vb-}
-      {vb+}
       DrawThemeBackground(XPTheme(tcToolBar), Canvas.Handle,
         TP_BUTTON, Flags, R2, nil);
-      {vb+end}
       if CloseButtonDown then OffsetRect(R2, 1, 1);
       DrawGlyph(Canvas.Handle, R2, 7, 7, Pattern[0], clBtnText);
     end
@@ -1453,11 +1354,9 @@ begin
   begin
     R := DockRect;
     Inc(R.Bottom, 1);
-    {DrawThemeBackground(REBAR_THEME, Canvas.Handle, 0, 0, R, nil);} {vb-}
-    DrawThemeBackground(XPTheme(tcRebar), Canvas.Handle, 0, 0, R, nil); {vb+}
+    DrawThemeBackground(XPTheme(tcRebar), Canvas.Handle, 0, 0, R, nil);
   end
-  {else DrawThemeBackground(REBAR_THEME, Canvas.Handle, 0, 0, DockRect, nil);} {vb-}
-  else DrawThemeBackground(XPTheme(tcRebar), Canvas.Handle, 0, 0, DockRect, nil); {vb+}
+  else DrawThemeBackground(XPTheme(tcRebar), Canvas.Handle, 0, 0, DockRect, nil);
 end;
 
 procedure TTBXDefaultTheme.PaintDockPanelNCArea(Canvas: TCanvas; R: TRect; const DockPanelInfo: TTBXDockPanelInfo);
@@ -1528,10 +1427,7 @@ begin
         Flags := TS_NORMAL;
         if CloseButtonDown then Flags := TS_PRESSED
         else if CloseButtonHover then Flags := TS_HOT;
-        {DrawThemeBackground(TOOLBAR_THEME, DC, TP_BUTTON, Flags, R2, nil);} {vb-}
-        {vb+}
         DrawThemeBackground(XPTheme(tcToolBar), DC, TP_BUTTON, Flags, R2, nil);
-        {vb+end}
         if CloseButtonDown then OffsetRect(R2, 1, 1);
         InflateRect(R2, -2, -2);
       end
@@ -1572,7 +1468,7 @@ procedure TTBXDefaultTheme.GetViewMargins(ViewType: Integer; out Margins: TTBXMa
 begin
   with Margins do
     if ((ViewType and VT_TOOLBAR) = VT_TOOLBAR) and
-      ((ViewType and TVT_FLOATING) = TVT_FLOATING) then
+       ((ViewType and TVT_FLOATING) = TVT_FLOATING) then
     begin
       LeftWidth := 4;
       TopHeight := 2;
@@ -1600,11 +1496,8 @@ begin
   begin
     if Hot then Flags := TS_PRESSED
     else Flags := TS_HOT;
-    {DrawThemeBackground(TOOLBAR_THEME, Canvas.Handle, TP_BUTTON, Flags, ARect, nil);} {vb-}
-    {vb+}
     DrawThemeBackground(XPTheme(tcToolBar), Canvas.Handle,
       TP_BUTTON, Flags, ARect, nil);
-    {vb+end}
     X := (R.Left + R.Right) div 2;
     Y := (R.Top + R.Bottom) div 2;
     Sz := Min(X - R.Left, Y - R.Top) * 3 div 4;
@@ -1684,8 +1577,7 @@ begin
           if Boolean(State and PFS_DISABLED) then Inc(Flags, 3)
           else if Boolean(State and PFS_PUSHED) then Inc(Flags, 2)
           else if Boolean(State and PFS_HOT) then Inc(Flags);
-          {DrawThemeBackground(BUTTON_THEME, DC, BP_CHECKBOX, Flags, R, nil);} {vb-}
-          DrawThemeBackground(XPTheme(tcButton), DC, BP_CHECKBOX, Flags, R, nil); {vb+}
+          DrawThemeBackground(XPTheme(tcButton), DC, BP_CHECKBOX, Flags, R, nil);
         end
         else
         begin
@@ -1728,11 +1620,8 @@ begin
           if Boolean(State and PFS_DISABLED) then Inc(Flags, 3)
           else if Boolean(State and PFS_PUSHED) then Inc(Flags, 2)
           else if Boolean(State and PFS_HOT) then Inc(Flags);
-          {DrawThemeBackground(BUTTON_THEME, DC, BP_RADIOBUTTON, Flags, R, nil);} {vb-}
-          {vb+}
           DrawThemeBackground(XPTheme(tcButton), DC, BP_RADIOBUTTON,
             Flags, R, nil);
-          {vb+end}
         end
         else
         begin
@@ -1798,8 +1687,7 @@ begin
     SBP_BODY:
       begin
         if USE_THEMES then
-          {DrawThemeBackground(STATUSBAR_THEME, DC, 0, 0, R, nil)} {vb-}
-          DrawThemeBackground(XPTheme(tcStatus), DC, 0, 0, R, nil) {vb+}
+          DrawThemeBackground(XPTheme(tcStatus), DC, 0, 0, R, nil)
         else
           FillRectEx(DC, R, StatusBarColor);
       end;
@@ -1809,8 +1697,7 @@ begin
         begin
           if Part = SBP_LASTPANE then Flags := SP_GRIPPERPANE
           else Flags := SP_PANE;
-          {DrawThemeBackground(STATUSBAR_THEME, DC, Flags, 0, R, nil);} {vb-}
-          DrawThemeBackground(XPTheme(tcStatus), DC, Flags, 0, R, nil); {vb+}
+          DrawThemeBackground(XPTheme(tcStatus), DC, Flags, 0, R, nil);
         end
         else
         begin
@@ -1821,8 +1708,7 @@ begin
     SBP_GRIPPER:
       begin
         if USE_THEMES then
-          {DrawThemeBackground(STATUSBAR_THEME, DC, SP_GRIPPER, 0, R, nil)} {vb-}
-          DrawThemeBackground(XPTheme(tcStatus), DC, SP_GRIPPER, 0, R, nil) {vb+}
+          DrawThemeBackground(XPTheme(tcStatus), DC, SP_GRIPPER, 0, R, nil)
         else
         begin
           D := 0;
@@ -1869,22 +1755,11 @@ end;
 
 procedure TTBXDefaultTheme.SetupColorCache;
 begin
-  {ToolbarColor := clBtnFace;
-  ToolbarText := clBtnText;
-  StatusBarColor := clBtnFace;
-  if USE_THEMES then
-  begin
-    GetThemeColor(TOOLBAR_THEME, 0, 0, TMT_FILLCOLOR, Cardinal(ToolbarColor));
-    GetThemeColor(TOOLBAR_THEME, 0, 0, TMT_TEXTCOLOR, Cardinal(ToolbarText));
-    GetThemeColor(STATUSBAR_THEME, 0, 0, TMT_FILLCOLOR, Cardinal(StatusBarColor));
-  end;} {vb-}
-  {vb+}
   ToolbarColor := TBXThemes.clToolbar;
   ToolbarText := TBXThemes.clToolbarText;
   if USE_THEMES
     then GetThemeColor(XPTheme(tcStatus), 0, 0, TMT_FILLCOLOR, Cardinal(StatusBarColor))
     else StatusBarColor := clBtnFace;
-  {vb+end}
   DockPanelColor := NearestMixedColor(ToolbarColor, clWindow, 64);
 end;
 
@@ -1892,11 +1767,5 @@ procedure TTBXDefaultTheme.TBXSysCommand(var Message: TMessage);
 begin
   if Message.WParam = TSC_VIEWCHANGE then SetupColorCache;
 end;
-
-{initialization
-  InitializeStock;
-
-finalization
-  FinalizeStock;} {vb-}
 
 end.

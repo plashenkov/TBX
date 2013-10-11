@@ -125,8 +125,7 @@ type
     procedure SetSimpleText(const Value: TCaption);
     procedure SetSizeGrip(Value: Boolean);
     procedure SetUseSystemFont(Value: Boolean);
-    {procedure TBMThemeChange(var Message); message TBM_THEMECHANGE;} {vb-}
-    procedure TBMThemeChange(var Message: TMessage); message TBM_THEMECHANGE; {vb+}
+    procedure TBMThemeChange(var Message: TMessage); message TBM_THEMECHANGE;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
   protected
@@ -212,11 +211,9 @@ type
     property OnDragOver;
     property OnEndDock;
     property OnEndDrag;
-    {vb+}
     {$IFDEF JR_D9}
     property OnMouseActivate;
     {$ENDIF}
-    {vb+end}
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
@@ -229,8 +226,7 @@ type
 
 implementation
 
-{uses TBXUtils;} {vb-}
-uses TB2Common, TBXConsts, TBXUtils {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+uses TB2Common, TBXConsts, TBXUtils {$IFDEF JR_D9}, Types {$ENDIF};
 
 type TFontSettingsAccess = class(TFontSettings);
 
@@ -335,8 +331,7 @@ begin
     begin
       P := StatusBar;
       while P <> nil do
-        {if P = Value then raise EInvalidOperation.Create('Can''t insert own parent')} {vb-}
-        if P = Value then raise EInvalidOperation.CreateRes(@STBXCannotInsertOwnParent) {vb+}
+        if P = Value then raise EInvalidOperation.CreateRes(@STBXCannotInsertOwnParent)
         else P := P.Parent;
 
       Panel := TTBXStatusPanels(Collection).FindPanel(Value);
@@ -344,15 +339,11 @@ begin
     end;
     PrevControl := FControl;
     FControl := Value;
-    {FControl.Parent := StatusBar;
-    if Value <> nil then Value.FreeNotification(StatusBar);} {vb-}
-    {vb+}
     if Value <> nil then
     begin
       Value.FreeNotification(StatusBar);
       Value.Parent := StatusBar;
     end;
-    {vb+end}
     Changed(True);
     if PrevControl <> nil then PrevControl.Perform(CM_SHOWINGCHANGED, 0, 0);
   end;
@@ -895,13 +886,6 @@ begin
   end;
 end;
 
-{procedure TTBXCustomStatusBar.TBMThemeChange(var Message);
-begin
-  UpdatePanels;
-  Invalidate;
-end;} {vb-}
-
-{vb+}
 procedure TTBXCustomStatusBar.TBMThemeChange(var Message: TMessage);
 begin
   if (Message.wParam = TSC_AFTERVIEWCHANGE) and HandleAllocated then
@@ -910,7 +894,6 @@ begin
     Invalidate;
   end;
 end;
-{vb+end}
 
 procedure TTBXCustomStatusBar.UpdateCache;
 var

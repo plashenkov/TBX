@@ -95,8 +95,7 @@ type
 
 implementation
 
-{uses TBXUtils, TB2Common, TB2Item, Classes, Controls, Commctrl, Forms;} {vb-}
-uses TBXUtils, TB2Common, TB2Item, Classes, Controls, Commctrl, Forms {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+uses TBXUtils, TB2Common, TB2Item, Classes, Controls, Commctrl, Forms {$IFDEF JR_D9}, Types {$ENDIF};
 
 var
   StockImgList: TImageList;
@@ -365,18 +364,6 @@ begin
   end;
 end;
 
-{procedure TTBXOfficeXPTheme.PaintCheckMark(Canvas: TCanvas; ARect: TRect; const ItemInfo: TTBXItemInfo);
-var
-  X, Y: Integer;
-begin
-  X := (ARect.Left + ARect.Right) div 2 - 2;
-  Y := (ARect.Top + ARect.Bottom) div 2 + 1;
-  Canvas.Pen.Color := GetBtnColor(ItemInfo, ipText);
-  Canvas.Polyline([Point(X-2, Y-2), Point(X, Y), Point(X+4, Y-4),
-    Point(X+4, Y-3), Point(X, Y+1), Point(X-2, Y-1), Point(X-2, Y-2)]);
-end;} {vb-}
-
-{vb+}
 procedure TTBXOfficeXPTheme.PaintCheckMark(Canvas: TCanvas; ARect: TRect; const ItemInfo: TTBXItemInfo);
 const
   CheckMarkPattern: array[0..6] of TPoint = (
@@ -401,7 +388,6 @@ begin
   end
   else DrawPattern(DC, X, Y, CheckMarkPattern, C1, False);
 end;
-{vb+end}
 
 procedure TTBXOfficeXPTheme.PaintChevron(Canvas: TCanvas; ARect: TRect; const ItemInfo: TTBXItemInfo);
 const
@@ -672,14 +658,14 @@ begin
             Point(Right - 1, Bottom),
             Point(Left, Bottom), Point(Left - 1, Bottom - 1),
             Point(Left - 1, Top), Point(Left, Top - 1)
-            ])
+          ])
         else
           Canvas.Polyline([
             Point(Left, Top - 1), Point(Right - 1, Top - 1),
             Point(Right, Top), Point(Right, Bottom),
             Point(Left - 1, Bottom),
             Point(Left - 1, Top), Point(Left, Top - 1)
-            ]);
+          ]);
     end;
 
     if not WindowInfo.ShowCaption then Exit;
@@ -1003,8 +989,7 @@ end;
 
 procedure TTBXOfficeXPTheme.PaintToolbarNCArea(Canvas: TCanvas; R: TRect; const ToolbarInfo: TTBXToolbarInfo);
 const
-  {DragHandleOffsets: array [Boolean, DHS_DOUBLE..DHS_SINGLE] of Integer = ((2, 0, 1), (5, 0, 5));} {vb-}
-  DragHandleOffsets: array [Boolean, DHS_DOUBLE..DHS_SINGLE] of Integer = ((1, 0, 0), (5, 0, 5)); {vb+}
+  DragHandleOffsets: array [Boolean, DHS_DOUBLE..DHS_SINGLE] of Integer = ((1, 0, 0), (5, 0, 5));
 
   function GetBtnItemState(BtnState: Integer): TBtnItemState;
   begin

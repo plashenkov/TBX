@@ -70,11 +70,8 @@ type
 implementation
 
 uses
-  {Forms, TBXThemes, TBXStrEdit, TBXUtils, TypInfo, TB2Version;} {vb-}
-  {vb+}
   Forms, ExtCtrls, TypInfo, {$IFDEF JR_D9} Types, {$ENDIF} TB2Common,
   TBXThemes, TBXStrEdit, TBXUtils, TB2Version;
-  {vb+end}
 
 type
   TTBXLinkAccess = class(TTBXCustomLink);
@@ -146,7 +143,8 @@ begin
   I := WordPosition(N, S, WordDelims);
   if I <> 0 then
     { find the end of the current word }
-    while (I <= Length(S)) and not(S[I] in WordDelims) do begin
+    while (I <= Length(S)) and not(S[I] in WordDelims) do
+    begin
       { add the I'th character to result }
       Inc(Len);
       SetLength(Result, Len);
@@ -342,37 +340,21 @@ end;
 
 procedure TTBXItemsEditor.ExecuteVerb(Index: Integer);
 const
-  CRLF = #13#10; {vb+}
   AboutText =
     '%s'#13#10 +
-    '©2001–2004 Alex A. Denisov'#13#10 +
+    '© 2001–2013 Alex A. Denisov and contributors'#13#10 +
     'For conditions of distribution and use, see TBX documentation.'#13#10 +
-    'Visit http://g32.org/tbx/ for the latest versions of TBX'#13#10 +
-    #13#10 +
-    {vb+}
-    '%s'+ CRLF +
-    '© 2005–2006 Vladimir Bochkarev'+ CRLF +
-    'e-mail: boxa@mail.ru'+ CRLF +
-    CRLF +
-    {vb+end}
+    'Visit http://plashenkov.github.io/tbx/ for the latest versions of TBX'#13#10#13#10 +
     'Running on'#13#10 +
     '%s'#13#10 +
-    '©1998-2004 by Jordan Russell'#13#10 +
-    'For conditions of distribution and use, see Toolbar2000 documentation.'#13#10 +
-    #13#10 +
-    'Visit http://www.jrsoftware.org/ for the latest versions of Toolbar2000'#13#10 +
-    '';
+    '© 1998-2013 Jordan Russell'#13#10 +
+    'For conditions of distribution and use, see Toolbar2000 documentation.'#13#10#13#10 +
+    'Visit http://www.jrsoftware.org/ for the latest versions of Toolbar2000';
 begin
   case Index of
     0: Edit;
-    1:
-      begin
-        MessageDlg(
-          Format(AboutText,
-          {[TBXVersionText, Toolbar2000VersionPropText]),} {vb-}
-          [TBXVersionText, TBXPatchEditionText, Toolbar2000VersionPropText]), {vb+}
-          mtInformation, [mbOK], 0);
-      end;
+    1: MessageDlg(Format(AboutText, [TBXVersionText, Toolbar2000VersionPropText]),
+         mtInformation, [mbOK], 0);
   end;
 end;
 
@@ -394,7 +376,6 @@ var
   S: string;
   I: Integer;
 begin
-  {vb+}
   with TBevel.Create(Sender) do
   begin
     Height := 2;
@@ -402,7 +383,7 @@ begin
     Align := alTop;
     Parent := Sender;
   end;
-  {vb+end}
+
   TB := TTBToolbar.Create(Sender);
   TB.Top := Sender.Height;
   TB.Parent := Sender;
@@ -423,8 +404,7 @@ begin
         NewItem.Caption := Item.Caption;
         NewItem.ImageIndex := Item.ImageIndex;
         NewItem.Tag := Item.Tag;
-        {NewItem.Hint := S;} {vb-}
-        NewItem.Hint := Format('%s (%s)', [StripAccelChars(Item.Caption), S]); {vb+}
+        NewItem.Hint := Format('%s (%s)', [StripAccelChars(Item.Caption), S]);
         NewItem.OnClick := Item.OnClick;
       end;
     end;
@@ -437,33 +417,21 @@ begin
     TTBXToolWindow, TTBXDockablePanel, TTBXPopupMenu, TTBXSwitcher, TTBXMRUList,
     TTBXMDIHandler, TTBXPageScroller, TTBXColorSet, TTBXAlignmentPanel,
     TTBXLabel, TTBXLink, TTBXButton, TTBXCheckBox, TTBXRadioButton, TTBXStatusBar]);
-  {RegisterNoIcon([TTBXItem, TTBXSubMenuItem, TTBXSeparatorItem,
-    TTBXVisibilityToggleItem, TTBXLabelItem, TTBXMRUListItem, TTBXColorItem,
-    TTBXMDIWindowItem, TTBXEditItem, TTBXSpinEditItem, TTBXDropDownItem,
-    TTBXComboBoxItem, TTBXStringList, TTBXUndoList, TTBXToolPalette, TTBXColorPalette]);} {vb-}
-  RegisterNoIcon([TTBXCustomItem]); {vb+}
-
-{$IFDEF COMPATIBLE_CTL}
-  {RegisterNoIcon([TTBXList, TTBXComboItem, TTBXComboList]);} {vb-}
-{$ENDIF}
+  RegisterNoIcon([TTBXCustomItem]);
 
   RegisterClasses([TTBXItem, TTBXSubMenuItem, TTBXSeparatorItem,
     TTBXVisibilityToggleItem, TTBXLabelItem, TTBXMRUListItem, TTBXColorItem,
     TTBXMDIWindowItem, TTBXEditItem, TTBXSpinEditItem, TTBXDropDownItem,
-    {TTBXComboBoxItem, TTBXStringList, TTBXUndoList, TTBXToolPalette, TTBXColorPalette} {vb-}
-    {vb+}
     TTBXComboBoxItem, TTBXDragHandleItem, TTBXStringList, TTBXUndoList,
     TTBXToolPalette, TTBXColorPalette]);
-    {vb+end}
 {$IFDEF COMPATIBLE_CTL}
   RegisterClasses([TTBXList, TTBXComboItem, TTBXComboList]);
 {$ENDIF}
 
-
   RegisterComponentEditor(TTBXToolbar, TTBXItemsEditor);
   RegisterComponentEditor(TTBXPopupMenu, TTBXItemsEditor);
   RegisterPropertyEditor(TypeInfo(string), TTBXCustomItem, 'Caption', TMLStringProperty);
-  RegisterPropertyEditor(TypeInfo(string), TTBXCustomItem, 'Hint', TMLStringProperty); {vb+}
+  RegisterPropertyEditor(TypeInfo(string), TTBXCustomItem, 'Hint', TMLStringProperty);
   RegisterPropertyEditor(TypeInfo(string), TTBXLabelItem, 'Caption', TCaptionProperty);
   RegisterPropertyEditor(TypeInfo(string), TTBXToolbar, 'ChevronHint', TMLStringProperty);
   RegisterPropertyEditor(TypeInfo(string), TTBXSwitcher, 'Theme', TThemeProperty);
@@ -489,7 +457,7 @@ begin
   TBRegisterItemClass(TTBXSpinEditItem, 'New TBX Spin Edit Item', HInstance);
   TBRegisterItemClass(TTBXDropDownItem, 'New TBX Drop Down Item', HInstance);
   TBRegisterItemClass(TTBXComboBoxItem, 'New TBX Combo Box Item', HInstance);
-  TBRegisterItemClass(TTBXDragHandleItem, 'New TBX Drag Handle Item', HInstance); {vb+}
+  TBRegisterItemClass(TTBXDragHandleItem, 'New TBX Drag Handle Item', HInstance);
   TBRegisterItemClass(TTBXStringList, 'New TBX String List', HInstance);
   TBRegisterItemClass(TTBXUndoList, 'New TBX Undo List', HInstance);
   TBRegisterItemClass(TTBXToolPalette, 'New TBX Tool Palette', HInstance);

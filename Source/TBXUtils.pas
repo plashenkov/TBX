@@ -14,17 +14,6 @@ interface
 uses
   Windows, Messages, Classes, SysUtils, Graphics, Controls, Forms, ImgList;
 
-{$IFDEF TBX_UNICODE}
-function GetTextHeightW(DC: HDC): Integer;
-function GetTextWidthW(DC: HDC; const S: WideString; StripAccelChar: Boolean): Integer;
-procedure DrawRotatedTextW(DC: HDC; AText: WideString; const ARect: TRect; const AFormat: Cardinal);
-function EscapeAmpersandsW(const S: WideString): WideString;
-function FindAccelCharW(const S: WideString): WideChar;
-function StripAccelCharsW(const S: WideString): WideString;
-function StripTrailingPunctuationW(const S: WideString): WideString;
-{$ENDIF}
-
-{vb+}
 { Misc. functions }
 {$IFNDEF JR_D6}
 function CheckWin32Version(AMajor: Integer; AMinor: Integer = 0): Boolean;
@@ -48,13 +37,12 @@ type
 
 function  CreateBufDC(DC: HDC; BufWidth, BufHeight: Integer; out BufDCRec: TBufDCRec): HDC;
 function  DeleteBufDC(const BufDCRec: TBufDCRec): Boolean;
-{vb+end}
 
 procedure GetRGB(C: TColor; out R, G, B: Integer);
 function  MixColors(C1, C2: TColor; W1: Integer): TColor;
 function  SameColors(C1, C2: TColor): Boolean;
 function  Lighten(C: TColor; Amount: Integer): TColor;
-function  NearestBlendedColor(C1, C2: TColor; W1: Integer): TColor; {vb+}
+function  NearestBlendedColor(C1, C2: TColor; W1: Integer): TColor;
 function  NearestLighten(C: TColor; Amount: Integer): TColor;
 function  NearestMixedColor(C1, C2: TColor; W1: Integer): TColor;
 function  ColorIntensity(C: TColor): Integer;
@@ -74,18 +62,14 @@ function  CreateBrushEx(Color: TColor): HBrush;
 function  CreateDitheredBrush(C1, C2: TColor): HBrush;
 function  FillRectEx(DC: HDC; const Rect: TRect; Color: TColor): Boolean; {$IFDEF COMPATIBLE_GFX}overload;{$ENDIF}
 function  FrameRectEx(DC: HDC; var Rect: TRect; Color: TColor; Adjust: Boolean): Boolean; {$IFDEF COMPATIBLE_GFX}overload;{$ENDIF}
-//procedure DrawLineEx(DC: HDC; X1, Y1, X2, Y2: Integer; Color: TColor); {$IFDEF COMPATIBLE_GFX}overload;{$ENDIF} {vb-}
-{vb+}
 procedure DrawLineEx(DC: HDC; X1, Y1, X2, Y2: Integer; Color: TColor); overload;
 procedure DrawLineEx(DC: HDC; const R: TRect; Color: TColor); overload;
 procedure DrawPattern(DC: HDC; X, Y: Integer; Points: array of TPoint; Color: TColor; Fill: Boolean); overload;
 procedure DrawPattern(DC: HDC; const P: TPoint; Points: array of TPoint; Color: TColor; Fill: Boolean); overload;
 procedure EllipseEx(DC: HDC; Left, Top, Right, Bottom: Integer; OutlineColor, FillColor: TColor); overload;
 procedure EllipseEx(DC: HDC; const R: TRect; OutlineColor, FillColor: TColor); overload;
-{vb+end}
 function  PolyLineEx(DC: HDC; const Points: array of TPoint; Color: TColor): Boolean;
 procedure PolygonEx(DC: HDC; const Points: array of TPoint; OutlineColor, FillColor: TColor);
-{vb+}
 procedure RectangleEx(DC: HDC; Left, Top, Right, Bottom: Integer; OutlineColor, FillColor: TColor); overload;
 procedure RectangleEx(DC: HDC; const R: TRect; OutlineColor, FillColor: TColor); overload;
 procedure RoundFrameEx(DC: HDC; Left, Top, Right, Bottom, EllipseWidth, EllipseHeight: Integer; Color: TColor); overload;
@@ -93,7 +77,6 @@ procedure RoundFrameEx(DC: HDC; const R: TRect; EllipseWidth, EllipseHeight: Int
 procedure RoundRectEx(DC: HDC; Left, Top, Right, Bottom, EllipseWidth, EllipseHeight: Integer; OutlineColor, FillColor: TColor); overload;
 procedure RoundRectEx(DC: HDC; const R: TRect; EllipseWidth, EllipseHeight: Integer; OutlineColor, FillColor: TColor); overload;
 procedure DitherFrame(DC: HDC; const R: TRect; C1, C2: TColor);
-{vb+end}
 procedure DitherRect(DC: HDC; const R: TRect; C1, C2: TColor); {$IFDEF COMPATIBLE_GFX}overload;{$ENDIF}
 procedure Frame3D(DC: HDC; var Rect: TRect; TopColor, BottomColor: TColor; Adjust: Boolean); {$IFDEF COMPATIBLE_GFX}overload;{$ENDIF}
 procedure DrawDraggingOutline(DC: HDC; const NewRect, OldRect: TRect);
@@ -105,7 +88,7 @@ type
 procedure GradFill(DC: HDC; ARect: TRect; ClrTopLeft, ClrBottomRight: TColor; Kind: TGradientKind);
 procedure BrushedFill(DC: HDC; Origin: PPoint; ARect: TRect; Color: TColor; Roughness: Integer);
 procedure ResetBrushedFillCache;
-procedure FinalizeBrushedFill; {vb+}
+procedure FinalizeBrushedFill;
 
 { drawing functions for compatibility with previous versions }
 {$IFDEF COMPATIBLE_GFX}
@@ -150,16 +133,13 @@ const
 { An additional declaration for D4 compiler }
 type
   PColor = ^TColor;
-  {vb+}
   {$IFNDEF JR_D6}
   PCardinal = ^Cardinal;
   {$ENDIF}
-  {vb+end}
 
 { Stock Objects }
 var
-  {StockBitmap1, StockBitmap2: TBitmap;} {vb-}
-  StockBitmap1: TBitmap; {vb+}
+  StockBitmap1: TBitmap;
   StockMonoBitmap, StockCompatibleBitmap: TBitmap;
   SmCaptionFont: TFont;
 
@@ -256,199 +236,8 @@ implementation
 
 {$R-}{$Q-}
 
-{uses TB2Common, Math;} {vb-}
-uses TB2Common, Math, Consts {$IFDEF JR_D9}, Types {$ENDIF}; {vb+}
+uses TB2Common, Math, Consts {$IFDEF JR_D9}, Types {$ENDIF};
 
-
-{$IFDEF TBX_UNICODE}
-
-function GetTextHeightW(DC: HDC): Integer;
-var
-  TextMetric: TTextMetricW;
-begin
-  GetTextMetricsW(DC, TextMetric);
-  Result := TextMetric.tmHeight;
-end;
-
-function GetTextWidthW(DC: HDC; const S: WideString; StripAccelChar: Boolean): Integer;
-var
-  Size: TSize;
-  S2: WideString;
-begin
-  if StripAccelChar then
-  begin
-    S2 := StripAccelCharsW(S);
-    GetTextExtentPoint32W(DC, PWideChar(S2), Length(S2), Size);
-  end
-  else GetTextExtentPoint32W(DC, PWideChar(S), Length(S), Size);
-  Result := Size.cx;
-end;
-
-procedure DrawRotatedTextW(DC: HDC; AText: WideString; const ARect: TRect; const AFormat: Cardinal);
-{ Like DrawText, but draws the text at a 270 degree angle.
-  The format flag this function respects are
-  DT_NOPREFIX, DT_HIDEPREFIX, DT_CENTER, DT_END_ELLIPSIS, DT_NOCLIP }
-var
-  RotatedFont, SaveFont: HFONT;
-  TextMetrics: TTextMetricW;
-  X, Y, P, I, SU, FU, W: Integer;
-  SaveAlign: UINT;
-  Clip: Boolean;
-
-  function GetSize(DC: HDC; const S: WideString): Integer;
-  var
-    Size: TSize;
-  begin
-    GetTextExtentPoint32W(DC, PWideChar(S), Length(S), Size);
-    Result := Size.cx;
-  end;
-
-begin
-  if Length(AText) = 0 then Exit;
-
-  RotatedFont := CreateRotatedFont(DC);
-  SaveFont := SelectObject(DC, RotatedFont);
-
-  GetTextMetricsW(DC, TextMetrics);
-  X := ARect.Left + ((ARect.Right - ARect.Left) - TextMetrics.tmHeight) div 2;
-
-  Clip := AFormat and DT_NOCLIP = 0;
-
-  { Find the index of the character that should be underlined. Delete '&'
-    characters from the string. Like DrawText, only the last prefixed character
-    will be underlined. }
-  P := 0;
-  I := 1;
-  if AFormat and DT_NOPREFIX = 0 then
-    while I <= Length(AText) do
-    begin
-      if AText[I] = '&' then
-      begin
-        Delete(AText, I, 1);
-        if PWideChar(AText)[I - 1] <> '&' then P := I;
-      end;
-      Inc(I);
-    end;
-
-  if AFormat and DT_END_ELLIPSIS <> 0 then
-  begin
-    if (Length(AText) > 1) and (GetSize(DC, AText) > ARect.Bottom - ARect.Top) then
-    begin
-      W := ARect.Bottom - ARect.Top;
-      if W > 2 then
-      begin
-        Delete(AText, Length(AText), 1);
-        while (Length(AText) > 1) and (GetSize(DC, AText + '...') > W) do
-          Delete(AText, Length(AText), 1);
-      end
-      else AText := AText[1];
-      if P > Length(AText) then P := 0;
-      AText := AText + '...';
-    end;
-  end;
-
-  if AFormat and DT_CENTER <> 0 then
-    Y := ARect.Top + ((ARect.Bottom - ARect.Top) - GetSize(DC, AText)) div 2
-  else
-    Y := ARect.Top;
-
-  if Clip then
-  begin
-    SaveDC(DC);
-    with ARect do IntersectClipRect(DC, Left, Top, Right, Bottom);
-  end;
-
-  SaveAlign := SetTextAlign(DC, TA_BOTTOM);
-  TextOutW(DC, X, Y, PWideChar(AText), Length(AText));
-  SetTextAlign(DC, SaveAlign);
-
-  { Underline }
-  if (P > 0) and (AFormat and DT_HIDEPREFIX = 0) then
-  begin
-    SU := GetTextWidthW(DC, Copy(AText, 1, P - 1), False);
-    FU := SU + GetTextWidthW(DC, PWideChar(AText)[P - 1], False);
-    Inc(X, TextMetrics.tmDescent - 2);
-    DrawLineEx(DC, X, Y + SU, X, Y + FU, GetTextColor(DC));
-  end;
-
-  if Clip then RestoreDC(DC, -1);
-
-  SelectObject(DC, SaveFont);
-  DeleteObject(RotatedFont);
-end;
-
-function EscapeAmpersandsW(const S: WideString): WideString;
-var
-  I: Integer;
-begin
-  Result := S;
-  I := 1;
-  while I <= Length(Result) do
-  begin
-    if Result[I] = '&' then
-    begin
-      Inc(I);
-      Insert('&', Result, I);
-    end;
-    Inc(I);
-  end;
-end;
-
-function FindAccelCharW(const S: WideString): WideChar;
-var
-  PStart, P: PWideChar;
-begin
-  { locate the last char with '&' prefix }
-  Result := #0;
-  if Length(S) > 0 then
-  begin
-    PStart := PWideChar(S);
-    P := PStart;
-    Inc(P, Length(S) - 2);
-    while P >= PStart do
-    begin
-      if P^ = '&' then
-      begin
-        if (P = PStart) or (PWideChar(Integer(P) - 2)^ <> '&') then
-        begin
-          Result := PWideChar(Integer(P) + 2)^;
-          Exit;
-        end
-        else Dec(P);
-      end;
-      Dec(P);
-    end;
-  end;
-end;
-
-function StripAccelCharsW(const S: WideString): WideString;
-var
-  I: Integer;
-begin
-  Result := S;
-  I := 1;
-  while I <= Length(Result) do
-  begin
-    if Result[I] = '&' then
-      System.Delete(Result, I, 1);
-    Inc(I);
-  end;
-end;
-
-function StripTrailingPunctuationW(const S: WideString): WideString;
-var
-  L: Integer;
-begin
-  Result := S;
-  L := Length(Result);
-  if (L > 1) and (Result[L] = ':') then SetLength(Result, L - 1)
-  else if (L > 3) and (Result[L - 2] = '.') and (Result[L - 1] = '.') and
-     (Result[L] = '.') then SetLength(Result, L - 3);
-end;
-
-{$ENDIF}
-
-{vb+}
 {$IFNDEF JR_D6}
 function CheckWin32Version(AMajor: Integer; AMinor: Integer = 0): Boolean;
 begin
@@ -564,7 +353,6 @@ begin
   Result := DeleteDC(BufDCRec.DC);
   if not DeleteObject(BufDCRec.Bmp) then Result := False;
 end;
-{vb+end}
 
 type
   PPoints = ^TPoints;
@@ -619,13 +407,11 @@ begin
   Result := R or (G shl 8) or (B shl 16);
 end;
 
-{vb+}
 function NearestBlendedColor(C1, C2: TColor; W1: Integer): TColor;
 begin
   Result := Blend(C1, C2, W1);
   Result := GetNearestColor(StockCompatibleBitmap.Canvas.Handle, Result);
 end;
-{vb+end}
 
 function NearestLighten(C: TColor; Amount: Integer): TColor;
 begin
@@ -858,32 +644,29 @@ begin
 end;
 
 { Drawing routines }
-{function GetBGR(C: TColorRef): Cardinal;
-asm
-        MOV     ECX,EAX         // this function swaps R and B bytes in ABGR
-        SHR     EAX,16
-        XCHG    AL,CL
-        MOV     AH,$FF          // and writes $FF into A component
-        SHL     EAX,16
-        MOV     AX,CX
-end;} {vb-}
 
-{vb+}
+{$IFDEF WIN64}
+function GetBGR(C: TColorRef): Cardinal;
+begin
+  Result := ((C and $00FF0000) shr 16) or
+             (C and $0000FF00) or
+            ((C and $000000FF) shl 16);
+end;
+{$ELSE}
 function GetBGR(C: TColorRef): Cardinal;
 asm
   SHL   EAX, 8   //ROL EAX, 8  // ABGR -> BGRA
   MOV   AL, $FF                // A = $FF
   BSWAP EAX                    // BGRA -> ARGB
 end;
-{vb+end}
+{$ENDIF}
 
 procedure SetPixelEx(DC: HDC; X, Y: Integer; C: TColorRef; Alpha: Longword = $FF);
 var
   W2: Cardinal;
   B: TColorRef;
 begin
-  {if Alpha <= 0 then Exit} {vb- signed Longword 8-[] }
-  if Alpha = 0 then Exit {vb+}
+  if Alpha = 0 then Exit
   else if Alpha >= 255 then SetPixelV(DC, X, Y, C)
   else
   begin
@@ -900,14 +683,6 @@ begin
   end;
 end;
 
-{function CreatePenEx(Color: TColor): HPen;
-begin
-  if Color = clNone then Result := CreatePen(PS_NULL, 1, 0)
-  else if Color < 0 then Result := CreatePen(PS_SOLID, 1, GetSysColor(Color and $000000FF))
-  else Result := CreatePen(PS_SOLID, 1, Color);
-end;} {vb-}
-
-{vb+}
 function CreatePenEx(Color: TColor): HPen;
 begin
   if Color <> clNone then
@@ -917,22 +692,7 @@ begin
   end
   else Result := CreatePen(PS_NULL, 1, 0);
 end;
-{vb+end}
 
-{function CreateBrushEx(Color: TColor): HBrush;
-var
-  LB: TLogBrush;
-begin
-  if Color = clNone then
-  begin
-    LB.lbStyle := BS_HOLLOW;
-    Result := CreateBrushIndirect(LB);
-  end
-  else if Color < 0 then Result := GetSysColorBrush(Color and $000000FF)
-  else Result := CreateSolidBrush(Color);
-end;} {vb-}
-
-{vb+}
 function CreateBrushEx(Color: TColor): HBrush;
 var
   LB: TLogBrush;
@@ -947,23 +707,7 @@ begin
     Result := CreateBrushIndirect(LB);
   end;
 end;
-{vb+end}
 
-{function FillRectEx(DC: HDC; const Rect: TRect; Color: TColor): Boolean;
-var
-  Brush: HBRUSH;
-begin
-  Result := Color <> clNone;
-  if Result then
-  begin
-    if Color < 0 then Brush := GetSysColorBrush(Color and $000000FF)
-    else Brush := CreateSolidBrush(Color);
-    Windows.FillRect(DC, Rect, Brush);
-    DeleteObject(Brush);
-  end;
-end;} {vb-}
-
-{vb+}
 function FillRectEx(DC: HDC; const Rect: TRect; Color: TColor): Boolean;
 var
   Brush: HBRUSH;
@@ -981,28 +725,7 @@ begin
   end
   else Result := False;
 end;
-{vb+end}
 
-{function FrameRectEx(DC: HDC; var Rect: TRect; Color: TColor; Adjust: Boolean): Boolean;
-var
-  Brush: HBRUSH;
-begin
-  Result := Color <> clNone;
-  if Result then
-  begin
-    if Color < 0 then Brush := GetSysColorBrush(Color and $000000FF)
-    else Brush := CreateSolidBrush(Color);
-    Windows.FrameRect(DC, Rect, Brush);
-    DeleteObject(Brush);
-  end;
-  if Adjust then with Rect do
-  begin
-    Inc(Left); Dec(Right);
-    Inc(Top); Dec(Bottom);
-  end;
-end;} {vb-}
-
-{vb+}
 function FrameRectEx(DC: HDC; var Rect: TRect; Color: TColor; Adjust: Boolean): Boolean;
 var
   Brush: HBRUSH;
@@ -1025,19 +748,8 @@ begin
     Dec(Right); Dec(Bottom);
   end;
 end;
-{vb+end}
 
 procedure DrawLineEx(DC: HDC; X1, Y1, X2, Y2: Integer; Color: TColor);
-{var
-  OldPen, Pen: HPen;
-begin
-  Pen := CreatePen(PS_SOLID, 1, ColorToRGB(Color));
-  OldPen := SelectObject(DC, Pen);
-  Windows.MoveToEx(DC, X1, Y1, nil);
-  Windows.LineTo(DC, X2, Y2);
-  SelectObject(DC, OldPen);
-  DeleteObject(Pen);} {vb-}
-{vb+}
 var
   OldPen: HPEN;
 begin
@@ -1102,23 +814,8 @@ begin
   with R do
     EllipseEx(DC, Left, Top, Right, Bottom, OutlineColor, FillColor);
 end;
-{vb+end}
 
 function PolyLineEx(DC: HDC; const Points: array of TPoint; Color: TColor): Boolean;
-{var
-  Pen, OldPen: HPEN;
-begin
-  Result := Color <> clNone;
-  if Result then
-  begin
-    if Color < 0 then Color := GetSysColor(Color and $FF);
-    Pen := CreatePen(PS_SOLID, 1, Color);
-    OldPen := SelectObject(DC, Pen);
-    Windows.Polyline(DC, PPoints(@Points[0])^, Length(Points));
-    SelectObject(DC, OldPen);
-    DeleteObject(Pen);
-  end;} {vb-}
-{vb+}
 var
   OldPen: HPEN;
 begin
@@ -1132,24 +829,8 @@ begin
   end
   else Result := False;
 end;
-{vb+end}
 
 procedure PolygonEx(DC: HDC; const Points: array of TPoint; OutlineColor, FillColor: TColor);
-{var
-  OldBrush, Brush: HBrush;
-  OldPen, Pen: HPen;
-begin
-  if (OutlineColor = clNone) and (FillColor = clNone) then Exit;
-  Pen := CreatePenEx(OutlineColor);
-  Brush := CreateBrushEx(FillColor);
-  OldPen := SelectObject(DC, Pen);
-  OldBrush := SelectObject(DC, Brush);
-  Windows.Polygon(DC, PPoints(@Points[0])^, Length(Points));
-  SelectObject(DC, OldBrush);
-  SelectObject(DC, OldPen);
-  DeleteObject(Brush);
-  DeleteObject(Pen);} {vb-}
-{vb+}
 var
   OldPen: HPEN;
   OldBrush: HBRUSH;
@@ -1163,9 +844,7 @@ begin
     DeleteObject(SelectObject(DC, OldPen));
   end;
 end;
-{vb+end}
 
-{vb+}
 procedure RectangleEx(DC: HDC; Left, Top, Right, Bottom: Integer;
   OutlineColor, FillColor: TColor);
 var
@@ -1235,7 +914,6 @@ begin
     RoundRectEx(DC, Left, Top, Right, Bottom, EllipseWidth,
       EllipseHeight, OutlineColor, FillColor);
 end;
-{vb+end}
 
 function CreateDitheredBrush(C1, C2: TColor): HBrush;
 var
@@ -1255,7 +933,6 @@ begin
   DeleteObject(Brush);
 end;
 
-{vb+}
 procedure DitherFrame(DC: HDC; const R: TRect; C1, C2: TColor);
 var
   Brush: HBRUSH;
@@ -1264,7 +941,6 @@ begin
   FrameRect(DC, R, Brush);
   DeleteObject(Brush);
 end;
-{vb+end}
 
 procedure Frame3D(DC: HDC; var Rect: TRect; TopColor, BottomColor: TColor; Adjust: Boolean);
 var
@@ -1352,26 +1028,24 @@ var
   Sz: TSize;
 begin
   Sz.CX := 3; Sz.CY := 2;
-  {DrawHalftoneInvertRect(DC, @NewRect, @OldRect, Sz, Sz);} {vb-}
-  DrawHalftoneInvertRect(DC, NewRect, OldRect, Sz, Sz); {vb+}
+  DrawHalftoneInvertRect(DC, NewRect, OldRect, Sz, Sz);
 end;
 
-{procedure FillLongword(var X; Count: Integer; Value: Longword);
-asm
-// EAX = X;  EDX = Count; ECX = Value
-        PUSH    EDI
-        MOV     EDI,EAX  // Point EDI to destination
-        MOV     EAX,ECX
-        MOV     ECX,EDX
-        TEST    ECX,ECX
-        JS      @exit
-        REP     STOSD    // Fill count dwords
-@exit:
-        POP     EDI
-end;} {vb-}
+{$IFDEF WIN64}
+type
+  PIntegerArray = ^TIntegerArray;
+  TIntegerArray = array[0..0] of Integer;
 
-{vb+}
-{ On modern processors this faster than REP STOSD }
+procedure FillLongWord(var X; Count: Integer; Value: LongWord);
+var
+  I: Integer;
+  P: PIntegerArray;
+begin
+  P := PIntegerArray(@X);
+  for I := Count - 1 downto 0 do
+    P[I] := Integer(Value);
+end;
+{$ELSE}
 procedure FillLongWord(var X; Count: Integer; Value: LongWord);
 asm
   cmp   edx, 8
@@ -1400,26 +1074,14 @@ asm
   jnz   @@SmallLoop
 @@Exit:
 end;
-{vb+end}
+{$ENDIF}
 
-{procedure MoveLongword(const Source; var Dest; Count: Integer);
-asm
-// EAX = Source; EDX = Dest; ECX = Count
-        PUSH    ESI
-        PUSH    EDI
-        MOV     ESI,EAX         // Source
-        MOV     EDI,EDX         // Destination
-        MOV     EAX,ECX         // Counter
-        CMP     EDI,ESI
-        JE      @exit
-        REP     MOVSD
-@exit:
-        POP     EDI
-        POP     ESI
-end;} {vb-}
-
-{vb+}
-{ On modern processors this faster than REP MOVSD }
+{$IFDEF WIN64}
+procedure MoveLongWord(const Source; var Dest; Count: Integer);
+begin
+  Move(Source, Dest, Count shl 2);
+end;
+{$ELSE}
 procedure MoveLongWord(const Source; var Dest; Count: Integer);
 asm
   push  ebx
@@ -1462,410 +1124,8 @@ asm
 @@Exit:
   pop   ebx
 end;
-{vb+end}
+{$ENDIF}
 
-{procedure DrawTBXIcon(Canvas: TCanvas; const R: TRect;
-  ImageList: TCustomImageList; ImageIndex: Integer; HiContrast: Boolean);
-const
-  CWeirdColor = $00203241;
-var
-  ImageWidth, ImageHeight: Integer;
-  I, J: Integer;
-  Src, Dst: PColor;
-  S, C: TColor;
-begin
-  if not HiContrast then
-  begin
-    ImageList.Draw(Canvas, R.Left, R.Top, ImageIndex);
-    Exit;
-  end;
-
-  ImageWidth := R.Right - R.Left;
-  ImageHeight := R.Bottom - R.Top;
-  with ImageList do
-  begin
-    if Width < ImageWidth then ImageWidth := Width;
-    if Height < ImageHeight then ImageHeight :=  Height;
-  end;
-
-  StockBitmap1.Width := ImageWidth;
-  StockBitmap1.Height := ImageHeight;
-  StockBitmap2.Width := ImageWidth;
-  StockBitmap2.Height := ImageHeight;
-
-  BitBlt(StockBitmap1.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    Canvas.Handle, R.Left, R.Top, SRCCOPY);
-  for J := 0 to ImageHeight - 1 do
-    FillLongWord(StockBitmap2.ScanLine[J]^, ImageWidth, CWeirdColor);
-  ImageList.Draw(StockBitmap2.Canvas, 0, 0, ImageIndex);
-
-  for J := 0 to ImageHeight - 1 do
-  begin
-    Src := StockBitmap2.ScanLine[J];
-    Dst := StockBitmap1.ScanLine[J];
-    for I := 0 to ImageWidth - 1 do
-    begin
-      S := Src^ and $00FFFFFF;
-      if S <> CWeirdColor then
-      begin
-        C := (S and $FF0000) shr 16 * 76 + (S and $00FF00) shr 8 * 150 +
-          (S and $0000FF) * 29;
-        if C > $FD00 then S := $000000
-        else if C < $6400 then S := $FFFFFF;
-        Dst^ := Lighten(S, 32);
-      end;
-      Inc(Src);
-      Inc(Dst);
-    end;
-  end;
-  BitBlt(Canvas.Handle, R.Left, R.Top, ImageWidth, ImageHeight,
-    StockBitmap1.Canvas.Handle, 0, 0, SRCCOPY);
-end;
-
-procedure BlendTBXIcon(Canvas: TCanvas; const R: TRect;
-  ImageList: TCustomImageList; ImageIndex: Integer; Opacity: Byte);
-const
-  CWeirdColor = $00203241;
-var
-  ImageWidth, ImageHeight: Integer;
-  I, J: Integer;
-  Src, Dst: ^Cardinal;
-  S, C, CBRB, CBG: Cardinal;
-  Wt1, Wt2: Cardinal;
-begin
-  Wt2 := Opacity;
-  Wt1 := 255 - Wt2;
-  ImageWidth := R.Right - R.Left;
-  ImageHeight := R.Bottom - R.Top;
-  with ImageList do
-  begin
-    if Width < ImageWidth then ImageWidth := Width;
-    if Height < ImageHeight then ImageHeight :=  Height;
-  end;
-
-  StockBitmap1.Width := ImageWidth;
-  StockBitmap1.Height := ImageHeight;
-  StockBitmap2.Width := ImageWidth;
-  StockBitmap2.Height := ImageHeight;
-
-  BitBlt(StockBitmap1.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    Canvas.Handle, R.Left, R.Top, SRCCOPY);
-  BitBlt(StockBitmap2.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    StockBitmap1.Canvas.Handle, 0, 0, SRCCOPY);
-  ImageList.Draw(StockBitmap2.Canvas, 0, 0, ImageIndex, True);
-
-  for J := 0 to ImageHeight - 1 do
-  begin
-    Src := StockBitmap2.ScanLine[J];
-    Dst := StockBitmap1.ScanLine[J];
-    for I := 0 to ImageWidth - 1 do
-    begin
-      S := Src^;
-      if S <> Dst^ then
-      begin
-        CBRB := (Dst^ and $00FF00FF) * Wt1;
-        CBG  := (Dst^ and $0000FF00) * Wt1;
-        C := ((S and $FF00FF) * Wt2 + CBRB) and $FF00FF00 + ((S and $00FF00) * Wt2 + CBG) and $00FF0000;
-        Dst^ := C shr 8;
-      end;
-      Inc(Src);
-      Inc(Dst);
-    end;
-  end;
-  BitBlt(Canvas.Handle, R.Left, R.Top, ImageWidth, ImageHeight,
-    StockBitmap1.Canvas.Handle, 0, 0, SRCCOPY);
-end;
-
-procedure HighlightTBXIcon(Canvas: TCanvas; const R: TRect;
-  ImageList: TCustomImageList; ImageIndex: Integer; HighlightColor: TColor; Amount: Byte);
-const
-  CWeirdColor = $00203241;
-var
-  ImageWidth, ImageHeight: Integer;
-  I, J: Integer;
-  Src, Dst: PColor;
-  S, C: Cardinal;
-  CBRB, CBG: Cardinal;
-  W1, W2: Cardinal;
-begin
-  ImageWidth := R.Right - R.Left;
-  ImageHeight := R.Bottom - R.Top;
-  with ImageList do
-  begin
-    if Width < ImageWidth then ImageWidth := Width;
-    if Height < ImageHeight then ImageHeight :=  Height;
-  end;
-
-  StockBitmap1.Width := ImageWidth;
-  StockBitmap1.Height := ImageHeight;
-  StockBitmap2.Width := ImageWidth;
-  StockBitmap2.Height := ImageHeight;
-
-  BitBlt(StockBitmap1.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    Canvas.Handle, R.Left, R.Top, SRCCOPY);
-  for J := 0 to ImageHeight - 1 do
-    FillLongWord(StockBitmap2.ScanLine[J]^, ImageWidth, CWeirdColor);
-  ImageList.Draw(StockBitmap2.Canvas, 0, 0, ImageIndex);
-
-  W2 := Amount;
-  W1 := 255 - W2;
-  HighlightColor := GetBGR(ColorToRGB(HighlightColor));
-  CBRB := (Cardinal(HighlightColor) and $00FF00FF) * W1;
-  CBG  := (Cardinal(HighlightColor) and $0000FF00) * W1;
-
-  for J := 0 to ImageHeight - 1 do
-  begin
-    Src := StockBitmap2.ScanLine[J];
-    Dst := StockBitmap1.ScanLine[J];
-    for I := 0 to ImageWidth - 1 do
-    begin
-      S := Src^ and $00FFFFFF;
-      if S <> CWeirdColor then
-      begin
-        C := ((S and $FF00FF) * W2 + CBRB) and $FF00FF00 + ((S and $00FF00) * W2 + CBG) and $00FF0000;
-        Dst^ := C shr 8;
-      end;
-      Inc(Src);
-      Inc(Dst);
-    end;
-  end;
-  BitBlt(Canvas.Handle, R.Left, R.Top, ImageWidth, ImageHeight,
-    StockBitmap1.Canvas.Handle, 0, 0, SRCCOPY);
-end;
-
-procedure DrawTBXIconShadow(Canvas: TCanvas; const R: TRect;
-  ImageList: TCustomImageList; ImageIndex: Integer; Density: Integer);
-const
-  D_DIV: array [0..2] of Cardinal = (3, 8, 20);
-  D_ADD: array [0..2] of Cardinal = (255 - 255 div 3, 255 - 255 div 8, 255 - 255 div 20);
-var
-  ImageWidth, ImageHeight: Integer;
-  I, J: Integer;
-  Src, Dst: ^Cardinal;
-  S, C, CBRB, CBG: Cardinal;
-begin
-  Assert(Density in [0..2]);
-
-  ImageWidth := R.Right - R.Left;
-  ImageHeight := R.Bottom - R.Top;
-  with ImageList do
-  begin
-    if Width < ImageWidth then ImageWidth := Width;
-    if Height < ImageHeight then ImageHeight :=  Height;
-  end;
-
-  StockBitmap1.Width := ImageWidth;
-  StockBitmap1.Height := ImageHeight;
-  StockBitmap2.Width := ImageWidth;
-  StockBitmap2.Height := ImageHeight;
-
-  BitBlt(StockBitmap1.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    Canvas.Handle, R.Left, R.Top, SRCCOPY);
-  BitBlt(StockBitmap2.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    StockBitmap1.Canvas.Handle, 0, 0, SRCCOPY);
-  ImageList.Draw(StockBitmap2.Canvas, 0, 0, ImageIndex, True);
-
-  for J := 0 to ImageHeight - 1 do
-  begin
-    Src := StockBitmap2.ScanLine[J];
-    Dst := StockBitmap1.ScanLine[J];
-    for I := 0 to ImageWidth - 1 do
-    begin
-      S := Src^;
-      if S <> Dst^ then
-      begin
-        CBRB := Dst^ and $00FF00FF;
-        CBG  := Dst^ and $0000FF00;
-        C := ((S and $FF0000) shr 16 * 29 + (S and $00FF00) shr 8 * 150 +
-          (S and $0000FF) * 76) shr 8;
-        C := C div D_DIV[Density] + D_ADD[Density];
-        Dst^ := ((CBRB * C and $FF00FF00) or (CBG * C and $00FF0000)) shr 8;
-      end;
-      Inc(Src);
-      Inc(Dst);
-    end;
-  end;
-  BitBlt(Canvas.Handle, R.Left, R.Top, ImageWidth, ImageHeight,
-    StockBitmap1.Canvas.Handle, 0, 0, SRCCOPY);
-end;
-
-procedure DrawTBXIconFlatShadow(Canvas: TCanvas; const R: TRect;
-  ImageList: TCustomImageList; ImageIndex: Integer; ShadowColor: TColor);
-const
-  CShadowThreshold = 180 * 256;
-var
-  ImageWidth, ImageHeight: Integer;
-  I, J: Integer;
-  P: ^Cardinal;
-  C: Cardinal;
-  SrcDC, DstDC: HDC;
-begin
-  ImageWidth := R.Right - R.Left;
-  ImageHeight := R.Bottom - R.Top;
-  with ImageList do
-  begin
-    if Width < ImageWidth then ImageWidth := Width;
-    if Height < ImageHeight then ImageHeight :=  Height;
-  end;
-
-  StockBitmap2.Width := ImageWidth;
-  StockBitmap2.Height := ImageHeight;
-  StockBitmap2.Canvas.Brush.Color := clWhite;
-  StockBitmap2.Canvas.FillRect(Rect(0, 0, ImageWidth, ImageHeight));
-  ImageList.Draw(StockBitmap2.Canvas, 0, 0, ImageIndex, True);
-
-  for J := 0 to ImageHeight - 1 do
-  begin
-    P := StockBitmap2.ScanLine[J];
-    for I := 0 to ImageWidth - 1 do
-    begin
-      C := P^ and $00FFFFFF;
-      if C <> $0 then
-      begin
-        C := (C and $FF0000) shr 16 * 76 + (C and $00FF00) shr 8 * 150 + (C and $0000FF) * 29;
-        if C > CShadowThreshold then P^ := $00FFFFFF
-        else P^ := $00000000;
-      end;
-      Inc(P);
-    end;
-  end;
-
-  StockMonoBitmap.Width := ImageWidth;
-  StockMonoBitmap.Height := ImageHeight;
-  StockMonoBitmap.Canvas.Brush.Color := clBlack;
-  BitBlt(StockMonoBitmap.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    StockBitmap2.Canvas.Handle, 0, 0, SRCCOPY);
-
-  SrcDC := StockMonoBitmap.Canvas.Handle;
-  Canvas.Brush.Color := ColorToRGB(ShadowColor);
-  DstDC := Canvas.Handle;
-  Windows.SetTextColor(DstDC, clWhite);
-  Windows.SetBkColor(DstDC, clBlack);
-  BitBlt(DstDC, R.Left, R.Top, ImageWidth, ImageHeight, SrcDC, 0, 0, ROP_DSPDxax);
-end;
-
-procedure DrawTBXIconFullShadow(Canvas: TCanvas; const R: TRect;
-  ImageList: TCustomImageList; ImageIndex: Integer; ShadowColor: TColor);
-const
-  CWeirdColor = $00203241;
-var
-  ImageWidth, ImageHeight: Integer;
-  I, J: Integer;
-  P: ^Cardinal;
-  C: Cardinal;
-  SrcDC, DstDC: HDC;
-begin
-  ImageWidth := R.Right - R.Left;
-  ImageHeight := R.Bottom - R.Top;
-  with ImageList do
-  begin
-    if Width < ImageWidth then ImageWidth := Width;
-    if Height < ImageHeight then ImageHeight :=  Height;
-  end;
-
-  StockBitmap2.Width := ImageWidth;
-  StockBitmap2.Height := ImageHeight;
-  for J := 0 to ImageHeight - 1 do
-    FillLongWord(StockBitmap2.ScanLine[J]^, ImageWidth, CWeirdColor);
-  ImageList.Draw(StockBitmap2.Canvas, 0, 0, ImageIndex, True);
-
-  for J := 0 to ImageHeight - 1 do
-  begin
-    P := StockBitmap2.ScanLine[J];
-    for I := 0 to ImageWidth - 1 do
-    begin
-      C := P^ and $00FFFFFF;
-      if C <> CWeirdColor then P^ := $00000000
-      else P^ := $00FFFFFF;
-      Inc(P);
-    end;
-  end;
-
-  StockMonoBitmap.Width := ImageWidth;
-  StockMonoBitmap.Height := ImageHeight;
-  StockMonoBitmap.Canvas.Brush.Color := clBlack;
-  BitBlt(StockMonoBitmap.Canvas.Handle, 0, 0, ImageWidth, ImageHeight,
-    StockBitmap2.Canvas.Handle, 0, 0, SRCCOPY);
-
-  SrcDC := StockMonoBitmap.Canvas.Handle;
-  Canvas.Brush.Color := ColorToRGB(ShadowColor);
-  DstDC := Canvas.Handle;
-  Windows.SetTextColor(DstDC, clWhite);
-  Windows.SetBkColor(DstDC, clBlack);
-  BitBlt(DstDC, R.Left, R.Top, ImageWidth, ImageHeight, SrcDC, 0, 0, ROP_DSPDxax);
-end;
-
-procedure DrawGlyph(DC: HDC; X, Y: Integer; ImageList: TCustomImageList; ImageIndex: Integer; Color: TColor);
-var
-  B: TBitmap;
-  OldTextColor, OldBkColor: Longword;
-  OldBrush, Brush: HBrush;
-begin
-  if Color = clNone then Exit;
-  B := TBitmap.Create;
-  B.Monochrome := True;
-  ImageList.GetBitmap(ImageIndex, B);
-  OldTextColor := SetTextColor(DC, clBlack);
-  OldBkColor := SetBkColor(DC, clWhite);
-  if Color < 0 then Brush := GetSysColorBrush(Color and $FF)
-  else Brush := CreateSolidBrush(Color);
-  OldBrush := SelectObject(DC, Brush);
-  BitBlt(DC, X, Y, ImageList.Width, ImageList.Height, B.Canvas.Handle, 0, 0, ROP_DSPDxax);
-  SelectObject(DC, OldBrush);
-  if Color >= 0 then DeleteObject(Brush);
-  SetTextColor(DC, OldTextColor);
-  SetBkColor(DC, OldBkColor);
-  B.Free;
-end;
-
-procedure DrawGlyph(DC: HDC; const R: TRect; ImageList: TCustomImageList; ImageIndex: Integer; Color: TColor); overload;
-begin
-  DrawGlyph(DC, (R.Left + R.Right + 1 - ImageList.Width) div 2, (R.Top + R.Bottom + 1 - ImageList.Height) div 2, ImageList, ImageIndex, Color);
-end;
-
-procedure DrawGlyph(DC: HDC; X, Y: Integer; const Bits; Color: TColor); overload;
-var
-  B: TBitmap;
-  OldTextColor, OldBkColor: Longword;
-  OldBrush, Brush: HBrush;
-begin
-  B := TBitmap.Create;
-  B.Handle := CreateBitmap(8, 8, 1, 1, @Bits);
-  OldTextColor := SetTextColor(DC, clBlack);
-  OldBkColor := SetBkColor(DC, clWhite);
-  if Color < 0 then Brush := GetSysColorBrush(Color and $FF)
-  else Brush := CreateSolidBrush(Color);
-  OldBrush := SelectObject(DC, Brush);
-  BitBlt(DC, X, Y, 8, 8, B.Canvas.Handle, 0, 0, ROP_DSPDxax);
-  SelectObject(DC, OldBrush);
-  if Color >= 0 then DeleteObject(Brush);
-  SetTextColor(DC, OldTextColor);
-  SetBkColor(DC, OldBkColor);
-  B.Free;
-end;
-
-procedure DrawGlyph(DC: HDC; const R: TRect; Width, Height: Integer; const Bits; Color: TColor); overload;
-var
-  B: TBitmap;
-  OldTextColor, OldBkColor: Longword;
-  OldBrush, Brush: HBrush;
-begin
-  B := TBitmap.Create;
-  B.Handle := CreateBitmap(8, 8, 1, 1, @Bits);
-  OldTextColor := SetTextColor(DC, clBlack);
-  OldBkColor := SetBkColor(DC, clWhite);
-  if Color < 0 then Brush := GetSysColorBrush(Color and $FF)
-  else Brush := CreateSolidBrush(Color);
-  OldBrush := SelectObject(DC, Brush);
-  BitBlt(DC, (R.Left + R.Right + 1 - Width) div 2, (R.Top + R.Bottom  + 1 - Height) div 2, Width, Height, B.Canvas.Handle, 0, 0, ROP_DSPDxax);
-  SelectObject(DC, OldBrush);
-  if Color >= 0 then DeleteObject(Brush);
-  SetTextColor(DC, OldTextColor);
-  SetBkColor(DC, OldBkColor);
-  B.Free;
-end;} {vb-}
-
-{vb+}
 type
   TDrawEffect = (deContrast, deBlend, deHighlight, deShadow);
 
@@ -2177,7 +1437,6 @@ begin
   LR.Bottom := Height;
   IntDrawGlyph(DC, LR, nil, 0, @Bits, Color);
 end;
-{vb+end}
 
 type
   TCustomFormAccess = class(TCustomForm);
@@ -2201,38 +1460,21 @@ var
 begin
   StockBitmap1 := TBitmap.Create;
   StockBitmap1.PixelFormat := pf32bit;
-  {StockBitmap2 := TBitmap.Create;
-  StockBitmap2.PixelFormat := pf32bit;} {vb-}
   StockMonoBitmap := TBitmap.Create;
   StockMonoBitmap.Monochrome := True;
   StockCompatibleBitmap := TBitmap.Create;
-  {StockCompatibleBitmap.Width := 8;
-  StockCompatibleBitmap.Height := 8;} {vb-}
-  {vb+}
   {$IFDEF JR_D10}
   StockCompatibleBitmap.SetSize(8, 8);
   {$ELSE}
   StockCompatibleBitmap.Width := 8;
   StockCompatibleBitmap.Height := 8;
   {$ENDIF}
-  {vb+end}
   SmCaptionFont := TFont.Create;
   NonClientMetrics.cbSize := SizeOf(NonClientMetrics);
   if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then
     SmCaptionFont.Handle := CreateFontIndirect(NonClientMetrics.lfSmCaptionFont);
 end;
 
-{procedure FinalizeStock;
-begin
-  SmCaptionFont.Free;
-  SmCaptionFont := nil;
-  StockCompatibleBitmap.Free;
-  StockMonoBitmap.Free;
-  StockBitmap2.Free;
-  StockBitmap1.Free;
-end;} {vb-}
-
-{vb+}
 procedure FinalizeStock;
 begin
   FreeAndNil(SmCaptionFont);
@@ -2240,7 +1482,6 @@ begin
   FreeAndNil(StockMonoBitmap);
   FreeAndNil(StockBitmap1);
 end;
-{vb+end}
 
 procedure RecreateStock;
 begin
@@ -2436,16 +1677,12 @@ begin
 
     FBuffer := TBitmap.Create;
     FBuffer.PixelFormat := pf32bit;
-    {FBuffer.Width := ASize.cx;
-    FBuffer.Height := ASize.cy;} {vb-}
-    {vb+}
     {$IFDEF JR_D10}
     FBuffer.SetSize(ASize.cx, ASize.cy);
     {$ELSE}
     FBuffer.Width := ASize.cx;
     FBuffer.Height := ASize.cy;
     {$ENDIF}
-    {vb+end}
 
     FillBuffer;
 
@@ -2496,16 +1733,12 @@ begin
 
     FBuffer := TBitmap.Create;
     FBuffer.PixelFormat := pf32bit;
-    {FBuffer.Width := ASize.cx;
-    FBuffer.Height := ASize.cy;} {vb-}
-    {vb+}
     {$IFDEF JR_D10}
     FBuffer.SetSize(ASize.cx, ASize.cy);
     {$ELSE}
     FBuffer.Width := ASize.cx;
     FBuffer.Height := ASize.cy;
     {$ENDIF}
-    {vb+end}
 
     FillBuffer;
 
@@ -2722,28 +1955,21 @@ type
 
 
 var
-  {GradientCache: array [0..GRADIENT_CACHE_SIZE] of array of TRGBQuad;} {vb-}
-  GradientCache: array of array of TRGBQuad; {vb+}
+  GradientCache: array of array of TRGBQuad;
   NextCacheIndex: Integer = 0;
 
 function FindGradient(Size: Integer; CL, CR: TRGBQuad): Integer;
-var Len: Integer; {vb+}
+var Len: Integer;
 begin
   Assert(Size > 0);
-  {Result := GRADIENT_CACHE_SIZE - 1;} {vb-}
-  Result := High(GradientCache); {vb+}
+  Result := High(GradientCache);
   while Result >= 0 do
   begin
-    {if (Length(GradientCache[Result]) = Size) and
-      (GradientCache[Result][0] = CL) and
-      (GradientCache[Result][Length(GradientCache[Result]) - 1] = CR) then Exit;} {vb-}
-    {vb+}
     Len := Length(GradientCache[Result]);
     if (Len = Size) and
       (GradientCache[Result][0] = CL) and
       (GradientCache[Result][Len- 1] = CR) then Exit;
     Dec(Result);
-    {vb+end}
   end;
 end;
 
@@ -2758,7 +1984,7 @@ begin
   Assert(Size > 0);
   Result := NextCacheIndex;
   if Result > High(GradientCache) then
-    SetLength(GradientCache, Result+ 1); {vb+}
+    SetLength(GradientCache, Result + 1);
   Inc(NextCacheIndex);
   if NextCacheIndex >= GRADIENT_CACHE_SIZE then NextCacheIndex := 0;
   R1 := CL and $FF;
@@ -2767,10 +1993,8 @@ begin
   R2 := CR and $FF - R1;
   G2 := CR shr 8 and $FF - G1;
   B2 := CR shr 16 and $FF - B1;
-  {vb+}
   if Length(GradientCache[Result]) < Size then
     GradientCache[Result] := nil;
-  {vb+end}
   SetLength(GradientCache[Result], Size);
   Dec(Size);
   Bias := Size div 2;
@@ -2797,7 +2021,7 @@ begin
   if Result < 0 then Result := MakeGradient(Size, CL, CR);
 end;
 
-procedure FinalizeGradientFill; {vb+}
+procedure FinalizeGradientFill;
 begin
   GradientCache := nil;
 end;
@@ -2821,12 +2045,9 @@ var
   GradIndex: Integer;
   R, CR: TRect;
   Brush: HBRUSH;
-  RGBQuadArray: PRGBQuadArray; {vb+}
+  RGBQuadArray: PRGBQuadArray;
 begin
   if not RectVisible(DC, ARect) then Exit;
-  {ClrTopLeft := ColorToRGB(ClrTopLeft);
-  ClrBottomRight := ColorToRGB(ClrBottomRight);} {vb-}
-  {vb+}
   if ClrTopLeft < 0 then
     ClrTopLeft := GetSysColor(ClrTopLeft and $FF);
   if ClrBottomRight < 0 then
@@ -2837,7 +2058,6 @@ begin
     FillRectEx(DC, ARect, ClrTopLeft);
     Exit;
   end;
-  {vb+end}
 
   if @GradientFill <> nil then
   begin
@@ -2887,11 +2107,10 @@ begin
       R := ARect; Inc(R.Top, Start); R.Bottom := R.Top + 1;
     end;
     GradIndex := GetGradient(Size, ClrTopLeft, ClrBottomRight);
-    RGBQuadArray := @GradientCache[GradIndex][0]; {vb+}
+    RGBQuadArray := @GradientCache[GradIndex][0];
     for I := Start to Finish do
     begin
-      {Brush := CreateSolidBrush(GradientCache[GradIndex][I]);} {vb-}
-      Brush := CreateSolidBrush(RGBQuadArray[I]); {vb+}
+      Brush := CreateSolidBrush(RGBQuadArray[I]);
       Windows.FillRect(DC, R, Brush);
       OffsetRect(R, Integer(Kind = gkHorz), Integer(Kind = gkVert));
       DeleteObject(Brush);
@@ -2907,17 +2126,12 @@ const
   NUM_TEMPLATES = 8;
   MIN_TEMPLATE_SIZE = 100;
   MAX_TEMPLATE_SIZE = 200;
-  NUM_RANDTHREADS = 1024; {vb+}
+  NUM_RANDTHREADS = 1024;
 
 var
-  {ThreadTemplates: array [0..NUM_TEMPLATES - 1] of array of Integer;
-  RandThreadIndex: array [0..1023] of Integer;
-  RandThreadPositions: array [0..1023] of Integer;} {vb-}
-  {vb+}
   ThreadTemplates: array of array of Integer;
   RandThreadIndex: array of Integer;
   RandThreadPositions: array of Integer;
-  {vb+end}
 
 procedure InitializeBrushedFill;
 const
@@ -2926,11 +2140,9 @@ var
   TemplateIndex, Size, I, V, V1, V2: Integer;
   T, R12, R13, R14, R21, R22, R23, R24: Single;
 begin
-  {vb+}
   SetLength(ThreadTemplates, NUM_TEMPLATES);
   SetLength(RandThreadIndex, NUM_RANDTHREADS);
   SetLength(RandThreadPositions, NUM_RANDTHREADS);
-  {vb+end}
   { Make thread templates }
   for TemplateIndex := 0 to NUM_TEMPLATES - 1 do
   begin
@@ -2967,8 +2179,7 @@ begin
   end;
 
   { Initialize Rand arrays }
-  {for I := 0 to 1023 do} {vb-}
-  for I := 0 to NUM_RANDTHREADS- 1 do {vb+}
+  for I := 0 to NUM_RANDTHREADS - 1 do
   begin
     RandThreadIndex[I] := Random(NUM_TEMPLATES);
     V1 := Random(Length(ThreadTemplates[RandThreadIndex[I]])) and not $1;
@@ -2990,22 +2201,13 @@ type
   end;
 
 var
-  {ThreadCache: array [0..THREAD_CACHE_SIZE] of TThreadCacheItem;} {vb-}
-  ThreadCache: array of TThreadCacheItem; {vb+}
+  ThreadCache: array of TThreadCacheItem;
   NextCacheEntry: Integer = 0;
 
 procedure ClearCacheItem(var CacheItem: TThreadCacheItem);
 var
   I: Integer;
 begin
-  {for I := NUM_TEMPLATES - 1 downto 0 do
-  begin
-    CacheItem.BaseColor := $FFFFFFFF;
-    CacheItem.Roughness := -1;
-    if CacheItem.Bitmaps[I] <> 0 then DeleteObject(CacheItem.Bitmaps[I]);
-    CacheItem.Bitmaps[I] := 0;
-  end;} {vb-}
-  {vb+}
   with CacheItem do
   begin
     BaseColor := $FFFFFFFF;
@@ -3017,7 +2219,6 @@ begin
         Bitmaps[I] := 0;
       end;
   end;
-  {vb+end}
 end;
 
 procedure ResetBrushedFillCache;
@@ -3025,19 +2226,16 @@ var
   I: Integer;
 begin
   { Should be called each time the screen parameters change }
-  {for I := THREAD_CACHE_SIZE - 1 downto 0 do ClearCacheItem(ThreadCache[I]);} {vb-}
-  for I := High(ThreadCache) downto 0 do ClearCacheItem(ThreadCache[I]); {vb+}
+  for I := High(ThreadCache) downto 0 do ClearCacheItem(ThreadCache[I]);
 end;
 
 procedure FinalizeBrushedFill;
 begin
   ResetBrushedFillCache;
-  {vb+}
   ThreadCache := nil;
   RandThreadPositions := nil;
   RandThreadIndex := nil;
   ThreadTemplates := nil;
-  {vb+end}
 end;
 
 procedure MakeCacheItem(var CacheItem: TThreadCacheItem; Color: TColorRef; Roughness: Integer);
@@ -3072,30 +2270,30 @@ begin
   CB := Color shr 8 and $FF00;
 
   try
-  for TemplateIndex := 0 to NUM_TEMPLATES - 1 do
-  begin
-    CacheItem.BaseColor := Color;
-    CacheItem.Roughness := Roughness;
-    Size := Length(ThreadTemplates[TemplateIndex]);
+    for TemplateIndex := 0 to NUM_TEMPLATES - 1 do
+    begin
+      CacheItem.BaseColor := Color;
+      CacheItem.Roughness := Roughness;
+      Size := Length(ThreadTemplates[TemplateIndex]);
 
       if CacheItem.Bitmaps[TemplateIndex] = 0 then
         CacheItem.Bitmaps[TemplateIndex] := CreateCompatibleBitmap(ScreenDC, Size, 1);
       SelectObject(CacheDC, CacheItem.Bitmaps[TemplateIndex]);
 
-    for I := 0 to Size - 1 do
-    begin
-      V := ThreadTemplates[TemplateIndex][I];
-      R := CR + V * Roughness;
-      G := CG + V * Roughness;
-      B := CB + V * Roughness;
-      if R < 0 then R := 0;
-      if G < 0 then G := 0;
-      if B < 0 then B := 0;
-      if R > $EF00 then R := $EF00;
-      if G > $EF00 then G := $EF00;
-      if B > $EF00 then B := $EF00;
-      Bits^[I] := (R and $FF00 + (G and $FF00) shl 8 + (B and $FF00) shl 16) shr 8;
-    end;
+      for I := 0 to Size - 1 do
+      begin
+        V := ThreadTemplates[TemplateIndex][I];
+        R := CR + V * Roughness;
+        G := CG + V * Roughness;
+        B := CB + V * Roughness;
+        if R < 0 then R := 0;
+        if G < 0 then G := 0;
+        if B < 0 then B := 0;
+        if R > $EF00 then R := $EF00;
+        if G > $EF00 then G := $EF00;
+        if B > $EF00 then B := $EF00;
+        Bits^[I] := (R and $FF00 + (G and $FF00) shl 8 + (B and $FF00) shl 16) shr 8;
+      end;
 
       BitBlt(CacheDC, 0, 0, Size, 1, DIBDC, 0, 0, SRCCOPY);
     end;
@@ -3110,8 +2308,7 @@ end;
 
 function FindCacheItem(Color: TColorRef; Roughness: Integer): Integer;
 begin
-  {Result := THREAD_CACHE_SIZE - 1;} {vb-}
-  Result := High(ThreadCache); {vb+}
+  Result := High(ThreadCache);
   while Result >= 0 do
     if (ThreadCache[Result].BaseColor = Color) and (ThreadCache[Result].Roughness = Roughness) then Exit
     else Dec(Result);
@@ -3124,13 +2321,11 @@ begin
   else
   begin
     Result := NextCacheEntry;
-    {vb+}
     if Result > High(ThreadCache) then
     begin
       SetLength(ThreadCache, Result+ 1);
       ClearCacheItem(ThreadCache[Result]);
     end;
-    {vb+end}
     MakeCacheItem(ThreadCache[Result], Color, Roughness);
     NextCacheEntry := (NextCacheEntry + 1) mod THREAD_CACHE_SIZE;
   end;
@@ -3151,7 +2346,7 @@ begin
   if (Color = clNone) or not RectVisible(DC, ARect) then Exit;
   CR := GetBGR(ColorToRGB(Color));
   if Origin = nil then Origin := @ZeroOrigin;
-  if ThreadTemplates = nil then InitializeBrushedFill; {vb+}
+  if ThreadTemplates = nil then InitializeBrushedFill;
   CacheIndex := GetCacheItem(CR, Roughness);
   GetClipBox(DC, BoxR);
   IntersectRect(ARect, ARect, BoxR);
@@ -3161,11 +2356,9 @@ begin
   CacheDC := CreateCompatibleDC(0);
   for Y := ARect.Top to ARect.Bottom - 1 do
   begin
-    {TemplateIndex := RandThreadIndex[(65536 + Y - Origin.Y) mod 1024];} {vb-}
-    TemplateIndex := RandThreadIndex[(65536 + Y - Origin.Y) mod NUM_RANDTHREADS]; {vb+}
+    TemplateIndex := RandThreadIndex[(65536 + Y - Origin.Y) mod NUM_RANDTHREADS];
     Size := Length(ThreadTemplates[TemplateIndex]);
-    {X := -RandThreadPositions[(65536 + Y - Origin.Y) mod 1024] + Origin.X;} {vb-}
-    X := -RandThreadPositions[(65536 + Y - Origin.Y) mod NUM_RANDTHREADS] + Origin.X; {vb+}
+    X := -RandThreadPositions[(65536 + Y - Origin.Y) mod NUM_RANDTHREADS] + Origin.X;
     SelectObject(CacheDC, ThreadCache[CacheIndex].Bitmaps[TemplateIndex]);
     while X < ARect.Right do
     begin
@@ -3178,10 +2371,6 @@ begin
   RestoreDC(DC, -1);
 end;
 
-{var
-  hUser, hMSImg: HModule;} {vb-}
-
-{vb+}
 var
   hMSImg: HModule;
 
@@ -3193,33 +2382,22 @@ begin
   if hMSImg <> 0 then
   begin
     AlphaBlend := GetProcAddress(hMSImg, 'AlphaBlend');
-    { vb+ Note: Windows9x/ME has a bug in GradientFill function:
-      not fill window nonclient area. So we will use GradientFill
-      only in the WindowsNT }
+    { Note: Windows9x/ME has a bug in GradientFill function:
+      does not fill window's non-client area. So we will use GradientFill
+      only in WindowsNT }
     if Win32Platform = VER_PLATFORM_WIN32_NT then
       GradientFill := GetProcAddress(hMSImg, 'GradientFill');
   end;
 end;
-{vb+end}
 
 initialization
-  {hUser := LoadLibrary('user32.dll');
-  hMSImg := LoadLibrary('msimg32.dll');
-  @UpdateLayeredWindow := GetProcAddress(hUser, 'UpdateLayeredWindow');
-  @AlphaBlend := GetProcAddress(hMSImg, 'AlphaBlend');
-  @GradientFill := GetProcAddress(hMSImg, 'GradientFill');
-  InitializeStock;
-  InitializeBrushedFill;
-  ResetBrushedFillCache;} {vb-}
-  {vb+}
   InitializeProcs;
   InitializeStock;
-  {vb+end}
+
 finalization
-  FinalizeGradientFill; {vb+}
+  FinalizeGradientFill;
   FinalizeBrushedFill;
   FinalizeStock;
-  {FreeLibrary(hMSImg);
-  FreeLibrary(hUser);} {vb-}
-  if hMSImg <> 0 then FreeLibrary(hMSImg); {vb+}
+  if hMSImg <> 0 then FreeLibrary(hMSImg);
+
 end.

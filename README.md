@@ -19,7 +19,7 @@ TBX expands Toolbar2000 with the following new features:
 Compatibility
 -------------
 
-Compatible with Delphi/C++Builder 4–XE2.
+Compatible with Delphi/C++Builder 4–XE5.
 
 
 Installation
@@ -35,4 +35,5 @@ Alex A. Denisov, initial developer.
 Roy Magne Klever (http://rmklever.com), contributor.  
 Robert Lee (http://www.silverpointdevelopment.com), contributor.  
 Vladimir Bochkarev (boxa@mail.ru), contributor.  
+Alexander Klimov (schwarzkopf-m@yandex.ru), contributor.  
 Yury Plashenkov (http://www.plashenkov.com), contributor and current maintainer.

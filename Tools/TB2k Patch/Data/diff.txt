@@ -1,5 +1,5 @@
 --- TB2Common.pas	Wed Sep 17 14:46:30 2008
-+++ TB2Common.pas	Fri Oct 11 14:01:37 2013
++++ TB2Common.pas	Tue Nov 05 13:42:30 2013
 @@ -1250,42 +1250,84 @@
  procedure DrawRotatedText(const DC: HDC; AText: String; const ARect: TRect;
    const AFormat: Cardinal);
@@ -120,7 +120,7 @@
      Flags := Flags or SND_SYSTEM;
    PlaySound({$IFNDEF CLR}PChar{$ENDIF}(Alias), 0, Flags);
 --- TB2Dock.pas	Wed Sep 17 15:12:26 2008
-+++ TB2Dock.pas	Fri Oct 11 14:57:41 2013
++++ TB2Dock.pas	Tue Nov 05 13:42:30 2013
 @@ -79,9 +79,6 @@
      FDisableArrangeToolbars: Integer;  { Increment to disable ArrangeToolbars }
      FArrangeToolbarsNeeded: Boolean;
@@ -347,7 +347,7 @@
  end;
  
 --- TB2DsgnItemEditor.pas	Thu Sep 25 13:49:32 2008
-+++ TB2DsgnItemEditor.pas	Fri Oct 11 14:55:21 2013
++++ TB2DsgnItemEditor.pas	Tue Nov 05 13:42:30 2013
 @@ -157,6 +157,12 @@
  procedure TBRegisterItemClass(AClass: TTBCustomItemClass;
    const ACaption: String; ResInstance: HINST);
@@ -457,7 +457,7 @@
 +  FreeAndNil(EditFormHooks);
  end.
 --- TB2ExtItems.pas	Thu Apr 10 16:51:12 2008
-+++ TB2ExtItems.pas	Fri Oct 11 14:52:41 2013
++++ TB2ExtItems.pas	Tue Nov 05 14:45:39 2013
 @@ -43,6 +43,11 @@
    EditItemDefaultEditOptions = [];
    EditItemDefaultEditWidth = 64;
@@ -524,7 +524,87 @@
  
  implementation
  
-@@ -377,7 +392,7 @@
+@@ -238,9 +253,15 @@
+   I: Integer;
+ begin
+   if FEditCaption <> Value then begin
++    {$IFDEF JR_D17}
++    for I := 0 to ClientCount - 1 do
++      if TBasicActionLink(Clients[I]) is TTBEditItemActionLink then
++        TTBEditItemActionLink(Clients[I]).SetEditCaption(Value);
++    {$ELSE}
+     for I := 0 to FClients.Count - 1 do
+       if TBasicActionLink(FClients[I]) is TTBEditItemActionLink then
+         TTBEditItemActionLink(FClients[I]).SetEditCaption(Value);
++    {$ENDIF}
+     FEditCaption := Value;
+     Change;
+   end;
+@@ -251,9 +272,15 @@
+   I: Integer;
+ begin
+   if FEditOptions <> Value then begin
++    {$IFDEF JR_D17}
++    for I := 0 to ClientCount - 1 do
++      if TBasicActionLink(Clients[I]) is TTBEditItemActionLink then
++        TTBEditItemActionLink(Clients[I]).SetEditOptions(Value);
++    {$ELSE}
+     for I := 0 to FClients.Count - 1 do
+       if TBasicActionLink(FClients[I]) is TTBEditItemActionLink then
+         TTBEditItemActionLink(FClients[I]).SetEditOptions(Value);
++    {$ENDIF}
+     FEditOptions := Value;
+     Change;
+   end;
+@@ -264,9 +291,15 @@
+   I: Integer;
+ begin
+   if FEditWidth <> Value then begin
++    {$IFDEF JR_D17}
++    for I := 0 to ClientCount - 1 do
++      if TBasicActionLink(Clients[I]) is TTBEditItemActionLink then
++        TTBEditItemActionLink(Clients[I]).SetEditWidth(Value);
++    {$ELSE}
+     for I := 0 to FClients.Count - 1 do
+       if TBasicActionLink(FClients[I]) is TTBEditItemActionLink then
+         TTBEditItemActionLink(FClients[I]).SetEditWidth(Value);
++    {$ENDIF}
+     FEditWidth := Value;
+     Change;
+   end;
+@@ -281,9 +314,15 @@
+   {$ELSE}
+   if @FOnAcceptText <> @Value then begin
+   {$ENDIF}
++    {$IFDEF JR_D17}
++    for I := 0 to ClientCount - 1 do
++      if TBasicActionLink(Clients[I]) is TTBEditItemActionLink then
++        TTBEditItemActionLink(Clients[I]).SetOnAcceptText(Value);
++    {$ELSE}
+     for I := 0 to FClients.Count - 1 do
+       if TBasicActionLink(FClients[I]) is TTBEditItemActionLink then
+         TTBEditItemActionLink(FClients[I]).SetOnAcceptText(Value);
++    {$ENDIF}
+     FOnAcceptText := Value;
+     Change;
+   end;
+@@ -294,9 +333,15 @@
+   I: Integer;
+ begin
+   if FText <> Value then begin
++    {$IFDEF JR_D17}
++    for I := 0 to ClientCount - 1 do
++      if TBasicActionLink(Clients[I]) is TTBEditItemActionLink then
++        TTBEditItemActionLink(Clients[I]).SetText(Value);
++    {$ELSE}
+     for I := 0 to FClients.Count - 1 do
+       if TBasicActionLink(FClients[I]) is TTBEditItemActionLink then
+         TTBEditItemActionLink(FClients[I]).SetText(Value);
++    {$ENDIF}
+     FText := Value;
+     Change;
+   end;
+@@ -377,7 +422,7 @@
  
  procedure TTBEditItemActionLink.SetText(const Value: String);
  begin
@@ -533,7 +613,7 @@
  end;
  
  
-@@ -401,7 +416,7 @@
+@@ -401,7 +446,7 @@
        if not CheckDefaults or (Self.EditOptions = []) then
          Self.EditOptions := EditOptions;
        if not CheckDefaults or (Self.Text = '') then
@@ -542,7 +622,7 @@
        if not CheckDefaults or not Assigned(Self.OnAcceptText) then
          Self.OnAcceptText := OnAcceptText;
      end;
-@@ -508,15 +523,41 @@
+@@ -508,15 +553,41 @@
    end;
  end;
  
@@ -570,9 +650,9 @@
 +procedure TTBEditItem.SetText(Value: String);
 +begin
 +  DoTextChanging(FText, Value, tcrSetProperty);
-   if FText <> Value then begin
-     FText := Value;
-     Change(False);
++  if FText <> Value then begin
++    FText := Value;
++    Change(False);
 +    DoTextChanged(tcrSetProperty);
 +  end;
 +end;
@@ -580,14 +660,14 @@
 +procedure TTBEditItem.SetTextEx(Value: String; Reason: Integer);
 +begin
 +  DoTextChanging(FText, Value, Reason);
-+  if FText <> Value then begin
-+    FText := Value;
-+    Change(False);
+   if FText <> Value then begin
+     FText := Value;
+     Change(False);
 +    DoTextChanged(Reason);
    end;
  end;
  
-@@ -530,18 +571,15 @@
+@@ -530,18 +601,15 @@
    procedure AcceptText;
    var
      S: String;
@@ -609,7 +689,7 @@
    if Message.Msg = WM_CHAR then
      case Word(Message.WParam) of
        VK_TAB: begin
-@@ -569,6 +607,11 @@
+@@ -569,6 +637,11 @@
    end;
  end;
  
@@ -621,7 +701,7 @@
  procedure TTBEditItemViewer.GetEditRect(var R: TRect);
  var
    Item: TTBEditItem;
-@@ -811,6 +854,7 @@
+@@ -811,6 +884,7 @@
    Item: TTBEditItem;
    R: TRect;
    ActiveWnd, FocusWnd: HWND;
@@ -629,7 +709,7 @@
  begin
    Item := TTBEditItem(Self.Item);
    GetEditRect(R);
-@@ -825,7 +869,7 @@
+@@ -825,7 +899,7 @@
    { Create the edit control }
    InflateRect(R, -3, -3);
    //View.FreeNotification(Self);
@@ -638,7 +718,7 @@
    try
      FEditControl.Visible := False;
      FEditControl.BorderStyle := bsNone;
-@@ -853,8 +897,13 @@
+@@ -853,8 +927,13 @@
      { Restore the original window procedure before destroying the control so
        it doesn't see a WM_KILLFOCUS message }
      RestoreEditControlWndProc;
@@ -653,7 +733,7 @@
    { ensure the area underneath the edit control is repainted immediately }
    View.Window.Update;
 --- TB2Item.pas	Fri Sep 19 11:35:48 2008
-+++ TB2Item.pas	Fri Oct 11 14:52:11 2013
++++ TB2Item.pas	Tue Nov 05 14:50:52 2013
 @@ -42,6 +42,14 @@
    {$IFDEF CLR} TB2OleMarshal, {$ENDIF}
    StdCtrls, CommCtrl, Menus, ActnList, ImgList, TB2Anim;
@@ -1191,7 +1271,7 @@
 -    Result.FAnimationDirection := AnimDir;
 +  end;
 +end;
-+
+ 
 +function TTBCustomItem.CreatePopup(const ParentView: TTBView;
 +  const ParentViewer: TTBItemViewer; const PositionAsSubmenu, SelectFirstItem,
 +  Customizing: Boolean; const APopupPoint: TPoint;
@@ -1276,7 +1356,7 @@
 +    Result.View.UpdatePositions;
 +    W := Result.Width;
 +    H := Result.Height;
- 
++
 +    { Calculate initial X,Y position of the popup window }
 +    if Assigned(ParentView) then begin
 +      if not PositionAsSubmenu then begin
@@ -1645,7 +1725,18 @@
  function TTBView.IsModalEnding: Boolean;
  begin
    Result := (GetRootView.FDoneActionData.DoneAction <> tbdaNone);
-@@ -5793,6 +6059,10 @@
+@@ -5670,7 +5936,9 @@
+   else
+     EndModal;
+   {$IFNDEF CLR}
+-  Exit; asm db 0,'Toolbar2000 (C) 1998-2008 Jordan Russell',0 end;
++    {$IFNDEF WIN64}
++    Exit; asm db 0,'Toolbar2000 (C) 1998-2008 Jordan Russell',0 end;
++    {$ENDIF}
+   {$ENDIF}
+ end;
+ 
+@@ -5793,6 +6061,10 @@
  end;
  {$ENDIF}
  
@@ -1656,7 +1747,7 @@
  
  { TTBModalHandler }
  
-@@ -5877,6 +6147,8 @@
+@@ -5877,6 +6149,8 @@
  
  procedure TTBModalHandler.Loop(const RootView: TTBView;
    const AMouseDown, AExecuteSelected, AFromMSAA, TrackRightButton: Boolean);
@@ -1665,7 +1756,7 @@
  var
    OriginalActiveWindow: HWND;
  
-@@ -6057,6 +6329,72 @@
+@@ -6057,6 +6331,72 @@
      end;
    end;
  
@@ -1738,7 +1829,7 @@
  var
    MouseDownOnMenu: Boolean;
    Msg: TMsg;
-@@ -6069,6 +6407,7 @@
+@@ -6069,6 +6409,7 @@
    Key: Word;
    Shift: TShiftState;
    Viewer: TTBItemViewer;
@@ -1746,7 +1837,7 @@
  begin
    RootView.FDoneActionData.DoneAction := tbdaNone;
    RootView.ValidatePositions;
-@@ -6089,6 +6428,7 @@
+@@ -6089,6 +6430,7 @@
          Exit;
      end;
      OriginalActiveWindow := GetActiveWindow;
@@ -1754,7 +1845,7 @@
      while ContinueLoop do begin
        TBUpdateAnimation;
        { Examine the next message before popping it out of the queue }
-@@ -6151,10 +6491,7 @@
+@@ -6151,10 +6493,7 @@
              is up, so swallow the message. }
            ;
          WM_CONTEXTMENU:
@@ -1766,7 +1857,7 @@
          WM_KEYFIRST..WM_KEYLAST: begin
              Application.CancelHint;
              MouseIsDown := (GetKeyState(VK_LBUTTON) < 0) or
-@@ -6237,9 +6574,18 @@
+@@ -6237,9 +6576,18 @@
                  end;
                end;
              WM_MOUSEWHEEL:
@@ -1788,7 +1879,7 @@
                end;
              WM_LBUTTONDOWN, WM_LBUTTONDBLCLK, WM_RBUTTONDOWN:
                if (Msg.message <> WM_RBUTTONDOWN) or TrackRightButton then begin
-@@ -6258,7 +6604,9 @@
+@@ -6258,7 +6606,9 @@
                  end;
                end;
              WM_LBUTTONUP, WM_RBUTTONUP:
@@ -1799,7 +1890,7 @@
                  UpdateAllSelections(Msg.pt, False);
                  { ^ False is used so that when a popup menu is
                    displayed with the cursor currently inside it, the item
-@@ -6317,9 +6665,10 @@
+@@ -6317,9 +6667,10 @@
  
  procedure TTBPopupView.AutoSize(AWidth, AHeight: Integer);
  begin
@@ -1813,7 +1904,7 @@
  end;
  
  function TTBPopupView.GetFont: TFont;
-@@ -6391,6 +6740,12 @@
+@@ -6391,6 +6742,12 @@
    inherited;
  end;
  
@@ -1826,7 +1917,7 @@
  function TTBPopupWindow.GetViewClass: TTBViewClass;
  begin
    Result := TTBPopupView;
-@@ -6473,8 +6828,12 @@
+@@ -6473,8 +6830,12 @@
       GetSystemParametersInfoBool(SPI_GETMENUANIMATION, False) then begin
      Blend := GetSystemParametersInfoBool(SPI_GETMENUFADE, False);
      if Blend or (FAnimationDirection <> []) then begin
@@ -1841,7 +1932,7 @@
      end;
    end;
    {$ENDIF}
-@@ -6487,6 +6846,12 @@
+@@ -6487,6 +6848,12 @@
      TBEndAnimation(WindowHandle);
    end;
    SetWindowPos(WindowHandle, 0, 0, 0, 0, 0, ShowFlags[Showing]);
@@ -1854,7 +1945,7 @@
  end;
  
  procedure TTBPopupWindow.WMEraseBkgnd(var Message: TWMEraseBkgnd);
-@@ -6553,7 +6918,7 @@
+@@ -6553,7 +6920,7 @@
  
    procedure ApplyToRect(var R: TRect);
    begin
@@ -1863,7 +1954,7 @@
    end;
  
  {$IFDEF CLR}
-@@ -6648,6 +7013,16 @@
+@@ -6648,6 +7015,16 @@
    Result := FItem;
  end;
  
@@ -1880,7 +1971,7 @@
  procedure TTBItemContainer.GetChildren(Proc: TGetChildProc; Root: TComponent);
  begin
    FItem.GetChildren(Proc, Root);
-@@ -6713,6 +7088,16 @@
+@@ -6713,6 +7090,16 @@
  function TTBPopupMenu.GetOptions: TTBItemOptions;
  begin
    Result := FItem.Options;
@@ -1898,7 +1989,7 @@
  
  procedure TTBPopupMenu.SetImages(Value: TCustomImageList);
 --- TB2Reg.pas	Thu Sep 18 14:08:40 2008
-+++ TB2Reg.pas	Fri Oct 11 14:01:37 2013
++++ TB2Reg.pas	Tue Nov 05 13:42:30 2013
 @@ -36,6 +36,32 @@
    TB2Toolbar, TB2ToolWindow, TB2Dock, TB2Item, TB2ExtItems, TB2MRU, TB2MDI,
    TB2DsgnItemEditor;
@@ -1962,7 +2053,7 @@
  function TTBImageIndexPropertyEditor.GetAttributes: TPropertyAttributes;
  begin
 --- TB2Toolbar.pas	Mon Jun 23 13:05:48 2008
-+++ TB2Toolbar.pas	Fri Oct 11 14:42:23 2013
++++ TB2Toolbar.pas	Tue Nov 05 14:48:41 2013
 @@ -90,6 +90,7 @@
      function GetChevronHint: String;
      function GetImages: TCustomImageList;
@@ -2013,7 +2104,31 @@
    public
      constructor Create(AOwner: TComponent); override;
    end;
-@@ -675,7 +683,7 @@
+@@ -298,6 +306,23 @@
+   {$IFDEF CLR} System.Runtime.InteropServices, System.Text, {$ENDIF}
+   TB2Consts, TB2Common, TB2Hook;
+ 
++{$IFDEF WIN64}
++type
++  TSmallPoint = TPoint;
++
++function SmallPointToPoint(const P: TSmallPoint): TPoint;
++begin
++  Result.X := P.X;
++  Result.Y := P.Y;
++end;
++
++function PointToSmallPoint(const P: TPoint): TSmallPoint;
++begin
++  Result.X := P.X;
++  Result.Y := P.Y;
++end;
++{$ENDIF WIN64}
++
+ const
+   { Constants for TTBCustomToolbar-specific registry values. Do not localize! }
+   rvFloatRightX = 'FloatRightX';
+@@ -675,7 +700,7 @@
    Result := TTBControlItem.Create(Owner);
    Result.Control := Ctl;
    if (csDesigning in ComponentState) and Assigned(Owner) then begin
@@ -2022,7 +2137,7 @@
      I := 1;
      while True do begin
        S := Format('TBControlItem%d', [I]);
-@@ -931,7 +939,40 @@
+@@ -931,7 +956,40 @@
  {$IFDEF JR_D5}
  procedure TTBCustomToolbar.DoContextPopup(MousePos: TPoint;
    var Handled: Boolean);
@@ -2063,7 +2178,7 @@
    CancelHover;
    inherited;
  end;
-@@ -956,6 +997,8 @@
+@@ -956,6 +1014,8 @@
      P := ClientToScreen(Point(X, Y));
      FView.UpdateSelection(P, True);
      if Assigned(FView.Selected) then begin
@@ -2072,7 +2187,7 @@
        Item := FView.Selected.Item;
        if not(tboLongHintInMenuOnly in Item.EffectiveOptions) then
          Hint := Item.Hint
-@@ -1118,6 +1161,16 @@
+@@ -1118,6 +1178,16 @@
  procedure TTBCustomToolbar.SetImages(Value: TCustomImageList);
  begin
    FItem.SubMenuImages := Value;
@@ -2090,7 +2205,7 @@
  
  function TTBCustomToolbar.GetLinkSubitems: TTBCustomItem;
 --- TB2ToolWindow.pas	Wed Jan 05 20:56:50 2005
-+++ TB2ToolWindow.pas	Fri Oct 11 14:38:39 2013
++++ TB2ToolWindow.pas	Tue Nov 05 13:42:30 2013
 @@ -109,6 +109,9 @@
      property OnDockChanged;
      property OnDockChanging;
@@ -2135,7 +2250,7 @@
  
  procedure TTBToolWindow.GetBaseSize(var ASize: TPoint);
 --- TB2Ver.inc	Sat Sep 13 16:06:46 2008
-+++ TB2Ver.inc	Fri Oct 11 14:28:52 2013
++++ TB2Ver.inc	Tue Nov 05 13:42:30 2013
 @@ -32,6 +32,24 @@
                        {$DEFINE JR_D11}  { then it must be at least Delphi 11 (2007) }
                        {$IFNDEF VER190}  { if it's not .NET Delphi 11 (2007) }

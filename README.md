@@ -27,18 +27,20 @@ Installation
 
 Uninstall previous versions of Toolbar2000 and TBX from your IDE.
 
-Download [Toolbar2000 2.2.2](http://www.jrsoftware.org/tb2k.php) and unzip it somewhere
-on your hard drive.
+Download [Toolbar2000 2.2.2](http://www.jrsoftware.org/tb2k.php)
+and unzip it somewhere on your hard drive.
 
-Download TBX, unzip it, compile Tools\TB2k Patch, run it and patch Toolbar2000 directory.
+Unzip TBX, compile `Tools\TB2k Patch`, run it and patch Toolbar2000 directory.
 
-Install Toolbar2000 to your IDE: add Toolbar2000\Source directory to your IDE options, then open and
-compile Toolbar2000\Packages\tb2k_dxx.dpk, open and install Toolbar2000\Packages\tb2kdsgn_dxx.dpk
-(xx is your Delphi version).
+Install Toolbar2000 to your IDE: add `Toolbar2000\Source` directory to your
+IDE options, then open and compile `Toolbar2000\Packages\tb2k_dxx.dpk`, open and install
+`Toolbar2000\Packages\tb2kdsgn_dxx.dpk` (xx is your Delphi version).
 
-Install TBX to your IDE: add TBX\Source, TBX\Source\Themes and TBX\Source\rmkThemes (optionally) to
-your IDE options, then open and compile TBX_Dxx.dpk, open and install TBX_Dxx_Design.dpk (xx is your
-Delphi version).
+Install TBX to your IDE: add `TBX\Source`, `TBX\Source\Themes` and `TBX\Source\rmkThemes`
+(optionally) to your IDE options, then open and compile `TBX_Dxx.dpk`, open and install
+`TBX_Dxx_Design.dpk` (xx is your Delphi version).
+
+That’s all!
 
 
 Credits

@@ -1,4 +1,4 @@
-package TBX_DXE;
+package TBX_DXE5;
 
 {$R *.res}
 {$ALIGN 8}
@@ -29,7 +29,7 @@ package TBX_DXE;
 requires
   vcl,
   rtl,
-  tb2k_d15_xe;
+  tb2k_d19_xe5;
 
 contains
   TBX in '..\..\Source\TBX.pas',

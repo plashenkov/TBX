@@ -29,8 +29,8 @@ package TBX_DXE2_Design;
 
 requires
   vcl,
-  tb2k_d16,
-  tb2kdsgn_d16,
+  tb2k_d16_xe2,
+  tb2kdsgn_d16_xe2,
   TBX_DXE2;
 
 contains

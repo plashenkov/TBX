@@ -1,4 +1,4 @@
-package TBX_DXE_Design;
+package TBX_DXE5_Design;
 
 {$R *.res}
 {$R '..\..\Source\TBXReg.dcr'}
@@ -29,9 +29,9 @@ package TBX_DXE_Design;
 
 requires
   vcl,
-  tb2k_d15_xe,
-  tb2kdsgn_d15_xe,
-  TBX_DXE;
+  tb2k_d19_xe5,
+  tb2kdsgn_d19_xe5,
+  TBX_DXE5;
 
 contains
   TBXReg in '..\..\Source\TBXReg.pas',

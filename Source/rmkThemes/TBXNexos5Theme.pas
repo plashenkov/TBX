@@ -1,21 +1,29 @@
-unit TBXNexos5Theme;
+{*
+ * "Nexos 5" Theme for TBX
+ * Copyright 2003-2013 Roy Magne Klever. All rights reserved.
+ *
+ * The MIT License (MIT)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom
+ * the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *}
 
-// TBX Package
-// Copyright 2001-2002 Alex A. Denisov. All Rights Reserved
-// See TBX.chm for license and installation instructions
-//
-// $Id: TBXOfficeXPTheme.pas,v 1.55 2002/12/24 04:32:45 Alex Exp $
-//
-// Modified OfficeXP theme by Roy Magne Klever - I named it 'NEXOS2'
-//
-// 10.05.2003 - © Roy Magne Klever
-//              roymagne@rmklever.com
-//              First version.
-//
-// 13.05.2003 - © Roy Magne Klever
-//              roymagne@rmklever.com
-//              Version2.
-//
+unit TBXNexos5Theme;
 
 interface
 

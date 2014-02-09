@@ -582,6 +582,15 @@ type
 
 { Misc. functions }
 
+function CharInSet(C: Char; const CharSet: TSysCharSet): Boolean;
+begin
+{$IFDEF UNICODE}
+  Result := SysUtils.CharInSet(C, CharSet);
+{$ELSE}
+  Result := C in CharSet;
+{$ENDIF}
+end;
+
 function StartsText(const ASubText, AText: string): Boolean;
 var
   P: PChar;
@@ -2030,13 +2039,13 @@ var
 
   procedure SkipWhiteSpace;
   begin
-    while P^ in CWhiteSpace do Inc(P);
+    while CharInSet(P^, CWhiteSpace) do Inc(P);
   end;
 
   function GetInt: Integer;
   begin
     Result := 0;
-    while P^ in CDigits do
+    while CharInSet(P^, CDigits) do
     begin
       Result := Result * 10 + (Integer(P^) - Integer('0'));
       Inc(P);
@@ -2046,7 +2055,7 @@ var
   function GetInt2: Extended;
   begin
     Result := 0;
-    while P^ in CDigits do
+    while CharInSet(P^, CDigits) do
     begin
       Result := Result * 10 + (Integer(P^) - Integer('0'));
       Inc(P);
@@ -2066,22 +2075,22 @@ var
 
     { Read prefix }
     PStart := P;
-    if ValueType <> evtHex then while not (P^ in CInvalidUnitChars) do Inc(P)
-    else while not (P^ in CInvalidHexUnitChars) do Inc(P);
+    if ValueType <> evtHex then while not CharInSet(P^, CInvalidUnitChars) do Inc(P)
+    else while not CharInSet(P^, CInvalidHexUnitChars) do Inc(P);
     SetString(PrefixString, PStart, P - PStart);
     SkipWhiteSpace;
 
     { Read value }
     if ValueType in [evtFloat, evtInteger] then
     begin
-      if (ValueType = evtInteger) and not (P^ in CDigits) then Exit;
+      if (ValueType = evtInteger) and not CharInSet(P^, CDigits) then Exit;
 
       { get the integer part }
       PStart := P;
       R := GetInt2;
       Count1 := P - PStart;
 
-      if (ValueType = evtFloat) and (P^ = {$IFDEF JR_D17}FormatSettings.DecimalSeparator{$ELSE}DecimalSeparator{$ENDIF}) then
+      if (ValueType = evtFloat) and (P^ = {$IFDEF JR_D15}FormatSettings.DecimalSeparator{$ELSE}DecimalSeparator{$ENDIF}) then
       begin
         Inc(P);
         PStart := P;
@@ -2093,7 +2102,7 @@ var
 
       if (Count1 = 0) and (Count2 = 0) then Exit; // '.' (or ',') is not a number
 
-      if (ValueType = evtFloat) and (P^ in ['e', 'E']) and (PChar(P + 1)^ in ['+', '-', '0'..'9']) then
+      if (ValueType = evtFloat) and CharInSet(P^, ['e', 'E']) and CharInSet(PChar(P + 1)^, ['+', '-', '0'..'9']) then
       begin
         Inc(P);
         ExponentSign := 1;
@@ -2103,7 +2112,7 @@ var
           Inc(P);
         end
         else if P^ = '+' then Inc(P);
-        if not (P^ in CDigits) then Exit;
+        if not CharInSet(P^, CDigits) then Exit;
         Tmp := GetInt;
         if Tmp >= 5000 then Exit;
         R := R * IntPower(10, Tmp * ExponentSign);
@@ -2112,12 +2121,12 @@ var
     else { evtHex }
     begin
       IR := 0;
-      if not (P^ in CHexDigits) then Exit;
-      while P^ in CHexDigits do
+      if not CharInSet(P^, CHexDigits) then Exit;
+      while CharInSet(P^, CHexDigits) do
       begin
         IR := IR shl 4;
-        if P^ in CDigits then Inc(IR, Integer(P^) - Integer('0'))
-        else if P^ in ['a'..'f'] then Inc(IR, Integer(P^) - Integer('a') + 10)
+        if CharInSet(P^, CDigits) then Inc(IR, Integer(P^) - Integer('0'))
+        else if CharInSet(P^, ['a'..'f']) then Inc(IR, Integer(P^) - Integer('a') + 10)
         else Inc(IR, Integer(P^) - Integer('A') + 10);
         Inc(P);
       end;
@@ -2127,8 +2136,8 @@ var
 
     { Read postfix }
     PStart := P;
-    if ValueType <> evtHex then while not (P^ in CInvalidUnitChars) do Inc(P)
-    else while not (P^ in CInvalidHexUnitChars) do Inc(P);
+    if ValueType <> evtHex then while not CharInSet(P^, CInvalidUnitChars) do Inc(P)
+    else while not CharInSet(P^, CInvalidHexUnitChars) do Inc(P);
     SetString(PostfixString, PStart, P - PStart);
     SkipWhiteSpace;
 
@@ -2168,7 +2177,7 @@ begin
   V := Value1;
 
   { Read operator }
-  if P^ in ['*', '+', '-', '/'] then
+  if CharInSet(P^, ['*', '+', '-', '/']) then
   begin
     Operator := P^;
     Inc(P);
@@ -2277,7 +2286,7 @@ begin
   Result := False;
   if Length(S) > 0 then
     for I := 1 to Length(S) do
-     if S[I] in InvalidChars then Exit;
+     if CharInSet(S[I], InvalidChars) then Exit;
   Result := True;
 end;
 

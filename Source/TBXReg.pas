@@ -96,6 +96,14 @@ type
   TTBXLinkAccess = class(TTBXCustomLink);
   TTBXButtonAccess = class(TTBXCustomButton);
 
+function CharInSet(C: Char; const CharSet: TSysCharSet): Boolean;
+begin
+{$IFDEF UNICODE}
+  Result := SysUtils.CharInSet(C, CharSet);
+{$ELSE}
+  Result := C in CharSet;
+{$ENDIF}
+end;
 
 { TThemeProperty }
 
@@ -126,9 +134,9 @@ begin
   L := Length(S);
   while I <= L do
   begin
-    while (I <= L) and (S[I] in Delims) do Inc(I);
+    while (I <= L) and CharInSet(S[I], Delims) do Inc(I);
     if I <= L then Inc(Result);
-    while (I <= L) and not(S[I] in Delims) do Inc(I);
+    while (I <= L) and not CharInSet(S[I], Delims) do Inc(I);
   end;
 end;
 
@@ -142,12 +150,12 @@ begin
   Result := 0;
   while (I <= Length(S)) and (Count <> N) do begin
     { skip over delimiters }
-    while (I <= Length(S)) and (S[I] in WordDelims) do Inc(I);
+    while (I <= Length(S)) and CharInSet(S[I], WordDelims) do Inc(I);
     { if we're not beyond end of S, we're at the start of a word }
     if I <= Length(S) then Inc(Count);
     { if not finished, find the end of the current word }
     if Count <> N then
-      while (I <= Length(S)) and not (S[I] in WordDelims) do Inc(I)
+      while (I <= Length(S)) and not CharInSet(S[I], WordDelims) do Inc(I)
     else Result := I;
   end;
 end;
@@ -162,7 +170,7 @@ begin
   I := WordPosition(N, S, WordDelims);
   if I <> 0 then
     { find the end of the current word }
-    while (I <= Length(S)) and not(S[I] in WordDelims) do
+    while (I <= Length(S)) and not CharInSet(S[I], WordDelims) do
     begin
       { add the I'th character to result }
       Inc(Len);

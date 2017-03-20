@@ -48,4 +48,4 @@ Roy Magne Klever (http://rmklever.com), contributor.
 Robert Lee (http://www.silverpointdevelopment.com), contributor.  
 Vladimir Bochkarev (boxa@mail.ru), contributor.  
 Alexander Klimov (schwarzkopf-m@yandex.ru), contributor.  
-Yury Plashenkov (http://www.plashenkov.com), contributor and current maintainer.
+Yury Plashenkov (https://github.com/plashenkov), contributor and current maintainer.

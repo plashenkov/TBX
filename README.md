@@ -1,5 +1,4 @@
-TBX
-===
+# TBX
 
 TBX is an add-on package for Toolbar2000 components: http://www.jrsoftware.org/tb2k.php.
 
@@ -15,15 +14,11 @@ TBX expands Toolbar2000 with the following new features:
 * A status bar component
 * Additional controls
 
-
-Compatibility
--------------
+## Compatibility
 
 Compatible with Delphi/C++Builder 4–XE5.
 
-
-Installation
-------------
+## Installation
 
 Uninstall previous versions of Toolbar2000 and TBX from your IDE.
 
@@ -39,9 +34,7 @@ Install TBX to your IDE: add *TBX\Source*, *TBX\Source\Themes* and *TBX\Source\r
 (optionally) to your IDE options, then open and compile *TBX_Dxx.dpk*, open and install
 *TBX_Dxx_Design.dpk* (xx is your Delphi version).
 
-
-Credits
--------
+## Credits
 
 Alex A. Denisov, initial developer.  
 Roy Magne Klever (http://rmklever.com), contributor.  

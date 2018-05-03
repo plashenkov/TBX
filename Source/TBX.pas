@@ -2499,16 +2499,19 @@ begin
   DestroyShadow;
   Hide;
 
-  ParentItem := View.ParentItem;
-  if ParentItem is TTBXCustomItem then
+  if Assigned(View) then
   begin
-    ClickedItem := nil;
-    ParentView := View.ParentView;
-    if Assigned(ParentView) then
-      with TTBViewAccess(ParentView).DoneActionData do
-        if DoneAction = tbdaClickItem then
-          ClickedItem := ClickItem;
-    TTBXCustomItem(ParentItem).DoClosePopup(ClickedItem);
+    ParentItem := View.ParentItem;
+    if ParentItem is TTBXCustomItem then
+    begin
+      ClickedItem := nil;
+      ParentView := View.ParentView;
+      if Assigned(ParentView) then
+        with TTBViewAccess(ParentView).DoneActionData do
+          if DoneAction = tbdaClickItem then
+            ClickedItem := ClickItem;
+      TTBXCustomItem(ParentItem).DoClosePopup(ClickedItem);
+    end;
   end;
 
   inherited;

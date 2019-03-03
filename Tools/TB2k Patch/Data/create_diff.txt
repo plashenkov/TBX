@@ -1,6 +1,0 @@
-To create diff, use the following command:
-  diff -ur "tb2k dir original" "tb2k dir modified" > diff.txt
-
-Then edit diff.txt: delete file paths (leaving filenames only),
-also delete lines with diff command, i.e.
-  diff -ur C:\...

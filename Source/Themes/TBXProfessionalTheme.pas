@@ -1,6 +1,6 @@
 {*
  * "Professional" Theme for TBX
- * Copyright 2008-2013 Yury Plashenkov. All rights reserved.
+ * Copyright 2008-2013 Yuri Plashenkov. All rights reserved.
  *
  * The MIT License (MIT)
  *

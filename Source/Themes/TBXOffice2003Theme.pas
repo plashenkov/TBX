@@ -1,6 +1,6 @@
 {*
  * "Office 2003" Theme for TBX
- * Copyright 2005-2013 Yury Plashenkov. All rights reserved.
+ * Copyright 2005-2013 Yuri Plashenkov. All rights reserved.
  *
  * The MIT License (MIT)
  *

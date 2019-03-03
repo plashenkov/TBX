@@ -23,7 +23,7 @@ TBX depends on special version of Toolbar2000 you can take
 
 Now install TBX: add `TBX\Source`, `TBX\Source\Themes` and `TBX\Source\rmkThemes` (optionally)
 to your IDE library path, then open and compile `TBX\Packages\TBX_Run.dpk`,
-open and install `TBX\Packahes\TBX_Dsgn.dpk`.
+open and install `TBX\Packages\TBX_Dsgn.dpk`.
 
 ## License
 

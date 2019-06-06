@@ -1,0 +1,12 @@
+__history
+__recovery
+*.~*
+
+*.local
+*.identcache
+*.projdata
+*.tvsconfig
+*.dsk
+*.vlb
+*.stat
+*.dcu

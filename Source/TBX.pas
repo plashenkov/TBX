@@ -36,6 +36,7 @@ interface
 
 uses
   Windows, Messages, Classes, SysUtils, Controls, Graphics, ImgList, Forms,
+  {$IFDEF JR_D17} UITypes,{$ENDIF}
   TB2Item, TB2Dock, TB2Toolbar, TB2ToolWindow, TB2Anim, TBXUtils, TBXThemes;
 
 const
@@ -785,12 +786,23 @@ var
   BufDC: HDC;
   BufDCRec: TBufDCRec;
   ResultOK: Boolean;
+  {$IFDEF JR_D7}
+  IsThemesEnabled: Boolean;
+  {$ENDIF}
 begin
   if Control = nil then Exit;
+  {$IFDEF JR_D7}
+  IsThemesEnabled :=
+    {$IF  CompilerVersion >= 33}
+    StyleServices.Enabled;
+    {$ELSE}
+    ThemeServices.ThemesEnabled;
+    {$IFEND}
+  {$ENDIF}
   Parent := Control.Parent;
   if (Parent <> nil) and Parent.HandleAllocated then
   begin
-    if {$IFDEF JR_D7}(ThemeServices.ThemesEnabled or USE_THEMES){$ELSE}USE_THEMES{$ENDIF} and
+    if {$IFDEF JR_D7}(IsThemesEnabled or USE_THEMES){$ELSE}USE_THEMES{$ENDIF} and
       (Parent is TTabSheet){special case} then goto DrawTabSheet;
 
     SetPoint(R2.TopLeft, 0, 0);
@@ -800,7 +812,7 @@ begin
     SetWindowOrgEx(DC, R2.Left, R2.Top, nil);
     if ResultOK then Exit;
 
-    if {$IFDEF JR_D7}(ThemeServices.ThemesEnabled or USE_THEMES){$ELSE}USE_THEMES{$ENDIF} and
+    if {$IFDEF JR_D7}(IsThemesEnabled or USE_THEMES){$ELSE}USE_THEMES{$ENDIF} and
       (Control is TWinControl) then
     begin
       DrawTabSheet:
@@ -809,7 +821,7 @@ begin
       BufDC := CreateBufDC(DC, R2.Right, R2.Bottom, BufDCRec);
       { Fortunately, DrawThemeParentBackground has no problems if DC is memory DC }
       {$IFDEF JR_D7}
-      if ThemeServices.ThemesEnabled then
+      if IsThemesEnabled then
         ResultOK := UxTheme.DrawThemeParentBackground(TWinControl(Control).Handle, BufDC, @R2) = S_OK
       else
         ResultOK := TBXUxThemes.DrawThemeParentBackground(TWinControl(Control).Handle, BufDC, @R2) = S_OK;

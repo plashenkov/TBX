@@ -32,7 +32,8 @@ interface
 
 uses
   Windows, Messages, Classes, Graphics, Controls, StdCtrls, ExtCtrls, Forms,
-  TB2Dock, TB2Item, TBX, TBXThemes, ImgList, Menus;
+  ImgList, Menus, {$IFDEF JR_D17} UITypes,{$ENDIF}
+  TB2Dock, TB2Item, TBX, TBXThemes;
 
 const
   { New hit test constants for page scrollers }
@@ -1301,11 +1302,11 @@ var
   NewDockList: TList;
   PosData: array of TPosRec;
   LeftRight: Boolean;
-  I, J, K, L, DragIndex, ResizeIndex, ForcedWidth: Integer;
+  I, J, K, DragIndex, ResizeIndex: Integer;
   EmptySize, ClientW, ClientH, DockSize, TotalSize, TotalMinimumSize, TotalMaximumSize: Integer;
   T: TTBXDockablePanel;
   S: TPoint;
-  CurRowPixel, CurRowSize: Integer;
+  CurRowSize: Integer;
   StretchPanelCount: Integer;
   Stretching: Boolean;
   AccDelta, Acc: Extended;

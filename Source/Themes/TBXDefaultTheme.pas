@@ -31,7 +31,8 @@ interface
 {$I TBX.inc}
 
 uses
-  Windows, Messages, Graphics, TBXThemes, ImgList;
+  Windows, Messages, Graphics, ImgList, {$IFDEF JR_D17} UITypes,{$ENDIF}
+  TBXThemes;
 
 type
   TTBXDefaultTheme = class(TTBXTheme)

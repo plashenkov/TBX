@@ -34,7 +34,8 @@ uses
   Windows, Classes, Controls, SysUtils, Graphics, ImgList, Dialogs,
   {$IFDEF JR_D6} DesignIntf, DesignEditors, VCLEditors, {$ELSE} DsgnIntf, {$ENDIF}
   TB2Reg, TB2Toolbar, TB2Item, TBX, TBXMDI, TBXSwitcher, TB2DsgnItemEditor,
-  TBXExtItems, TBXLists, TBXDkPanels, TBXToolPals, TBXStatusBars;
+  TBXExtItems, TBXLists, TBXDkPanels, TBXToolPals, TBXStatusBars,
+  TBXGraphics, TBXImgListEdit;
 
 procedure Register;
 
@@ -84,6 +85,14 @@ type
   TTBXItemsEditor = class(TTBItemsEditor)
   public
     procedure ExecuteVerb(Index: Integer); override;
+  end;
+
+  TTBXImageListEditor = class(TDefaultEditor)
+  public
+    procedure Edit; override;
+    procedure ExecuteVerb(Index: Integer); override;
+    function GetVerb(Index: Integer): string; override;
+    function GetVerbCount: Integer; override;
   end;
 
 implementation
@@ -385,6 +394,49 @@ begin
   end;
 end;
 
+{ TTBXImageListEditor }
+
+procedure TTBXImageListEditor.Edit;
+var
+  Dlg: TTBXImageListDlg;
+  L: TTBXImageList;
+  Cmp: TTBXImageList;
+begin
+  Cmp := Component as TTBXImageList;
+  L := TTBXImageList.Create(nil);
+  try
+    L.Assign(Cmp);
+    Dlg := TTBXImageListDlg.Create;
+    try
+      Dlg.DIBList := L.DIBList;
+      Dlg.ShowModal;
+      if Dlg.ModalResult = mrOk then
+      begin
+        Cmp.Assign(L);
+        Designer.Modified;
+      end;
+    finally
+      Dlg.Free;
+    end;
+  finally
+    L.Free;
+  end;
+end;
+
+procedure TTBXImageListEditor.ExecuteVerb(Index: Integer);
+begin
+  if Index = 0 then Edit;
+end;
+
+function TTBXImageListEditor.GetVerbCount: Integer;
+begin
+  Result := 1;
+end;
+
+function TTBXImageListEditor.GetVerb(Index: Integer): string;
+begin
+  if Index = 0 then Result := 'Edit...';
+end;
 
 { THookObj }
 
@@ -443,7 +495,8 @@ begin
   RegisterComponents('TBX', [TTBXDock, TTBXMultiDock, TTBXToolbar,
     TTBXToolWindow, TTBXDockablePanel, TTBXPopupMenu, TTBXSwitcher, TTBXMRUList,
     TTBXMDIHandler, TTBXPageScroller, TTBXColorSet, TTBXAlignmentPanel,
-    TTBXLabel, TTBXLink, TTBXButton, TTBXCheckBox, TTBXRadioButton, TTBXStatusBar]);
+    TTBXLabel, TTBXLink, TTBXButton, TTBXCheckBox, TTBXRadioButton, TTBXStatusBar,
+    TTBXImageList]);
   RegisterNoIcon([TTBXCustomItem]);
 
   RegisterClasses([TTBXItem, TTBXSubMenuItem, TTBXSeparatorItem,
@@ -471,6 +524,7 @@ begin
 {$ENDIF}
 
   RegisterComponentEditor(TTBXStatusBar, TTBXStatusBarEditor);
+  RegisterComponentEditor(TTBXImageList, TTBXImageListEditor);
 
   TBRegisterItemClass(TTBXItem, 'New &TBX Item', HInstance);
   TBRegisterItemClass(TTBXSubMenuItem, 'New TBX Submenu Item', HInstance);

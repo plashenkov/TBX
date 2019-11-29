@@ -35,6 +35,7 @@ requires
 
 contains
   TBXReg in '..\Source\TBXReg.pas',
+  TBXImgListEdit in '..\Source\TBXImgListEdit.pas',
   TBXStrEdit in '..\Source\TBXStrEdit.pas';
 
 end.

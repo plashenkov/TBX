@@ -36,4 +36,5 @@ Roy Magne Klever (http://rmklever.com), contributor.
 Robert Lee (http://www.silverpointdevelopment.com), contributor.  
 Vladimir Bochkarev (boxa@mail.ru), contributor.  
 Alexander Klimov (schwarzkopf-m@yandex.ru), contributor.  
+zed (https://github.com/zedxxx), contributor.  
 Yuri Plashenkov (https://github.com/plashenkov), contributor and current maintainer.

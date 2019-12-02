@@ -1202,8 +1202,8 @@ type
 {$HINTS OFF}
 
   {$IF CompilerVersion > 33}
-  {$MESSAGE WARN 'Check if System.ImageList.TBaseImageList is still the same and adjust the IFDEF'}
-  {$ENDIF}
+    {$MESSAGE WARN 'Check if System.ImageList.TBaseImageList is still the same and adjust the IFDEF'}
+  {$IFEND}
 
   {$IF CompilerVersion >= 29}
   TCustomImageListCrack = class(TComponent)
